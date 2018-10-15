@@ -1,0 +1,4 @@
+terms数据库中
+type为0代表site_category
+type为1代表tags
+type为2代表person_category
