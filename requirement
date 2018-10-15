@@ -1,0 +1,10 @@
+tornado==5.1.1
+timeago==1.0.8
+motor==1.2.1
+apscheduler==3.5.3
+aioredis==1.1.0
+lxml==4.2.1
+aiocache==0.10.0
+ujson
+msgpack==0.5.6
+git+https://github.com/yichen0831/opencc-python.git

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block page %}
+				<div id="pagenavi" class="clearfix">
+                    {% for i in range(1,11) %}
+                        {% if i == int(page) %}
+						    <a class="page-numbers current" href="/t/{{ t_id }}/page/{{ i }}/" title="第 {{ i }} 页">{{ i }}</a>
+                        {% else %}
+                            <a class="page-numbers" href="/t/{{ t_id }}/page/{{ i }}/" title="第 {{ i }} 页">{{ i }}</a>
+                        {% end %}
+                    {% end %}
+                </div>
+{% end %}

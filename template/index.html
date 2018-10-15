@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block page %}
+				<div id="pagenavi" class="clearfix">
+                    {% for i in range(1,11) %}
+                        {% if i == int(page) %}
+						    <a class="page-numbers current" href="/page/{{ i }}/" title="第 {{ i }} 页">{{ i }}</a>
+                        {% else %}
+                            <a class="page-numbers" href="/page/{{ i }}/" title="第 {{ i }} 页">{{ i }}</a>
+                        {% end %}
+                    {% end %}
+                </div>
+{% end %}
+
+{% block login_sidebar %}
+	{% if not is_login %}
+	{% include login_sidebar.html %}
+	{% end %}
+{% end %}
+
+
+{% block right_sidebar %}
+			<div class="right_sidebar">
+
+				<div id="hotnews">
+					<div class="sidebar-head">
+						24小时热门
+					</div>
+					<ul class="article-list">
+						{% for hot_post in hot_posts %}
+						<li class="article-item">
+							<a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
+								<!--
+								<div class="module-pic news-pic">
+									<img src="//p9.pstatp.com/list/240x240/pgc-image/153622829372847ac5a43fc">
+								</div>
+								-->
+								<div class="news-inner">
+									<p class="module-title">{{ hot_post['title'] }}</p>
+								</div>
+							</a>
+						</li>
+						{% end %}
+					</ul>
+				</div>
+			</div>
+{% end %}
+
+ 
+ 
