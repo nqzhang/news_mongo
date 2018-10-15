@@ -14,3 +14,9 @@ db.posts.getIndexes()
 
 #db.users.find({"email"："898611548@qq.com",is_real:1})
 db.users.createIndex({email:1,is_real:1},{background:true})
+
+#分片
+db.posts.createIndex({_id:"hashed"},{background:true})
+db.terms.createIndex({_id:"hashed"},{background:true})
+sh.shardCollection("www_smwenku_com.posts", {"_id":"hashed"})
+sh.shardCollection("www_smwenku_com.terms", {"_id":"hashed"})
