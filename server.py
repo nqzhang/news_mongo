@@ -10,6 +10,13 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 from cron import cron
 import asyncio
+from tornado.platform.asyncio import AsyncIOMainLoop
+try:
+    import uvloop
+    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+    AsyncIOMainLoop().install()
+except:
+    pass
 
 if __name__ == "__main__":
     #asyncio.set_event_loop(asyncio.new_event_loop())
