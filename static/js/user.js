@@ -8,6 +8,13 @@ function getCookie(name) {
 $(document).on('keyup', '.bootstrap-tagsinput input', function(){
     $(this).attr('placeholder', '')
 })
+function publish_success(post) {
+    $('#alertSuccess .title').text(post['title']);
+    $('#alertSuccess').show();
+    return function(data, textStatus, jqXHR) {
+        $('#alertSuccess .toarticle').attr("href","/a/" + data['post_id']);
+    };
+}
 
 function publish() {
     var post={};
@@ -25,11 +32,9 @@ function publish() {
         //contentType: "application/json",
         //dataType: "JSON",
         type: "POST",
-        success: function ( data , status_text, jqXHR) {
-            alert('ajax success')
-        },
+        success: publish_success(post),
         error: function ( data , status_text, jqXHR ) {
-            alert('ajax fail')
+            alert('post fail')
         },
     });
 };

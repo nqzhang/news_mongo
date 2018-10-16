@@ -57,4 +57,9 @@ class PostAjaxHandler(UserHander):
         post_id = await self.application.db.posts.insert_one(
             {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
              "post_date": datetime.datetime.now()})
+        post_id = str(post_id.inserted_id)
+        publish_success = {}
+        publish_success['post_id'] = post_id
+        publish_success['title'] = title
+        self.write(publish_success)
 
