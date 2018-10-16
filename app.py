@@ -8,7 +8,7 @@ import aioredis
 
 class Application(tornado.web.Application):
     def __init__(self,db):
-        tornado.ioloop.IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
+        #tornado.ioloop.IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
         handlers = [
             (r'/?',index.IndexPageHandler),
             (r'/page/(\d*)/?', index.IndexPageHandler),
