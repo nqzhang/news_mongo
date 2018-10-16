@@ -1628,7 +1628,7 @@
   }
 
   /**
-   * Finds the root node (document, shadowDOM root) of the given element
+   * Finds the root node (doc, shadowDOM root) of the given element
    * @method
    * @memberof Popper.Utils
    * @argument {Element} node
@@ -1667,7 +1667,7 @@
     range.setEnd(end, 0);
     var commonAncestorContainer = range.commonAncestorContainer;
 
-    // Both nodes are inside #document
+    // Both nodes are inside #doc
 
     if (element1 !== commonAncestorContainer && element2 !== commonAncestorContainer || start.contains(end)) {
       if (isOffsetContainer(commonAncestorContainer)) {
@@ -3202,7 +3202,7 @@
     }
 
     // NOTE: DOM access here
-    // resets the popper's position so that the document size can be calculated excluding
+    // resets the popper's position so that the doc size can be calculated excluding
     // the size of the popper element itself
     var transformProp = getSupportedPropertyName('transform');
     var popperStyles = data.instance.popper.style; // assignment to help minification
