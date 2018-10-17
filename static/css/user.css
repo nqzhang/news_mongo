@@ -135,7 +135,7 @@ svg:not(:root) {
 }
 
 .list-group-item {
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 2.5rem;
     color: #4f4f4f;
     font-size: 14px;
     border: 0px;
@@ -380,4 +380,40 @@ div.notice-box i.notice-icon.type-error {
 
 .mr8 {
     margin-right: 8px;
+}
+
+.list-group-title {
+    padding: 0.75rem 1.2rem;
+    color: #bbb;
+}
+
+.list-group-item:hover {
+    background-color: #C92027;
+    border-color: #C92027;
+    color: #fff;
+}
+.list-group-item:focus, .list-group-item:hover {
+    z-index: 1;
+    text-decoration: none;
+}
+.list-group-title:hover {
+    color: #bbb!important;
+    background-color: #fff !important;
+}
+
+
+.list-group.edit-btn-box a.list-group-item {
+    text-align: left;
+    padding: 12px 16px;
+}
+
+.list-group-item:first-child {
+    border-top-left-radius: 0rem;
+    border-top-right-radius: 0rem;
+}
+
+.list-group-item:last-child {
+    margin-bottom: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }

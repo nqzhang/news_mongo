@@ -1,53 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/static/css/user.css">
-    <link rel="stylesheet" href="/static/css/tagsinput.css">
+{% extends "user_base.html" %}
+
+{% block title %}
     <title>寫博客 - {{ config.site_name}}</title>
-</head>
-<script src="/static/js/jquery-2.0.3.min.js"></script>
-<script src="/static/js/bootstrap.bundle.min.js"></script>
-<script src="/static/ckeditor/ckeditor.js"></script>
+{% end %}
 
-<body>
-<header class="bg-white">
-    <nav class="navbar navbar-expand-md navbar-light container">
-        <a class="navbar-brand" href="/">神馬文庫</a>
-        <div class="collapse navbar-collapse flex-row-reverse">
-            <ul class="link">
-                <li>
-                    <a href="/">首頁</a>
-                </li>
-                <li class="router-link-active">
-                    <a href="#">創作中心</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
-
-<main role="main" class="container">
-    <div class="row row-offcanvas row-offcanvas-right main-wrapper">
-        <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
-            <div class="list-group has-bdb">
-
-                <a href="#" class="list-group-item editArticle active">
-                    <svg class="icon icon-pencil">
-                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="icon"
-                             viewBox="0 0 1262 1024" id="pencil" width="100%" height="100%">
-                            <path d="M1053.60889187 803.35800378a40.929028 40.929028 0 1 1 0 81.78837087H215.35358752c-10.84781888 0-21.25429111-4.27408659-28.91977315-11.91634026a41.04517202 41.04517202 0 0 1-11.96279701-29.01268882 44.29719507 44.29719507 0 0 1 1.95121361-13.51912287c87.64201171-247.89704311 227.22347106-442.99517581 386.57258187-588.15153119 35.67933459-32.56668394 86.8057773-58.11829111 128.47812512-67.89758754 174.68007598-41.06840039 288.82607219-36.39942497 403.08821136-34.65726996a1256.95322459 1256.95322459 0 0 1-72.45042002 76.42253235c-4.08825745 3.97211343-208.43142533 24.2043399-237.86223026 57.16591378s163.97162949 8.98951985 158.35027562 13.51912287a1174.02664614 1174.02664614 0 0 1-88.43178827 65.43534215c-5.69104006 3.83274102-189.17480566-0.44134557-220.95171194 33.82103556-31.80013575 34.23915275 128.89624233 22.02083932 121.55596183 25.96972437-85.34236709 45.73737582-159.30265407 78.51311946-269.08164804 113.96016598-72.98468017 23.5771641-154.12264686 161.6487565-185.4349792 217.42094518A518.86021965 518.86021965 0 0 0 271.19546349 803.35800378h782.41342838z m0 0"
-                                  fill="" p-id="8156"></path>
-                        </svg>
-                    </svg>
-                    寫博客
-                </a>
-            </div>
-
-        </div>
+{% block content-body %}
         <div class="col-12 col-md-10" id="content-body">
             <div class="title-box">
                 <input type="text" id="txtTitle" maxlength="100" placeholder="輸入文章標題" value="">
@@ -128,17 +85,4 @@
                 </div>
             </div>
         </div>
-
-
-    </div>
-</main>
-<div class="notice-box" style="display: none; bottom: 56px;">
-    <i class="mr8 notice-icon type-error" style="display: block;"></i>
-    <span class="notice">请输入文章标题。</span></div>
-<script>
-    CKEDITOR.replace('editor')
-</script>
-<script src="/static/js/tagsinput.js"></script>
-<script src="/static/js/user.js"></script>
-</body>
-</html>
+{% end %}

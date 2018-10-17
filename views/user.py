@@ -10,8 +10,9 @@ import config
 class PostEditHandler(UserHander):
     @authenticated_async
     async def get(self):
+        active = 'edit'
         #print(self.current_user)
-        self.render('user/postedit.html',config=config)
+        self.render('user/postedit.html',config=config,active=active)
 
 
 class PostAjaxHandler(UserHander):
@@ -69,4 +70,11 @@ class PostAjaxHandler(UserHander):
         publish_success['post_id'] = post_id
         publish_success['title'] = title
         self.write(publish_success)
+
+class PostListHandler(UserHander):
+    @authenticated_async
+    async def get(self):
+        #print(self.current_user)
+        active = 'list'
+        self.render('user/postlist.html',config=config,active=active)
 
