@@ -1,15 +1,17 @@
 from views.base import UserHander
 import tornado.web
+import tornado
 from views.base import authenticated_async
 from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
+import config
 
 class PostEditHandler(UserHander):
     @authenticated_async
     async def get(self):
         #print(self.current_user)
-        self.render('user/postedit.html')
+        self.render('user/postedit.html',config=config)
 
 
 class PostAjaxHandler(UserHander):
@@ -18,11 +20,16 @@ class PostAjaxHandler(UserHander):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         u_id =  self.current_user.decode()
         content = self.get_argument('content')
+        if not content.strip():
+            raise tornado.web.HTTPError(500, reason='content can not be empty')
         title = self.get_argument('title')
+        if not title.strip():
+            raise tornado.web.HTTPError(500, reason='title can not be empty')
         tags = self.get_argument('tags').split(',')
-        category = [i.lower() for i in self.get_argument('category').split(',')]
-        category_site = category[0:1]
-        category_person = category[1:]
+        category_site = [i.lower() for i in self.get_argument('category_site').split(',')]
+        if not category_site[0] or len(category_site) != 1:
+            raise tornado.web.HTTPError(500, reason='wrong category_site')
+        category_person = [i.lower() for i in self.get_argument('category_person').split(',')]
         # 如果不存在category_site,创建
         category_site_ids = []
         for c_name in category_site:
