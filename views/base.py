@@ -7,6 +7,8 @@ from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
 import urllib.parse as urlparse
 from urllib.parse import urlencode
+from lxml import etree
+
 
 def authenticated_async(method):
     @gen.coroutine
@@ -30,21 +32,7 @@ def authenticated_async(method):
                 yield result
     return wrapper
 
-class BaseHandler(tornado.web.RequestHandler):
-    async def is_login(self):
-        sessionid = self.get_secure_cookie('sessionid')
-        sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
-        uid = self.get_secure_cookie('uid')
-        if not (sessionid and sig and uid):
-            return False
-        user_salt = await self.application.redis.get(uid)
-        hashstr = sessionid + user_salt + uid
-        user = {}
-        #print(hashlib.sha512(hashstr).hexdigest())
-        print()
-        if sig == hashlib.sha512(hashstr).hexdigest():
-            return True
-        return False
+
 class UserHander(tornado.web.RequestHandler):
     def prepare(self):
         self.set_cookie("_xsrf", self.xsrf_token)
@@ -73,3 +61,32 @@ class BlockingHandler(tornado.web.RequestHandler):
         cc = OpenCC('t2s')
         text = cc.convert(text)
         return text
+
+    @run_on_executor
+    def get_thumb_image(self,posts):
+        for post in posts:
+            if 'post_thumb' not in post:
+                post_etree = etree.HTML(post['content'])
+                if post_etree is not None:
+                    img = post_etree.cssselect("img:first-child")
+                    if len(img) > 0:
+                        post_thumb = img[0].get('src')
+                        if post_thumb:
+                            post['post_thumb'] = post_thumb
+        return posts
+
+class BaseHandler(BlockingHandler):
+    async def is_login(self):
+        sessionid = self.get_secure_cookie('sessionid')
+        sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
+        uid = self.get_secure_cookie('uid')
+        if not (sessionid and sig and uid):
+            return False
+        user_salt = await self.application.redis.get(uid)
+        hashstr = sessionid + user_salt + uid
+        user = {}
+        #print(hashlib.sha512(hashstr).hexdigest())
+        print()
+        if sig == hashlib.sha512(hashstr).hexdigest():
+            return True
+        return False

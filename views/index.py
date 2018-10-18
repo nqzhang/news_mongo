@@ -13,6 +13,7 @@ class IndexPageHandler(BaseHandler):
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         posts =  await self.application.db.posts.find().sort([("post_date",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
         posts = await join.post_user(posts,self.application.db)
+        posts = await self.get_thumb_image(posts)
         hot_posts = await sidebar.hot_posts(self.application.db)
         #self.write('ok')
         self.render('index.html',menu_left=menu_left,posts=posts,config=config,page=page,hot_posts=hot_posts,is_login=is_login)
