@@ -4,6 +4,8 @@
 /* primary text color: #657180 */
 /* secondary text color: #2E2E2E */
 /* theme color: #03a87c */
+/* border color: #e0e0e0 */
+
 /* ==== CSS reset ==== */
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -181,7 +183,7 @@ a, a:hover, a:focus {
 }
 
 .left-content {
-    flex-grow: 2;
+    flex-grow: 3;
     max-width: 680px;
     margin-right: 2rem;
     float: left;
@@ -190,6 +192,7 @@ a, a:hover, a:focus {
 
 .right-content {
     flex-grow: 1;
+    max-width: 300px;
 }
 
 .list-item {
@@ -220,6 +223,16 @@ a, a:hover, a:focus {
 .sidebar-head {
     font-size: 1.5rem;
     padding-bottom: 2rem;
+}
+
+.breadcrumb {
+    margin: 1rem 0 1.5rem;
+}
+
+.metadata {
+    padding-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 /* ==== other body ==== */

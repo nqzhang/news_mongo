@@ -20,110 +20,54 @@
 </head>
 
 <body>
-    <div class="main">
-        <section id="menu-wrapper">
-            <ul class="menu">
-                <li>
-                    <a href="/">
-                        {{ config.site_name }}
-                    </a>
-                </li>
-                {% for menu in menu_left %}
-                <li>
-                    <a href="/c/{{ menu['_id'] }}/">
-                        {{ menu['name'] }}
-                    </a>
-                </li>
-                {% end %}
-            </ul>
-        </section>
-        <div id="box">
-            <section id="header">
-                <div id="header-left">
-                    <a href="#" id="a-menu">
-                        <img src="/static/images/menu.png" alt="menu">
-                    </a>
+    {% block header %}
+        {% include component/header.html %}
+    {% end %}
+    <div class="container" id="content-wrapper">
+        <div class="content">
+            <div class="left-content">
+                <div class='breadcrumb'>
+                    <a href="/" target="_blank">首页</a>
+                    /
+                    <a href="/c/{{ post['category'][0]['_id'] }}/" target="_blank">{{ post['category'][0]['name'] }}</a>
+                    /
+                    <span class="text">正文</span>
                 </div>
-                <div id="header-title">
-                    <h1>{{ config.site_name }}</h1>
+                <h1>{{ post['title'] }}</h1>
+                <div class="metadata">
+                    <span class="original">原创</span> <span>{{ post['user']['user_name'] }}</span> <span> {{ post['post_date'] }} </span>
                 </div>
-            </section>
-            <div class="news-header">
-                <div class="middlebar">
-                    <div class="bui-left logo-box">
-                        <div id="logo_article">
-                            <a href="/">{{ config.site_name }}</a>
-                        </div>
-                    </div>
-                    <div class="middlebar-inner clearfix">
-                        <div class="bui-left chinese-tag">
-                            <a href="/" target="_blank">首页</a>
-                            /
-                            <a href="/c/{{ post['category'][0]['_id'] }}/" target="_blank">{{ post['category'][0]['name'] }}</a>
-                            /
-                            <span class="text">正文</span>
-                        </div>
-                    </div>
+                <div class="article-content">
+                    {% raw post['content'] %}
                 </div>
-            </div>
-            <div id="left_sidebar">
-                <ul>
-					{% for menu in menu_left %}
-					<li>
-                        <a href="/c/{{ menu['_id'] }}/" class="category"><span>{{ menu['name'] }}</span></a>
+                <ul class="tag-list">
+                    {% for tag in post['tags'] %}
+                    <li class="tag-item">
+                        <a href="/t/{{ tag['_id'] }}" target="_blank" class="label-link">{{ tag['name'] }}</a>
                     </li>
-					{% end %}
+                    {% end %}
                 </ul>
             </div>
-            <div class="bui-left index-middle">
-			    <div class="article-box">
-				<h1 class="article-title">{{ post['title'] }}</h1>
-				<div class="article-sub">
-					<span class="original">原创</span> <span>{{ post['user']['user_name'] }}</span> <span> {{ post['post_date'] }} </span>
-				</div>
-				<div class="article-content">
-					{% raw post['content'] %}
-				</div>
-				<div class="bui-box article-tag">
-					<div class="bui-left">
-						<i class="bui-icon icon-tag" style="font-size: 21px; color: rgb(202, 202, 202);"></i>
-						<ul class="tag-list">
-							{% for tag in post['tags'] %}
-							<li class="tag-item">
-								<a href="/t/{{ tag['_id'] }}" target="_blank" class="label-link">{{ tag['name'] }}</a>
-							</li>
-							{% end %}
-						</ul>
-					</div>
-				</div>
-			    </div>
-		    </div>
-			<div class="right_sidebar">
-
-				<div id="hotnews">
-					<div class="sidebar-head">
-						24小时热门
-					</div>
-					<ul class="article-list">
-						{% for hot_post in hot_posts %}
-						<li class="article-item">
-							<a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
-								<!--
-								<div class="module-pic news-pic">
-									<img src="//p9.pstatp.com/list/240x240/pgc-image/153622829372847ac5a43fc">
-								</div>
-								-->
-								<div class="news-inner">
-									<p class="module-title">{{ hot_post['title'] }}</p>
-								</div>
-							</a>
-						</li>
-						{% end %}
-					</ul>
-				</div>
-			</div>
-
-            <div style="clear: both;"></div>
+            <div class="right-content">
+                <div class="right_sidebar">
+                    <div>
+                        <div class="sidebar-head">
+                            24小时热门
+                        </div>
+                        <div>
+                            {% for hot_post in hot_posts %}
+                            <section class="sidebar-item">
+                                <h3>
+                                    <a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
+                                        {{ hot_post['title'] }}
+                                    </a>
+                                </h3>
+                            </section>
+                            {% end %}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
@@ -132,5 +76,4 @@ $.post("/views", {post_id:"{{ post['_id'] }}" });
 </script>
 <script async type="text/javascript" src="/static/js/custom_fix.js"></script>
 </body>
-
 </html>
