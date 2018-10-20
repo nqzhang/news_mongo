@@ -10,12 +10,12 @@
 		<title>{{ post['title'] }} - {{ config.site_name }}</title>
 		<meta name="description" content="{{ post['desc'] }}" />
 		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/prism.css"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/lib/prism.css"/>
         <link rel="alternate" hreflang="zh-Hant" href="{{ config.site_domain }}/a/{{post['_id']}}/" />
         <link rel="alternate" hreflang="zh-Hans" href="{{ config.site_domain }}/a/{{post['_id']}}/zh-cn/" />
-		<script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"></script>
+		<script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
     	<script type="text/javascript" src="/static/js/main.js"></script>
-        <script type="text/javascript" src="/static/js/prism.js"></script>
+        <script type="text/javascript" src="/static/js/lib/prism.js"></script>
         {% raw config.analytics_code %}
 </head>
 
@@ -25,15 +25,13 @@
             <ul class="menu">
                 <li>
                     <a href="/">
-                        <span class="menu-li-title">{{ config.site_name }}</span>
-                        <img class="menu-li-arrow" src="/static/images/arrow-forward.png" alt="">
+                        {{ config.site_name }}
                     </a>
                 </li>
                 {% for menu in menu_left %}
                 <li>
                     <a href="/c/{{ menu['_id'] }}/">
-                            <span class="menu-li-title">{{ menu['name'] }}</span>
-                            <img class="menu-li-arrow" src="/static/images/arrow-forward.png" alt="">
+                        {{ menu['name'] }}
                     </a>
                 </li>
                 {% end %}

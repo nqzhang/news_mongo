@@ -1,0 +1,94 @@
+
+<html>
+ 	<head>
+		<meta charset="UTF-8">
+		{% raw config.custom_meta %}
+		<meta http-equiv="Cache-Control" content="no-transform" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<title>{{ config.site_name }}</title>
+		<meta name="keywords" content="">
+		<meta name="description" content="" />
+		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+		<script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
+    	<script type="text/javascript" src="/static/js/main.js"></script>
+		{% raw config.analytics_code %}
+ 	</head>
+ 	<body>
+		<div class="container">
+			<header>
+				<div class="header-top">
+					<a class="logo" href="/">
+						{{ config.site_name }}
+					</a>
+					<div class="meta-bar">
+						<a class="search">搜索</a>
+						<a class="signup">注册</a>
+						<a class="login">登录</a>
+					</div>
+				</div>
+			</header>
+		</div>
+		<div id="menu-wrapper">
+			<div class="container">
+				<ul class="menu">
+					{% for menu in menu_left %}
+					<li>
+						<a href="/c/{{ menu['_id'] }}/">
+							{{ menu['name'] }}
+						</a>
+					</li>
+					{% end %}
+				</ul>
+			</div>
+		</div>
+		{% block content-body %}
+		<div id="content-wrapper" class="container">
+			<div class="content">
+				<div class="left-content">
+						<div class="list">
+							{% for post in posts %}
+							<section class="list-item">
+								<div>
+									<h2><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h2>
+									<span class="">&nbsp;{{ post['user']['user_name'] }}&nbsp;</span>
+									{% comment "<a class="" target="_blank"  href="/c/user/{{ post['user']['_id'] }}/">&nbsp;{{ post['user']['user_name'] }}&nbsp;</a>" %}
+									<span class="">&nbsp;{{ post['post_date'] }}</span>
+								</div>
+								{% if "post_thumb" in post %}
+								<div class="">
+									<a href="/a/{{ post['_id'] }}" target="_blank" class="">
+										<img src="{{ post['post_thumb'] }}"/>
+									</a>
+								</div>
+								{% end %}
+							</section>
+							{% end %}
+						</div>
+						{% block page %}
+						<div id="" class="pagination">
+								<a class="current" href="/" title="第 1 页">1</a>
+								<a class="" href="/2/">2</a>
+								<a class="" href="/3/" title="第 3 页">3</a>
+								<a class="" href="/4/" title="第 4 页">4</a>
+								<a class="" href="/5/" title="第 5 页">5</a>
+								<a class="" href="/6/" title="第 6 页">6</a>
+								<a class="" href="/6/" title="第 7 页">7</a>
+								<a class="" href="/7/" title="第 8 页">8</a>
+								<a class="" href="/8/" title="第 9 页">9</a>
+								<a class="" href="/9/" title="第 10 页">10</a>
+						</div>
+						{% end %}
+					</div>
+					<div class="right-content">
+						{% block right_sidebar %}
+						{% end %}
+					</div>
+			</div>
+		</div>
+		{% end %}
+		<footer>
+
+		</footer>
+ 	</body>
+ </html>

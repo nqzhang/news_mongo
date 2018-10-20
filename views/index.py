@@ -16,4 +16,4 @@ class IndexPageHandler(BaseHandler):
         posts = await self.get_thumb_image(posts)
         hot_posts = await sidebar.hot_posts(self.application.db)
         #self.write('ok')
-        self.render('index.html',menu_left=menu_left,posts=posts,config=config,page=page,hot_posts=hot_posts,is_login=is_login)
+        self.render('page/index.html',menu_left=menu_left,posts=posts,config=config,page=page,hot_posts=hot_posts,is_login=is_login)

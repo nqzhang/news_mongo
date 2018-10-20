@@ -3,6 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# virtualenv files
+bin
+include
+
 # C extensions
 *.so
 
@@ -112,4 +116,6 @@ dmypy.json
 #编辑器
 .idea/
 
-
+# others
+pip-selfcheck.json
+dump.rdb
