@@ -5,9 +5,7 @@
 {% end %}
 
 {% block right_sidebar %}
-
 	<div class="right_sidebar">
-
 		<div id="hotnews">
 			<div class="sidebar-head">
 				{{ hot_posts['name'] }}   24小时热门
@@ -30,18 +28,17 @@
 			</ul>
 		</div>
 	</div>
-
 {% end %}
 
 
 {% block category %}
-				<ul>
-					{% for menu in menu_left %}
-							{% if c_id == str(menu['_id']) %}
-								<li><a href="/c/{{ menu['_id'] }}/" class="category category-active"><span>{{ menu['name'] }}</span></a></li>
-							{% else %}
-								<li><a href="/c/{{ menu['_id'] }}/" class="category"><span>{{ menu['name'] }}</span></a></li>
-							{% end %}
-					{% end %}
-				</ul>
+	<ul>
+		{% for menu in menu_left %}
+				{% if c_id == str(menu['_id']) %}
+					<li><a href="/c/{{ menu['_id'] }}/" class="category category-active"><span>{{ menu['name'] }}</span></a></li>
+				{% else %}
+					<li><a href="/c/{{ menu['_id'] }}/" class="category"><span>{{ menu['name'] }}</span></a></li>
+				{% end %}
+		{% end %}
+	</ul>
 {% end %}

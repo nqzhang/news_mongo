@@ -15,19 +15,22 @@
 		{% raw config.analytics_code %}
  	</head>
  	<body>
-		<div class="container">
-			<header>
-				<div class="header-top">
-					<a class="logo" href="/">
-						{{ config.site_name }}
-					</a>
-					<div class="meta-bar">
-						<a class="search">搜索</a>
-						<a class="signup">注册</a>
-						<a class="login">登录</a>
+		{% block header %}
+		<div class="header-wrapper">
+			<div class="container">
+				<header>
+					<div class="header-top">
+						<a class="logo" href="/">
+							{{ config.site_name }}
+						</a>
+						<div class="meta-bar">
+							<a class="search">搜索</a>
+							<a class="signup">注册</a>
+							<a class="login">登录</a>
+						</div>
 					</div>
-				</div>
-			</header>
+				</header>
+			</div>
 		</div>
 		<div id="menu-wrapper">
 			<div class="container">
@@ -42,6 +45,7 @@
 				</ul>
 			</div>
 		</div>
+		{% end %}
 		{% block content-body %}
 		<div id="content-wrapper" class="container">
 			<div class="content">
@@ -55,13 +59,6 @@
 									{% comment "<a class="" target="_blank"  href="/c/user/{{ post['user']['_id'] }}/">&nbsp;{{ post['user']['user_name'] }}&nbsp;</a>" %}
 									<span class="">&nbsp;{{ post['post_date'] }}</span>
 								</div>
-								{% if "post_thumb" in post %}
-								<div class="">
-									<a href="/a/{{ post['_id'] }}" target="_blank" class="">
-										<img src="{{ post['post_thumb'] }}"/>
-									</a>
-								</div>
-								{% end %}
 							</section>
 							{% end %}
 						</div>

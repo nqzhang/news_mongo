@@ -4,7 +4,6 @@
 /* primary text color: #657180 */
 /* secondary text color: #2E2E2E */
 /* theme color: #03a87c */
-/* theme hover color: #029e74 */
 /* ==== CSS reset ==== */
 
 /* http://meyerweb.com/eric/tools/css/reset/ 
@@ -80,12 +79,12 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
 }
 
-h1 { font-size: 2.5rem; margin-bottom: 1rem; }
-h2 { font-size: 2.25rem; margin-bottom: 0.75rem;}
-h3 { font-size: 2rem; margin-bottom: 0.5rem; }
-h4 { font-size: 1.75rem; margin-bottom: 0.5rem; }
-h5 { font-size: 1.5rem; margin-bottom: 0.4rem; }
-h6 { font-size: 1.25rem; margin-bottom: 0.3rem;}
+h1 { font-size: 2.25rem; margin-bottom: 1rem; }
+h2 { font-size: 2rem; margin-bottom: 0.75rem;}
+h3 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+h4 { font-size: 1.50rem; margin-bottom: 0.5rem; }
+h5 { font-size: 1.25rem; margin-bottom: 0.4rem; }
+h6 { font-size: 1rem; margin-bottom: 0.3rem;}
 
 a, a:hover, a:focus {
     cursor: pointer;
@@ -100,9 +99,11 @@ a, a:hover, a:focus {
     align-items: center;
 }
 
-.logo {
+.logo,
+.logo:hover,
+.logo:focus {
     color: #2E2E2E;
-    font-size: 2rem;
+    font-size: 2.5rem;
 }
 
 .meta-bar {
@@ -118,7 +119,7 @@ a, a:hover, a:focus {
     padding: 0px 1.5rem;
 }
 
-.login, .signup {
+.search, .login, .signup {
     color: #03a87c;
 }
 
@@ -128,13 +129,18 @@ a, a:hover, a:focus {
     margin-left: 1.5rem;
 }
 
+.search:hover, 
+.signup:hover {
+    color: #03a87c;
+}
+
 .login:hover {
-    border-color: #029e74;
-    color: #029e74;
+    color: #fff;
+    background-color: #03a87c;
 }
 
 .menu {
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     display: flex;
     justify-content: flex-start;
 }
@@ -161,7 +167,7 @@ a, a:hover, a:focus {
     font-size: 1.1rem;
 }
 
-/* ==== Body ==== */
+/* ==== list body ==== */
 .container {
     width: 100%;
     max-width: 1048px;
@@ -203,6 +209,21 @@ a, a:hover, a:focus {
     text-align: center;
     line-height: 2rem;
 }
+
+.pagination a:hover,
+.pagination a.current{
+    border-color: #03a87c;
+    color: #fff;
+    background-color: #03a87c;
+}
+/* ==== article body ==== */
+.sidebar-head {
+    font-size: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* ==== other body ==== */
+
 /* ==== Sidebar ==== */
 /* ==== Footer ==== */
 footer {
