@@ -3,7 +3,7 @@
 
 /* primary text color: #657180 */
 /* secondary text color: #2E2E2E */
-/* theme color: #03a87c */
+/* theme color: #fd484d */
 /* border color: #e0e0e0 */
 
 /* ==== CSS reset ==== */
@@ -103,6 +103,10 @@ pre {
 }
 
 /* ==== Header ==== */
+.header-wrapper {
+    border-bottom: 1px solid #e0e0e0;
+}
+
 .header-top {
     height: 6rem;
     display: flex;
@@ -131,27 +135,27 @@ pre {
 }
 
 .search, .login, .signup {
-    color: #03a87c;
+    color: #fd484d;
 }
 
 .login {
-    border: 1px solid #03a87c;
+    border: 1px solid #fd484d;
     border-radius: 0.25rem;
     margin-left: 1.5rem;
 }
 
 .search:hover, 
 .signup:hover {
-    color: #03a87c;
+    color: #fd484d;
 }
 
 .login:hover {
     color: #fff;
-    background-color: #03a87c;
+    background-color: #fd484d;
 }
 
 .menu {
-    padding: 1.5rem 0;
+    padding: 1rem 0;
     display: flex;
     justify-content: flex-start;
 }
@@ -189,6 +193,7 @@ pre {
 .content {
     display: flex;
     flex-direction: row;
+    margin-top: 3rem;
 }
 
 .left-content {
@@ -208,6 +213,14 @@ pre {
     margin-bottom: 2rem;
 }
 
+.list-item h2 a {
+    width: 100%;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .pagination {
     padding-top: 3rem;
 }
@@ -224,9 +237,9 @@ pre {
 
 .pagination a:hover,
 .pagination a.current{
-    border-color: #03a87c;
+    border-color: #fd484d;
     color: #fff;
-    background-color: #03a87c;
+    background-color: #fd484d;
 }
 /* ==== article body ==== */
 .sidebar-head {
