@@ -26,11 +26,11 @@ class PostAjaxHandler(UserHander):
         title = self.get_argument('title')
         if not title.strip():
             raise tornado.web.HTTPError(500, reason='title can not be empty')
-        tags = self.get_argument('tags').split(',')
-        category_site = [i.lower() for i in self.get_argument('category_site').split(',')]
-        if not category_site[0] or len(category_site) != 1:
+        tags = [x for x in self.get_argument('tags').split(',') if x]
+        category_site = [i.lower() for i in self.get_argument('category_site').split(',') if i]
+        if len(category_site) != 1:
             raise tornado.web.HTTPError(500, reason='wrong category_site')
-        category_person = [i.lower() for i in self.get_argument('category_person').split(',')]
+        category_person = [i.lower() for i in self.get_argument('category_person').split(',') if i]
         # 如果不存在category_site,创建
         category_site_ids = []
         for c_name in category_site:

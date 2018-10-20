@@ -3,8 +3,10 @@ import tornado
 from bson import ObjectId
 import config
 from lxml import etree
-from models import sidebar
+from models import join,sidebar
 from .base import BlockingHandler
+from config import articles_per_page
+
 
 class ArticleHandler(BlockingHandler):
     async def get(self, post_id,language='zh-tw'):
@@ -18,7 +20,8 @@ class ArticleHandler(BlockingHandler):
             category.append(c)
         post['category'] = category
         tags = []
-        for t_id in post['tags']:
+        tags_id = post['tags']
+        for t_id in tags_id:
             t = await self.application.db.terms.find_one({"_id":ObjectId(t_id)})
             tags.append(t)
         post['tags'] = tags
@@ -32,12 +35,16 @@ class ArticleHandler(BlockingHandler):
 
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self.application.db)
+        related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
+            .limit(articles_per_page).to_list(length=articles_per_page)
+        related_posts = await join.post_user(related_posts, self.application.db)
+        related_posts = await self.get_posts_desc(related_posts)
         self.set_header('cache-control',
-                        'public, stale-while-revalidate=120,stale-if-error=3600,max-age=5,s-maxage=2592000')
+                        'public, stale-while-revalidate=120,stale-if-error=3600,max-age=5,s-maxage=600')
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-            self.render('article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts)
+            self.render('article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts)
         else:
-            self.render('article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts)
+            self.render('article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts)
 
