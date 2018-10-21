@@ -74,6 +74,14 @@ class BlockingHandler(tornado.web.RequestHandler):
                         if post_thumb:
                             post['post_thumb'] = post_thumb
         return posts
+    @run_on_executor
+    def get_posts_desc(self,posts):
+        for post in posts:
+            post_etree = etree.HTML(post['content'])
+            post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
+            # post_desc = post_etree.cssselect('p')[0].text
+            post['desc'] = post_desc
+        return posts
 
 class BaseHandler(BlockingHandler):
     async def is_login(self):

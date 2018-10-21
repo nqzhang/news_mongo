@@ -66,6 +66,33 @@
                             {% end %}
                         </div>
                     </div>
+                    <div>
+                        <span class="related-title">相关文章</span>
+                        <div class="recommend-box">
+                            {% for related_post in related_posts%}
+                                <div class="recommend-item-box type_blog clearfix">
+                                    <div class="content">
+                                        <a href="/a/{{ related_post['_id'] }}" target="_blank" title="{{ related_post['title'] }}">
+                                        <h4 class="text-truncate oneline">
+                                                {{ related_post['title'] }}				</h4>
+                                        <div class="info-box d-flex align-content-center">
+                                            <p class="date-and-readNum">
+                                                <span class="date hover-show">{{ related_post['post_date'] }}</span>
+                                                </p>
+                                            </div>
+                                        </a>
+                                            <p class="content">
+                                                <a href="/a/{{ related_post['_id'] }}" target="_blank" title="{{ related_post['title'] }}">
+                                                    <span class="desc oneline">{{ related_post['desc'] }}
+                                                    </span>
+                                                </a>
+                                                <span class="blog_title_box oneline"><a target="_blank" href="#">来自：	<span class="blog_title"> {{ related_post['user']['user_name'] }}</span></a></span>
+                                            </p>
+                                    </div>
+                                </div>
+                            {% end %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
