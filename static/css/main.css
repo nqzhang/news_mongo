@@ -3,8 +3,12 @@
 
 /* primary text color: #657180 */
 /* secondary text color: #2E2E2E */
+/* menu color: #232323 */
 /* theme color: #fd484d */
 /* border color: #e0e0e0 */
+
+/* svg element */
+/* https://www.flaticon.com/packs */
 
 /* ==== CSS reset ==== */
 
@@ -102,9 +106,13 @@ pre {
     white-space: pre-wrap;
 }
 
+body {
+    background-color: #F7F7F7;
+}
+
 /* ==== Header ==== */
 .header-wrapper {
-    border-bottom: 1px solid #e0e0e0;
+    margin: 3rem 0;
 }
 
 .header-top {
@@ -114,11 +122,22 @@ pre {
     align-items: center;
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+}
+
 .logo,
 .logo:hover,
 .logo:focus {
     color: #2E2E2E;
     font-size: 2.5rem;
+}
+
+.logo img {
+    height: 80%;
+    width: auto;
+    padding-right: 1rem;
 }
 
 .meta-bar {
@@ -155,31 +174,39 @@ pre {
 }
 
 .menu {
-    padding: 1rem 0;
+    padding: 2rem 0;
     display: flex;
     justify-content: flex-start;
-}
-
-#menu-wrapper {
-    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
 }
 
 #menu-wrapper.sticky {
     position: fixed;
     top: 0;
+    left: 0; 
     width: 100%;
+    background-color: #fff;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
+#menu-wrapper.sticky .menu {
+    padding: 2rem 3rem;
+    margin: 0 auto;
+    max-width: 1048px;
+    border: none;
+}
+
 .menu li {
     display: inline-block;
-    padding-right: 1rem;
+    padding-right: 2rem;
 }
 
 .menu li a{
     font-size: 1.1rem;
+    color: #232323;
+    font-weight: 700;
 }
 
 /* ==== list body ==== */
@@ -187,7 +214,11 @@ pre {
     width: 100%;
     max-width: 1048px;
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 3rem;
+    background-color: #fff;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
 .content {

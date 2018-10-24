@@ -3,7 +3,8 @@
         <header>
             <div class="header-top">
                 <a class="logo" href="/">
-                    {{ config.site_name }}
+                    <img src="/static/images/logo.png" />
+                    <span>{{ config.site_name }}
                 </a>
                 <div class="meta-bar">
                     <a class="search">搜索</a>
@@ -12,18 +13,5 @@
                 </div>
             </div>
         </header>
-    </div>
-</div>
-<div id="menu-wrapper">
-    <div class="container">
-        <ul class="menu">
-            {% for menu in menu_left %}
-            <li>
-                <a href="/c/{{ menu['_id'] }}/">
-                    {{ menu['name'] }}
-                </a>
-            </li>
-            {% end %}
-        </ul>
     </div>
 </div>

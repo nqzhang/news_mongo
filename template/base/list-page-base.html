@@ -20,6 +20,9 @@
 		{% end %}
 		{% block content-body %}
 		<div id="content-wrapper" class="container">
+			{% block menu %}
+				{% include ../component/menu.html %}
+			{% end %}
 			<div class="content">
 				<div class="left-content">
 					<div class="list">
@@ -54,10 +57,11 @@
 					{% end %}
 				</div>
 			</div>
+			{% block footer %}
+				{% include ../component/footer.html %}
+			{% end %}
 		</div>
 		{% end %}
-		<footer>
 
-		</footer>
  	</body>
  </html>
