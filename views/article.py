@@ -21,9 +21,11 @@ class ArticleHandler(BlockingHandler):
         post['category'] = category
         tags = []
         tags_id = post['tags']
+        #print(tags_id)
         for t_id in tags_id:
             t = await self.application.db.terms.find_one({"_id":ObjectId(t_id)})
-            tags.append(t)
+            if t:
+                tags.append(t)
         post['tags'] = tags
         post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
         #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
@@ -32,7 +34,7 @@ class ArticleHandler(BlockingHandler):
         post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
         #post_desc = post_etree.cssselect('p')[0].text
         post['desc'] = post_desc
-
+        print(post)
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self.application.db)
         related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
