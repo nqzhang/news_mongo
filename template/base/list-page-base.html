@@ -30,9 +30,12 @@
 						<section class="list-item">
 							<div>
 								<h2><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h2>
-								<span class="">&nbsp;{{ post['user']['user_name'] }}&nbsp;</span>
-								{% comment "<a class="" target="_blank"  href="/c/user/{{ post['user']['_id'] }}/">&nbsp;{{ post['user']['user_name'] }}&nbsp;</a>" %}
-								<span class="">&nbsp;{{ post['post_date'] }}</span>
+								<div class="post-meta">
+										<img src="/static/svgs/user.svg" />
+										<span>{{ post['user']['user_name'] }}</span>
+										<img src="/static/svgs/clock.svg" />
+										<span>{{ post['post_date'] }}</span>
+								</div>
 							</div>
 						</section>
 						{% end %}
