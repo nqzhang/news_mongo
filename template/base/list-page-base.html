@@ -9,6 +9,7 @@
 		<title>{{ config.site_name }}</title>
 		<meta name="keywords" content="">
 		<meta name="description" content="" />
+		<link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
 		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
 		<script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
     	<script type="text/javascript" src="/static/js/main.js"></script>
@@ -29,7 +30,7 @@
 						{% for post in posts %}
 						<section class="list-item">
 							<div>
-								<h2><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h2>
+								<h4><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
 								<div class="post-meta">
 										<img src="/static/svgs/user.svg" />
 										<span>{{ post['user']['user_name'] }}</span>

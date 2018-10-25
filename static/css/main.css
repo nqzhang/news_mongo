@@ -238,7 +238,7 @@ body {
 .content {
     display: flex;
     flex-direction: row;
-    margin-top: 3rem;
+    margin-top: 2rem;
 }
 
 #content-wrapper {
@@ -309,9 +309,9 @@ body {
 /* ==== article body ==== */
 .sidebar-head {
     font-size: 1.5rem;
-    padding-bottom: 2rem;
     display: inline-block;
     padding-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
 }
 
 .sidebar-head:after {
@@ -322,6 +322,10 @@ body {
     padding-bottom: 0.5rem;
     -webkit-transition: width 0.3s; /* Safari */
     transition: width 0.3s;
+}
+
+.sidebar-item li{
+    padding-bottom: 0.5rem;
 }
 
 .right_sidebar:hover .sidebar-head:after {
