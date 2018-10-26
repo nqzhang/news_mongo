@@ -1086,6 +1086,7 @@ font-weight: 100;
     line-height: 24px;
     color: #3d3d3d;
     display: inline-block;
+    white-space: normal!important;
 }
 
 .recommend-box .recommend-item-box div.info-box, .article-list .recommend-item-box div.info-box, .recommend-box .article-item-box div.info-box, .article-list .article-item-box div.info-box {
