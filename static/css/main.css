@@ -358,11 +358,12 @@ a.category-active {
 
 .news-header {
     width: 100%;
-    max-width: 1220px;
+    min-width: 1220px;
 }
 
 .middlebar .middlebar-inner {
     margin: 0 auto;
+    width:1180px;
 }
 
 
@@ -1030,7 +1031,7 @@ font-weight: 100;
     }
     /*文章自适应*/
     .news-header {
-        min-width: 300px;
+        display: none;
     }
     .logo-box {
         display: none;

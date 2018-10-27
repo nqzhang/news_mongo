@@ -39,6 +39,24 @@
                 {% end %}
             </ul>
         </section>
+        <div class="news-header">
+                <div class="middlebar">
+                    <div class="middlebar-inner clearfix">
+                    <div class="bui-left logo-box">
+                        <div id="logo_article">
+                            <a href="/">{{ config.site_name }}</a>
+                        </div>
+                    </div>
+                        <div class="bui-left chinese-tag">
+                            <a href="/" target="_blank">首页</a>
+                            /
+                            <a href="/c/{{ post['category'][0]['_id'] }}/" target="_blank">{{ post['category'][0]['name'] }}</a>
+                            /
+                            <span class="text">正文</span>
+                        </div>
+                    </div>
+                </div>
+        </div>
         <div id="box">
             <section id="header">
                 <div id="header-left">
@@ -50,24 +68,6 @@
                     <h1>{{ config.site_name }}</h1>
                 </div>
             </section>
-            <div class="news-header">
-                <div class="middlebar">
-                    <div class="bui-left logo-box">
-                        <div id="logo_article">
-                            <a href="/">{{ config.site_name }}</a>
-                        </div>
-                    </div>
-                    <div class="middlebar-inner clearfix">
-                        <div class="bui-left chinese-tag">
-                            <a href="/" target="_blank">首页</a>
-                            /
-                            <a href="/c/{{ post['category'][0]['_id'] }}/" target="_blank">{{ post['category'][0]['name'] }}</a>
-                            /
-                            <span class="text">正文</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div id="left_sidebar">
                 <ul>
 					{% for menu in menu_left %}
