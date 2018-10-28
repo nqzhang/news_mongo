@@ -236,6 +236,15 @@ body {
     width: 100%;
 }
 
+.menu li a.menu-active {
+    color: #fd484d;
+}
+
+.menu li a.menu-active::after {
+    width: 100%;
+    border-color: #fd484d;
+}
+
 /* ==== list body ==== */
 .container {
     width: 100%;
@@ -346,14 +355,14 @@ body {
     color: #fd484d;
 }
 
-.sidebar-head {
+.section-head {
     font-size: 1.5rem;
     display: inline-block;
     padding-bottom: 0.5rem;
     margin-bottom: 1.5rem;
 }
 
-.sidebar-head:after {
+.section-head:after {
     content: '';
     display: block;
     width: 10%;
@@ -363,12 +372,8 @@ body {
     transition: width 0.3s;
 }
 
-.sidebar-item li{
+.section-item li{
     padding-bottom: 0.5rem;
-}
-
-.right_sidebar:hover .sidebar-head:after {
-    width: 100%;
 }
 
 .breadcrumb {
@@ -394,9 +399,17 @@ body {
     padding: 3rem 0 2rem; 
 }
 
+.related-post-list {
+    margin-top: 4rem;
+}
+
 /* ==== other body ==== */
 
 /* ==== Sidebar ==== */
+.right_sidebar:hover .section-head:after {
+    width: 100%;
+}
+
 /* ==== Footer ==== */
 footer {
     height: 100px;
@@ -415,116 +428,4 @@ footer {
    .main {
        padding: 0 1rem;
    }
-}
-
-
-
-.recommend-box, .article-list {
-    margin-top: 1px;
-    padding: 0;
-    background-color: transparent;
-    -webkit-box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.05);
-}
-.recommend-box .recommend-item-box:first-of-type {
-    border-top: 1px solid  #e0e0e0;
-}
-.recommend-box .recommend-item-box {
-    border-bottom: 1px solid #e0e0e0;
-}
-
-.recommend-box .recommend-item-box, .article-list .recommend-item-box, .recommend-box .article-item-box, .article-list .article-item-box {
-    position: relative;
-    margin-bottom: 1px;
-    padding: 12px 24px;
-    background-color: #fff;
-}
-
-.recommend-box *, .article-list * {
-    word-wrap: break-word;
-}
-
-.recommend-box .recommend-item-box div.content, .article-list .recommend-item-box div.content, .recommend-box .article-item-box div.content, .article-list .article-item-box div.content {
-    display: inline-block;
-    font-size: 0;
-    width: 100%;
-}
-
-.recommend-box .recommend-item-box h4, .article-list .recommend-item-box h4, .recommend-box .article-item-box h4, .article-list .article-item-box h4 {
-    margin-bottom: 6px;
-    font-size: 18px;
-    line-height: 24px;
-    color: #3d3d3d;
-    display: inline-block;
-}
-
-.recommend-box .recommend-item-box div.info-box, .article-list .recommend-item-box div.info-box, .recommend-box .article-item-box div.info-box, .article-list .article-item-box div.info-box {
-    padding-top: 4px;
-    font-size: 14px;
-    color: #6b6b6b;
-    float: right;
-    position: relative;
-}
-
-.recommend-box .recommend-item-box div.info-box, .article-list .recommend-item-box div.info-box, .recommend-box .article-item-box div.info-box, .article-list .article-item-box div.info-box {
-    padding-top: 4px;
-    font-size: 14px;
-    color: #6b6b6b;
-    float: right;
-    position: relative;
-}
-
-.align-content-center {
-    -ms-flex-line-pack: center !important;
-    align-content: center !important;
-}
-
-recommend-box .recommend-item-box p.content, .article-list .recommend-item-box p.content, .recommend-box .article-item-box p.content, .article-list .article-item-box p.content {
-    font-size: 14px;
-    line-height: 22px;
-    white-space: normal;
-    color: #999;
-}
-
-recommend-box .recommend-item-box p.content a, .article-list .recommend-item-box p.content a, .recommend-box .article-item-box p.content a, .article-list .article-item-box p.content a {
-    font-size: 14px;
-    color: #999;
-}
-@media (min-width: 1650px) {
-.container main .recommend-box .type_blog .content .blog_title_box {
-    width: 17%;
-}}
-
-.recommend-box  .desc {
-    display: inline-block;
-    width: 80%;
-    overflow: hidden;
-    vertical-align: bottom;
-    white-space: nowrap;
-}
-
-.recommend-box .recommend-item-box p.content a, .article-list .recommend-item-box p.content a, .recommend-box .article-item-box p.content a, .article-list .article-item-box p.content a {
-    font-size: 14px;
-    color: #999;
-}
-
-.oneline {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap !important;
-}
-
-.content .blog_title_box {
-    width: 20%;
-    text-align: right;
-    float: right;
-}
-
-span.related-title {
-    display: inline-block;
-    font-weight: 700;
-    font-size: 16px;
-    line-height: 32px;
-    padding-bottom: 10px;
-    color: #555;
 }

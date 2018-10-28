@@ -2,11 +2,19 @@
 <div id="menu-wrapper">
     <ul class="menu" >
         {% for menu in menu_left %}
-        <li>
-            <a href="/c/{{ menu['_id'] }}/">
-                {{ menu['name'] }}
-            </a>
-        </li>
+            {% comment if c_id == str(menu['_id']) %}
+                <!-- <li>
+                    <a href="/c/{{ menu['_id'] }}/" class="menu-active">
+                        <span>{{ menu['name'] }}</span>
+                    </a>
+                </li> -->
+            {% comment else %}
+                <li>
+                    <a href="/c/{{ menu['_id'] }}/" >
+                        <span>{{ menu['name'] }}</span>
+                    </a>
+                </li>
+            {% comment end %}
         {% end %}
     </ul>
 </div>
