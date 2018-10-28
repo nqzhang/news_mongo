@@ -104,8 +104,8 @@ p {
 }
 
 img {
-    width: auto;
-    height: 100%;
+    width: 100%;
+    height: auto;
 }
 
 pre {
@@ -401,6 +401,8 @@ body {
 
 .related-post-list {
     margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e0e0e0;
 }
 
 /* ==== other body ==== */
