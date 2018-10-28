@@ -1,0 +1,20 @@
+<div class="right_sidebar">
+    <div>
+        <div class="section-head">
+            24小时热门
+        </div>
+        <div>
+            <section class="section-item">
+                <ul>
+                    {% for hot_post in hot_posts %}
+                    <li>
+                        <a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
+                            {{ hot_post['title'] }}
+                        </a>
+                    </li>
+                    {% end %}
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>
