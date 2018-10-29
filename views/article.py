@@ -37,6 +37,10 @@ class ArticleHandler(BlockingHandler):
         print(post)
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self.application.db)
+        #TODO
+        # 1.tags_id 为空时 不查询相关文章 并使用category_id 补充相关文章
+        # 2. 相关文章排序one
+
         related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             .limit(articles_per_page).to_list(length=articles_per_page)
         related_posts = await join.post_user(related_posts, self.application.db)
