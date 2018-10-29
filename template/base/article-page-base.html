@@ -25,11 +25,10 @@
         {% include ../component/header.html %}
     {% end %}
     <div class="container" id="content-wrapper">
-        {% block menu %}
-            {% include ../component/menu.html %}
-        {% end %}
         <div class="content">
-            <div class="left-content">
+            {% block menu %}
+            {% end %}
+            <div class="main-content">
                 {% block breadcrumb %}
                     {% include ../component/breadcrumb.html %}
                 {% end %}
@@ -55,8 +54,8 @@
                     {% include ../component/related-posts.html %}
                 {% end %}
             </div>
-            <div class="right-content">
-                {% block right_sidebar %}
+            <div class="secondary-content">
+                {% block sidebar %}
                 {% end %}
             </div>
         </div>

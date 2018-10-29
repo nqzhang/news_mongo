@@ -21,16 +21,16 @@
 		{% end %}
 		{% block content-body %}
 		<div id="content-wrapper" class="container">
-			{% block menu %}
-				{% include ../component/menu.html %}
-			{% end %}
 			<div class="content">
-				<div class="left-content">
+				{% block menu %}
+					{% include ../component/menu.html %}
+				{% end %}
+				<div class="main-content">
 					<div class="list">
 						{% for post in posts %}
 						<section class="list-item">
 							<div>
-								<h4><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
+								<h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
 								<div class="post-meta">
 									<img src="/static/svgs/user.svg" />
 									<span>{{ post['user']['user_name'] }}</span>
@@ -45,7 +45,7 @@
 						{% include ../component/pagination.html %}
 					{% end %}
 				</div>
-				<div class="right-content">
+				<div class="secondary-content">
 					{% block right_sidebar %}
 					{% end %}
 				</div>
