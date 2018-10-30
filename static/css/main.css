@@ -2,10 +2,10 @@
 /* mobile breakpoint: 720px */
 
 /* primary text color: #494949 */
-/* secondary text color: #2E2E2E */
+/* secondary text color: ##3d3d3d */
 /* menu color: #232323 */
 /* theme color: #fd484d */
-/* border color: #e0e0e0 */
+/* border color: #f4f4f4 */
 
 /* svg element */
 /* https://www.flaticon.com/packs */
@@ -81,16 +81,16 @@ html, body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #2E2E2E;
+    color: ##3d3d3d;
     font-weight: 500;
 }
 
-h1 { font-size: 2.25rem; margin-bottom: 1rem; }
+h1 { font-size: 2.25rem; margin-bottom: 1rem; font-weight: bold;}
 h2 { font-size: 2rem; margin-bottom: 1rem;}
-h3 { font-size: 1.75rem; margin-bottom: 0.75rem; }
-h4 { font-size: 1.50rem; margin-bottom: 0.75rem; }
-h5 { font-size: 1.25rem; margin-bottom: 0.6rem; }
-h6 { font-size: 1rem; margin-bottom: 0.6rem;}
+h3 { font-size: 1.75rem; margin-bottom: 0.75rem; font-weight: bold;}
+h4 { font-size: 1.50rem; margin-bottom: 0.75rem; font-weight: bold;}
+h5 { font-size: 1.25rem; margin-bottom: 0.6rem; font-weight: bold;}
+h6 { font-size: 1rem; margin-bottom: 0.6rem; font-weight: bold;}
 
 a, a:hover, a:focus {
     cursor: pointer;
@@ -152,7 +152,7 @@ body {
 .logo,
 .logo:hover,
 .logo:focus {
-    color: #2E2E2E;
+    color: ##3d3d3d;
     font-size: 2.5rem;
 }
 
@@ -293,7 +293,7 @@ body {
     width: 100%;
     line-height: 4rem;
     font-weight: 500;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #f4f4f4;
 }
 
 .mobile-menu-close {
@@ -323,7 +323,6 @@ body {
 .main-content {
     flex-grow: 2;
     margin-right: 2rem;
-    padding: 1.5rem 2rem;
     float: left;
     overflow: hidden;
     background-color: #fff;
@@ -342,7 +341,12 @@ body {
 }
 
 .list-item {
-    margin-bottom: 2rem;
+    padding: 2rem;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+.list-item:hover {
+    background-color: #fafafa;
 }
 
 .list-item-title a {
@@ -351,6 +355,11 @@ body {
     display: inline-block;
     white-space: nowrap;
     overflow: hidden;
+    color: #3d3d3d;
+}
+
+.list-item-title a:hover {
+    color: #fd484d;
 }
 
 .post-meta {
@@ -376,7 +385,7 @@ body {
 }
 
 .pagination {
-    padding-top: 3rem;
+    padding: 3rem 2rem;
 }
 
 .pagination a {
@@ -396,6 +405,10 @@ body {
     background-color: #fd484d;
 }
 /* ==== article body ==== */
+.article-wrapper {
+    padding: 2rem;
+}
+
 .tag-list {
     display: flex;
     flex-direction: row;
@@ -444,7 +457,7 @@ body {
 .metadata {
     padding-bottom: 1rem;
     margin-bottom: 1.5rem;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #f4f4f4;
 }
 
 .original {
@@ -456,14 +469,14 @@ body {
 
 .article-content {
     font-size: 1.25rem;
-    color: #2E2E2E;
+    color: ##3d3d3d;
     padding: 3rem 0 2rem; 
 }
 
 .related-post-list {
     margin-top: 4rem;
     padding-top: 2rem;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid #f4f4f4;
 }
 
 /* ==== other body ==== */

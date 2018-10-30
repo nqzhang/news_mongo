@@ -29,30 +29,32 @@
             {% block menu %}
             {% end %}
             <div class="main-content">
-                {% block breadcrumb %}
-                    {% include ../component/breadcrumb.html %}
-                {% end %}
-                <h1>{{ post['title'] }}</h1>
-                <div class="post-meta">
-                    <span class="original">原创</span> 
-                    <img src="/static/svgs/user.svg" />
-                    <span>{{ post['user']['user_name'] }}</span> 
-                    <img src="/static/svgs/clock.svg" />
-                    <span> {{ post['post_date'] }} </span>
-                </div>
-                <div class="article-content">
-                    {% raw post['content'] %}
-                </div>
-                <ul class="tag-list">
-                    {% for tag in post['tags'] %}
-                    <li>
-                        <a href="/t/{{ tag['_id'] }}" target="_blank" class="label-link">{{ tag['name'] }}</a>
-                    </li>
+                <div class="article-wrapper">
+                    {% block breadcrumb %}
+                        {% include ../component/breadcrumb.html %}
                     {% end %}
-                </ul>
-                {% block related_posts %}
-                    {% include ../component/related-posts.html %}
-                {% end %}
+                    <h1>{{ post['title'] }}</h1>
+                    <div class="post-meta">
+                        <span class="original">原创</span> 
+                        <img src="/static/svgs/user.svg" />
+                        <span>{{ post['user']['user_name'] }}</span> 
+                        <img src="/static/svgs/clock.svg" />
+                        <span> {{ post['post_date'] }} </span>
+                    </div>
+                    <div class="article-content">
+                        {% raw post['content'] %}
+                    </div>
+                    <ul class="tag-list">
+                        {% for tag in post['tags'] %}
+                        <li>
+                            <a href="/t/{{ tag['_id'] }}" target="_blank" class="label-link">{{ tag['name'] }}</a>
+                        </li>
+                        {% end %}
+                    </ul>
+                    {% block related_posts %}
+                        {% include ../component/related-posts.html %}
+                    {% end %}
+                </div>
             </div>
             <div class="secondary-content">
                 {% block sidebar %}
