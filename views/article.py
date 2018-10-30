@@ -9,6 +9,18 @@ from config import articles_per_page
 
 
 class ArticleHandler(BlockingHandler):
+    def related_sort(self,terms_id,related_posts):
+        orders = {}
+        for i, term_id in enumerate(terms_id):
+            orders[term_id] = i
+        print('ttt',terms_id,orders,related_posts)
+        sort_key = {}
+        for related_post in related_posts:
+            order_match_count = -sum(el in  terms_id for el in related_post['tags'])
+            order_first = min(orders[t] for t in related_post['tags'] if t in terms_id)
+            sort_key[related_post['_id']] = (order_match_count,order_first)
+        return sorted(related_posts, key=lambda x: sort_key[x['_id']])
+
     async def get(self, post_id,language='zh-tw'):
         post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         u_id = post['user']
@@ -39,10 +51,13 @@ class ArticleHandler(BlockingHandler):
         hot_posts = await sidebar.hot_posts(self.application.db)
         #TODO
         # 1.tags_id 为空时 不查询相关文章 并使用category_id 补充相关文章
-        # 2. 相关文章排序one
 
-        related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
+        #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
+            #.limit(articles_per_page).to_list(length=articles_per_page)
+        print(tags_id)
+        related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}) \
             .limit(articles_per_page).to_list(length=articles_per_page)
+        related_posts = self.related_sort(tags_id,related_posts)
         related_posts = await join.post_user(related_posts, self.application.db)
         related_posts = await self.get_posts_desc(related_posts)
         self.set_header('cache-control',
