@@ -13,6 +13,21 @@ $(document).ready(function() {
     $(window).resize(function(){
         refreshMenuOffsetTop();
     });
+    // sticky menu end
+
+    // toggle mobile menu
+    $("#menu-icon").click(function() {
+        toggleMobileMenu();
+    })
+
+    $(".mobile-menu-background").click(function(){
+        toggleMobileMenu();
+    })
+
+    $(".mobile-menu-close").click(function(){
+        toggleMobileMenu();
+    })
+    // toggle mobile menu end
 })
 
 function setMenuOffset() {
@@ -64,3 +79,14 @@ function refreshMenuOffsetTop() {
     }
 }
 
+function toggleMobileMenu() {
+    if($('.mobile-menu-background').hasClass("active")) {
+        $('.mobile-menu-background').removeClass("active");
+        $('.mobile-menu').removeClass("active");
+        $('body').removeClass("noscroll");
+    } else {
+        $('.mobile-menu-background').addClass("active");
+        $('.mobile-menu').addClass("active");
+        $('body').addClass("noscroll");
+    }
+}

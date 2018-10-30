@@ -123,6 +123,10 @@ body {
     background-color: #F7F7F7;
 }
 
+.noscroll {
+    overflow: hidden;
+}
+
 /* ==== Header ==== */
 .header-wrapper {
     margin: 3rem 0;
@@ -241,6 +245,65 @@ body {
     background-color: #fd484d;
 }
 
+.mobile-menu-background {
+    display: none;
+}
+
+.mobile-menu-background.active {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.mobile-menu {
+    position: fixed;
+    height: 100%;
+    max-width: 350px;
+    width: 80%;
+    z-index: 2;
+    top: 0;
+    left: -100vw;
+    background-color: #fff;
+    overflow-x: hidden;
+    transition: 0.4s;
+    padding: 4rem 2rem 2rem 2rem;
+    -moz-box-shadow: 2px 2px 5px #4a4a4a;
+    -webkit-box-shadow: 2px 2px 5px #4a4a4a;
+    box-shadow: 2px 2px 5px #4a4a4a;
+    overflow: scroll; 
+}
+
+.mobile-menu.active {
+    left: 0;    
+}
+
+.mobile-menu ul {
+    padding: 1rem 0;
+    text-align: center;
+}
+
+.mobile-menu ul li.mobile-menu-item a {
+    font-size: 1.5rem;
+    display: inline-block;
+    width: 100%;
+    line-height: 4rem;
+    font-weight: 500;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.mobile-menu-close {
+    width: 2.5em;
+    height: auto;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
 /* ==== list body ==== */
 .container {
     width: 100%;
@@ -321,7 +384,7 @@ body {
     width: 2rem;
     height: 2rem;
     border: 1px solid #494949;
-    margin-right: 1rem;
+    margin: 1rem 1rem 0 0;
     text-align: center;
     line-height: 2rem;
 }
@@ -440,6 +503,16 @@ footer {
 
 /** mobile breakpoint **/
 @media (max-width: 720px) {
+    .logo,
+    .logo:hover,
+    .logo:focus {
+        font-size: 2rem;
+    }
+
+    .logo img {
+        height: 60%;
+    }
+
    .meta-bar .signup {
        display: none;
    }
@@ -463,5 +536,13 @@ footer {
 
    .content{
        flex-direction: column;
+   }
+
+   .main-content {
+       margin-right: 0;
+   }
+
+   .header-top {
+    padding: 0 1.5rem;
    }
 }
