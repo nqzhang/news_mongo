@@ -10,7 +10,6 @@ from config import articles_per_page
 
 class ArticleHandler(BlockingHandler):
     def related_sort(self,terms_id,related_posts,related_type='tags'):
-        print(terms_id)
         orders = {}
         for i, term_id in enumerate(terms_id):
             orders[term_id] = i
@@ -64,7 +63,7 @@ class ArticleHandler(BlockingHandler):
                 .limit(related_fill_num).to_list(length=related_fill_num)
                 related_posts_category = self.related_sort(category_id, related_posts_category,related_type='category')
                 related_posts += related_posts_category
-        print(related_posts)
+        #print(related_posts)
         related_posts = await join.post_user(related_posts, self.application.db)
         related_posts = await self.get_posts_desc(related_posts)
         self.set_header('cache-control',
