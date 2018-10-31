@@ -67,9 +67,8 @@
 <div class="notice-box" style="display: none; bottom: 56px;">
     <i class="mr8 notice-icon type-error" style="display: block;"></i>
     <span class="notice">请输入文章标题。</span></div>
-<script>
-    CKEDITOR.replace('editor')
-</script>
+{% block postedit %}
+{% end %}
 <script src="/static/js/tagsinput.js"></script>
 <script src="/static/js/user.js"></script>
 </body>

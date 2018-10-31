@@ -1,8 +1,9 @@
 db.posts.createIndex({tags:1,post_date:-1},{background:true})
 db.posts.createIndex({post_date:-1},{background:true})
 db.posts.createIndex({category:1,post_date:-1},{background:true})
-
 db.posts.createIndex({title:"hashed"},{background:true})
+db.posts.createIndex({user:1,post_date:-1},{background:true})
+
 db.terms.createIndex({name:1,type:1},{background:true})
 db.users.createIndex({username:1},{background:true})
 

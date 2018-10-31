@@ -417,3 +417,112 @@ div.notice-box i.notice-icon.type-error {
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
 }
+
+.tab-content>.active {
+    display: block;
+}
+.fade.show {
+    opacity: 1;
+}
+
+.article-list-item {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    border-bottom: 1px dotted #ddd;
+    padding: 1rem 0 1rem 0;
+    color: #999;
+    font-size: 12px;
+}
+
+.list-item-title {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+}
+
+
+.article-list-item-info {
+    margin-top: 0.5rem;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.article-list-item-txt {
+    font-size: 18px;
+    color: #4f4f4f;
+    margin-bottom: 0;
+}
+
+.article-list-item .article-list-item-txt a {
+    font-size: 18px;
+    color: #4f4f4f;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.article-list-item-info {
+    margin-top: 0.5rem;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.item-info-left > span {
+    margin-right: 1.5rem;
+}
+
+.item-info-oper {
+    margin-left: auto;
+}
+
+.item-info-oper span {
+    color: #349EDF;
+    padding: 0px .5rem;
+    border-right: 1px solid #e9e9e9;
+    cursor: pointer;
+}
+
+.item-info-oper span.del {
+    border-right: 0;
+    color: #CA0C16;
+}
+
+.item-info-oper a {
+    color: #349EDF;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease-in;
+}
+
+.article-list-item .article-list-item-txt a:hover {
+    color: #C92027;
+    cursor: pointer;
+}
+
+.icon-search, .icon-read, .icon-comment {
+    fill: #CCC;
+}
+
+.item-info-left > span svg.icon-read {
+    width: 17px;
+    height: 17px;
+    vertical-align: -4px;
+}
+
+span.required {
+    margin-left: 2px;
+    font-size: 12px;
+    color: #CA0C16;
+}

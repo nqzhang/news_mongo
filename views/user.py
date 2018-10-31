@@ -6,13 +6,24 @@ from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
 import config
+from models import join
+from bson.json_util import dumps
 
 class PostEditHandler(UserHander):
     @authenticated_async
-    async def get(self):
+    async def get(self,post_id=0):
         active = 'edit'
+        post={}
+        if post_id != 0:
+            post = await self.application.db.posts.find_one({"_id": ObjectId(post_id),"user":ObjectId(self.current_user.decode())})
+            post = await join.post_tags(post, self.application.db)
+            post = await join.post_category(post, self.application.db)
+            #print(post)
+        post['post_id'] = post_id
+        post_json = dumps(post)
+        print(post_json)
         #print(self.current_user)
-        self.render('user/postedit.html',config=config,active=active)
+        self.render('user/postedit.html',config=config,active=active,post=post,post_json=post_json)
 
 
 class PostAjaxHandler(UserHander):
@@ -21,6 +32,7 @@ class PostAjaxHandler(UserHander):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         u_id =  self.current_user.decode()
         content = self.get_argument('content')
+        post_id = self.get_argument('post_id')
         if not content.strip():
             raise tornado.web.HTTPError(500, reason='content can not be empty')
         title = self.get_argument('title')
@@ -43,11 +55,11 @@ class PostAjaxHandler(UserHander):
             category_site_ids.append(c_id)
         category_person_ids = []
         for c_name in category_person:
-            c = await self.application.db.terms.find_one({"name": c_name, "type": "2"})
+            c = await self.application.db.terms.find_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
             if c:
                 c_id = c['_id']
             else:
-                c = await self.application.db.terms.insert_one({"name": c_name, "type": "2"})
+                c = await self.application.db.terms.insert_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
                 c_id = c.inserted_id
             category_person_ids.append(c_id)
         category_ids = category_site_ids + category_person_ids
@@ -62,10 +74,16 @@ class PostAjaxHandler(UserHander):
                 t = await self.application.db.terms.insert_one({"name": t_name, "type": "1"})
                 t_id = t.inserted_id
             t_ids.append(t_id)
-        post_id = await self.application.db.posts.insert_one(
-            {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
-             "post_date": datetime.datetime.now()})
-        post_id = str(post_id.inserted_id)
+        if post_id == '0':
+            post_id = await self.application.db.posts.insert_one(
+                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
+                 "post_date": datetime.datetime.now()})
+            post_id = str(post_id.inserted_id)
+        else:
+            await self.application.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
+                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
+                 "post_date": datetime.datetime.now()})
+            post_id = str(post_id)
         publish_success = {}
         publish_success['post_id'] = post_id
         publish_success['title'] = title
@@ -76,5 +94,20 @@ class PostListHandler(UserHander):
     async def get(self):
         #print(self.current_user)
         active = 'list'
-        self.render('user/postlist.html',config=config,active=active)
+        posts = await self.application.db.posts.find({'user':ObjectId(self.current_user.decode())}).sort([("post_date", -1)]).to_list(length=None)
+        for post in posts:
+            post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M:%S")
+            views = post.get('views',0)
+            post['views'] = views
+            #print(post)
+        print(posts)
+        self.render('user/postlist.html',config=config,active=active,posts=posts)
+
+class PostDeleteHandler(UserHander):
+    @authenticated_async
+    async def post(self):
+        post_id = self.get_argument('post_id')
+        result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
+        self.write(post_id)
+
 

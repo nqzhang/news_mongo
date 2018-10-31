@@ -86,3 +86,16 @@
             </div>
         </div>
 {% end %}
+
+
+{% block postedit %}
+    {% if post['post_id'] !=0 %}
+    <script>
+        var text = '{% raw post_json %}';
+        jsonData =  JSON.parse(text);
+    </script>
+    {% end %}
+    <script>
+        CKEDITOR.replace('editor')
+    </script>
+{% end %}
