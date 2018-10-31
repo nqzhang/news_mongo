@@ -123,4 +123,4 @@ dump.rdb
 
 
 # exclude
-!/static/js/lib/*
+!/static/js/lib/
