@@ -332,8 +332,8 @@ body {
 }
 
 .secondary-content {
-    width: 28%;
-    max-width: 300px;
+    width: 30%;
+    min-width: 300px;
     padding: 1.5rem 2rem;
     background-color: #fff;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
@@ -620,7 +620,8 @@ footer {
     }
 
     .secondary-content {
-        max-width: 250px;
+        width: 25%;
+        min-width: 250px;
     }
 }
 
@@ -667,5 +668,9 @@ footer {
 
    .header-top {
     padding: 0 1.5rem;
+   }
+
+   .secondary-content {
+       width: 100%;
    }
 }
