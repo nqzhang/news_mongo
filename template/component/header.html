@@ -3,27 +3,32 @@
         <header>
             <div class="header-top">
                 <a class="logo" href="/">
-                    {{ config.site_name }}
+                    <img src="/static/images/logo.png" />
+                    <span>{{ config.site_name }}
                 </a>
                 <div class="meta-bar">
-                    <a class="search">搜索</a>
+                    <!-- <a class="search">搜索</a> -->
                     <a class="signup">注册</a>
                     <a class="login">登录</a>
+                    <a id='menu-icon'>
+                        <img src="/static/svgs/menu.svg" />
+                    </a>
                 </div>
             </div>
         </header>
     </div>
 </div>
-<div id="menu-wrapper">
-    <div class="container">
-        <ul class="menu">
-            {% for menu in menu_left %}
-            <li>
-                <a href="/c/{{ menu['_id'] }}/">
-                    {{ menu['name'] }}
+<div class='mobile-menu-background'>
+</div>
+<div class='mobile-menu'>
+    <img class="mobile-menu-close" src="/static/svgs/cross.svg" />
+    <ul>
+        {% for menu in menu_left %}
+            <li class="mobile-menu-item">
+                <a href="/c/{{ menu['_id'] }}/" >
+                    <span>{{ menu['name'] }}</span>
                 </a>
             </li>
-            {% end %}
-        </ul>
-    </div>
+        {% end %}
+    </ul>
 </div>

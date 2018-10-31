@@ -9,6 +9,7 @@
 		<title>{{ config.site_name }}</title>
 		<meta name="keywords" content="">
 		<meta name="description" content="" />
+		<link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
 		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
 		<script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
     	<script type="text/javascript" src="/static/js/main.js"></script>
@@ -21,43 +22,39 @@
 		{% block content-body %}
 		<div id="content-wrapper" class="container">
 			<div class="content">
-				<div class="left-content">
+				{% block menu %}
+					{% include ../component/menu.html %}
+				{% end %}
+				<div class="main-content">
 					<div class="list">
 						{% for post in posts %}
 						<section class="list-item">
 							<div>
-								<h2><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h2>
-								<span class="">&nbsp;{{ post['user']['user_name'] }}&nbsp;</span>
-								{% comment "<a class="" target="_blank"  href="/c/user/{{ post['user']['_id'] }}/">&nbsp;{{ post['user']['user_name'] }}&nbsp;</a>" %}
-								<span class="">&nbsp;{{ post['post_date'] }}</span>
+								<h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
+								<div class="post-meta">
+									<img src="/static/svgs/user.svg" />
+									<span>{{ post['user']['user_name'] }}</span>
+									<img src="/static/svgs/clock.svg" />
+									<span>{{ post['post_date'] }}</span>
+								</div>
 							</div>
 						</section>
 						{% end %}
 					</div>
 					{% block page %}
-					<div id="" class="pagination">
-							<a class="current" href="/" title="第 1 页">1</a>
-							<a class="" href="/2/">2</a>
-							<a class="" href="/3/" title="第 3 页">3</a>
-							<a class="" href="/4/" title="第 4 页">4</a>
-							<a class="" href="/5/" title="第 5 页">5</a>
-							<a class="" href="/6/" title="第 6 页">6</a>
-							<a class="" href="/6/" title="第 7 页">7</a>
-							<a class="" href="/7/" title="第 8 页">8</a>
-							<a class="" href="/8/" title="第 9 页">9</a>
-							<a class="" href="/9/" title="第 10 页">10</a>
-					</div>
+						{% include ../component/pagination.html %}
 					{% end %}
 				</div>
-				<div class="right-content">
+				<div class="secondary-content">
 					{% block right_sidebar %}
 					{% end %}
 				</div>
 			</div>
+			{% block footer %}
+				{% include ../component/footer.html %}
+			{% end %}
 		</div>
 		{% end %}
-		<footer>
 
-		</footer>
  	</body>
  </html>

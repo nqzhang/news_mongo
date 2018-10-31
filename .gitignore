@@ -6,6 +6,7 @@ __pycache__/
 # virtualenv files
 bin
 include
+activate
 
 # C extensions
 *.so
@@ -119,3 +120,7 @@ dmypy.json
 # others
 pip-selfcheck.json
 dump.rdb
+
+
+# exclude
+!/static/js/lib/*
