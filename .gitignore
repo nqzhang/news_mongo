@@ -120,3 +120,7 @@ dmypy.json
 # others
 pip-selfcheck.json
 dump.rdb
+
+
+# exclude
+!/static/js/lib/*
