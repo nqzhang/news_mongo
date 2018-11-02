@@ -51,11 +51,14 @@ class UserHander(tornado.web.RequestHandler):
         if sig == hashlib.sha512(hashstr).hexdigest():
             return uid
         return False
-class BlockingHandler(tornado.web.RequestHandler):
+
+
+class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
         self.executor = ThreadPoolExecutor(2)
-        super(BlockingHandler, self).__init__(application, request, **kwargs)
+        super(BlockingBaseHandler, self).__init__(application, request, **kwargs)
 
+class BlockingHandler(BlockingBaseHandler):
     @run_on_executor
     def cc_async(self,text):
         cc = OpenCC('t2s')
