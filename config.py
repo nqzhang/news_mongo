@@ -39,6 +39,10 @@ articles_per_page = 15
 hot_news_num = 7
 site_name = '神馬文庫'
 site_domain = 'http://127.0.0.1:48000'
+smtp_hostname = 'smtp.mailgun.org'
+smtp_login = 'postmaster@www.smwenku.com'
+smtp_pass = '9b546fb86ccac1a87b2233aee6c378aa-c9270c97-04d79fc6'
+
 custom_meta = """<meta name="google-site-verification" content="QSl8rlXGYak0SPdlX0r_tMqD7I6XFuWD1JxR_D9PbyM" />
                 <meta name="msvalidate.01" content="4775F105590951C69208A1E849EF0F32" />"""
 analytics_code = """
