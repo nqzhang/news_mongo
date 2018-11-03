@@ -12,12 +12,20 @@ from email.mime.multipart import MIMEMultipart
 from email.header import Header
 from email.utils import parseaddr,formataddr
 import datetime
+from .user import UserHander
+from views.base import authenticated_async
+from bson import ObjectId
 
 class EmailHandler(BlockingBaseHandler):
     def _format_addr(self,s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
-
+    def generate_verify_link(self,user_salt):
+        email_code = uuid.uuid4().hex
+        email_hashstr = tornado.escape.utf8(email_code + user_salt + email_code)
+        email_hash = hashlib.sha512(email_hashstr).hexdigest()
+        verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_code)
+        return email_hash,verify_link
     @run_on_executor
     def send_mail(self,email,text):
         msgRoot = MIMEMultipart()
@@ -74,12 +82,9 @@ class RegisterHandler(EmailHandler):
             hashstr = tornado.escape.utf8(passwd + user_salt)
             user_hash = hashlib.sha512(hashstr).hexdigest()
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
-            email_code = uuid.uuid4().hex
-            email_hashstr =  tornado.escape.utf8(email_code + user_salt + email_code)
-            email_hash = hashlib.sha512(email_hashstr).hexdigest()
+            email_hash,verify_link = self.generate_verify_link(user_salt)
             email_code = await self.application.db.code.insert_one(
-                {"u_id":u['_id'],"type":"email","code":email_code,"createTime":datetime.datetime.now()})
-            verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain,email_code)
+                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
             #TODO 邮箱html格式
             await self.send_mail(email,verify_link)
             self.render('register_success.html')
@@ -103,9 +108,28 @@ class IsEmailExistHandler(RequestHandler):
             self.write('郵箱可用')
 
 
-#TODO 邮箱链接验证
-#邮箱验证链接过期后的重新生成
+#TODO 邮箱验证链接过期后的重新生成
 
 class EmailVerifyHandler(EmailHandler):
     async def get(self):
-        await self.send_mail('ttt')
+        email_hash = self.get_argument('code')
+        email_code = await self.application.db.code.find_one({"code": email_hash})
+        if email_code:
+            if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
+                self.write('链接已失效')
+            else:
+                await self.application.db.users.update_one({"_id":email_code['u_id']},{"is_active":1})
+                self.write('激活成功')
+        else:
+            self.write('验证链接无效')
+
+class EmailResendHandler(EmailHandler,UserHander):
+    @authenticated_async
+    async def post(self):
+        u_id = self.current_user.decode()
+        u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
+        email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
+        email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
+                                                                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()},upsert=True)
+        await self.send_mail(u['email'], verify_link)
+        self.write('邮件已重新发送')
