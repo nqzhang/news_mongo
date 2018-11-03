@@ -100,7 +100,6 @@ a, a:hover, a:focus {
 p {
     margin:0 0 1.5rem;
     line-height: 2rem;
-    margin: 0 0 16px;
 }
 
 img {
@@ -473,13 +472,33 @@ body {
 }
 
 .article-content {
-    font-size: 1.25rem;
     color: #3d3d3d;
     padding: 3rem 0 2rem; 
+    font-size: 1.35rem;
+    line-height: 2.7rem;
+}
+
+.article-content p,
+.article-content dt,
+.article-content dd,
+.article-content ol,
+.article-content ul,
+.article-content table,
+.article-content tr,
+.article-content td,
+.article-content th,
+.article-content abbr,
+.article-content acronym,
+.article-content blockquote,
+.article-content pre
+ {
+    font-size: 1.35rem;
+    line-height: 2.7rem;
 }
 
 .article-content small{
     font-size: 0.8rem;
+    line-height: 1.7rem;
 }
 
 .article-content hr {
@@ -564,7 +583,7 @@ sub {
 
 .article-content pre {
     background-color: #fafafa;
-    line-height: 1.6;
+    line-height: 2rem;
     margin-bottom: 1.6rem;
     max-width: 100%;
     overflow: auto;
