@@ -35,9 +35,7 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(handlers, **config.settings)
 
     def init_with_loop(self, loop):
-       self.redis = loop.run_until_complete(aioredis.create_redis((config.redis['host'], config.redis['port']), loop=loop))
-
-
+       self.redis = loop.run_until_complete(aioredis.create_redis_pool((config.redis['host'], config.redis['port']),maxsize=20, loop=loop))
 
 
 
