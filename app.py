@@ -24,6 +24,7 @@ class Application(tornado.web.Application):
             (r'/account/register.*?', account.RegisterHandler),
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
             (r'/account/email_verify/.*?', account.EmailVerifyHandler),
+            (r'/account/email_resend/.*?', account.EmailVerifyHandler),
             (r'/u/postedit/?', user.PostEditHandler),
             (r'/u/postedit/(.*)/?', user.PostEditHandler),
             (r'/u/postajax/.*?', user.PostAjaxHandler),
