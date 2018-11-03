@@ -108,8 +108,6 @@ class IsEmailExistHandler(RequestHandler):
             self.write('郵箱可用')
 
 
-#TODO 邮箱验证链接过期后的重新生成
-
 class EmailVerifyHandler(EmailHandler):
     async def get(self):
         email_hash = self.get_argument('code')
