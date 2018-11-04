@@ -62,7 +62,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
+input {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+}
 :after, :before {
     box-sizing: border-box;
 }
@@ -115,7 +120,6 @@ pre {
 
 code {
     padding: 0.5rem;
-
 }
 
 body {
@@ -124,6 +128,33 @@ body {
 
 .noscroll {
     overflow: hidden;
+}
+
+input {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    background: #fff;
+    vertical-align: top;
+    height: 4rem;
+    padding-left: 10px;
+    border-radius: 6px;
+    border: 1px #e7e7e7 solid;
+    width: 100%;
+}
+
+input:hover,
+input:focus {
+    border-color: #fd484d;
+}
+
+input[type=submit] {
+    color: #fd484d;
+    border-color: #fd484d;
+}
+
+input[type=submit]:hover {
+    color: #fff;
+    background-color: #fd484d;
 }
 
 /* ==== Header ==== */
@@ -296,7 +327,7 @@ body {
 }
 
 .mobile-menu-close {
-    width: 2.5rem;
+    width: 1.5rem;
     height: auto;
     position: absolute;
     right: 1rem;
@@ -608,7 +639,68 @@ sub {
     border-top: 1px solid #f4f4f4;
 }
 
-/* ==== other body ==== */
+/* ==== other ==== */
+/* == login overlay == */
+.overlay {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.login-layer {
+    z-index: 3;
+    color: #333;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -200px 0 0 -265px;
+    width: 530px;
+    padding: 4rem 0;
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+}
+
+.login-inner {
+    display: block;
+    width: 312px;
+    margin: 0 auto;
+}
+
+.login-layer-close-button {
+    width: 1.5rem;
+    height: auto;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+ul.form-ul li{
+    margin-bottom: 1.5rem;
+}
+
+.reg-link-container {
+    text-align: right;
+}
+
+.reg-link {
+    font-size: 1.2rem;
+}
+
+.reg-link:hover {
+    text-decoration: underline;
+}
 
 /* ==== Sidebar ==== */
 .right_sidebar:hover .section-head:after {
@@ -626,7 +718,6 @@ footer {
         margin: 0 0 1rem;
     }
 }
-
 
 /** tablet breakpoint **/
 @media (max-width: 960px) {
@@ -691,5 +782,15 @@ footer {
 
    .secondary-content {
        width: 100%;
+   }
+
+   .login-layer {
+        width: 90%;
+        margin: -200px 5% 0 5%;
+        left: 0;
+   }
+
+   .login-inner {
+       width: 80%;
    }
 }
