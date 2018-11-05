@@ -8,7 +8,7 @@ from tornado import gen
 import urllib.parse as urlparse
 from urllib.parse import urlencode
 from lxml import etree
-
+from bson import ObjectId
 
 def authenticated_async(method):
     @gen.coroutine
@@ -86,7 +86,19 @@ class BlockingHandler(BlockingBaseHandler):
             post['desc'] = post_desc
         return posts
 
+
 class BaseHandler(BlockingHandler):
+    async def get_user(self):
+        if await self.is_login():
+            uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
+            user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
+            need_keys = ['user_name','email']
+            user = {key: user[key] for key in need_keys}
+            user['is_login'] = True
+        else:
+            user={}
+            user['is_login'] = False
+        return user
     async def is_login(self):
         sessionid = self.get_secure_cookie('sessionid')
         sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
