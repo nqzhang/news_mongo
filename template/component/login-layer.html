@@ -2,7 +2,7 @@
     <div id="login-layer-wrapper" class="overlay">
         <div class="login-layer">
                 <img class="login-layer-close-button" src="/static/svgs/cross.svg">
-            <div class="login-inner">
+            <div class="user-form">
                 <form id="login-form" action="/account/login" method="post">
                     {% module xsrf_form_html() %}
                     <ul class="form-ul">
@@ -10,7 +10,7 @@
                             <input name="email" type="text"  placeholder="電子郵件">
                         </li>
                         <li>
-                            <input name="password" type="password" value="" placeholder="請輸入密碼" autocomplete="off">
+                            <input name="passwd" type="password" value="" placeholder="請輸入密碼" autocomplete="off">
                         </li>
                         <li>
                             <div class="err-info" style="display:none">請輸入正確的登錄賬號或密碼</div>

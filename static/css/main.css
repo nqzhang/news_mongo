@@ -672,7 +672,7 @@ sub {
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
-.login-inner {
+.user-form {
     display: block;
     width: 312px;
     margin: 0 auto;
@@ -700,6 +700,16 @@ ul.form-ul li{
 
 .reg-link:hover {
     text-decoration: underline;
+}
+
+/* ==== Sidebar ==== */
+.single-page {
+    text-align: center;
+    background-color: #fff;
+    padding: 4rem 0 6rem;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
 /* ==== Sidebar ==== */

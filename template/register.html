@@ -1,36 +1,39 @@
  		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
-        <script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js" ></script>
- 		<script async type="text/javascript" src="/static/js/register.js" ></script>
-<div class="reg">
-    				<div  class="reg_logo">
-					<a href="/">{{ config.site_name }}</a>
-				</div>
-    <div class="reg_title">創建您的通行證賬號</div>
- 		<div  class="pop-layer login-pop">
-    <div class="err-info" style="display:none">請輸入正確的登錄賬號或密碼</div>
-    <!-- 用户名登陆 -->
-    <div class="login user-login">
-    	<form id="login_form" action="/account/register" method="post">
-            {% module xsrf_form_html() %}
-        <ul>
-            <li><input name="email" type="text"  class="user-input" placeholder="郵箱">
-
-            </li>
-            <div id="showResult"></div>
-            <li>
-            	<input name="passwd" type="password" value=""  class="password-input" placeholder="請輸入密碼" autocomplete="off" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
-
-            </li>
-
-        </ul>
-        <div class="login-btn">
-        	<input type="submit" class="login-bn" value="註冊">
+        <script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
+         <script async type="text/javascript" src="/static/js/register.js" ></script>
+         <div class="header-wrapper">
+            <div class="container">
+                <header>
+                    <div class="header-top">
+                        <a class="logo" href="/">
+                            <img src="/static/images/logo.png">
+                            <span>{{ config.site_name }}</span>
+                        </a>
+                    </div>
+                </header>
+            </div>
         </div>
-        </form>
-        <!--
-        	<div class="login-oper"><a href="#" target="_blank" class="reg-link">注册</a></div>
-        -->
-    </div>
-    <!-- 手机号登陆 -->
-</div>
-</div>
+        <div class='container'>
+            <div class='single-page'>
+                <h1>創建您的通行證賬號</h1>
+                <div class='user-form'>
+                    <form id="register-form" action="/account/register" method="post">
+                        {% module xsrf_form_html() %}
+                        <ul class='form-ul'>
+                            <li>
+                                <input name="email" type="text" placeholder="郵箱">
+                            </li>
+                            <li>
+                                <input name="passwd" type="password" value="" placeholder="請輸入密碼" autocomplete="off" >
+                            </li>
+                            <div id="showResult"></div>
+                            <div class="err-info" style="display:none">請輸入電子郵件和密碼</div>
+                            <li>
+                                <input type="submit" value="註冊">
+                            </li>           
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+        

@@ -1,9 +1,10 @@
 $(document).ready(function(){
     // initialize login form
-    var login_base_action = $('#login-form').attr('action');
-    var login_action = login_base_action + '?src=' + window.location.href;
-    $('#login_form').attr('action',login_action);
-
+    var form = $('#login-form');
+    var login_base_action = form.attr('action');
+    var login_action = login_base_action + '?src=' + encodeURI(window.location.href);
+    form.attr('action',login_action);
+    console.log(form.attr('action'));
     // handle login layer toggling
     $('.login, #login-layer-wrapper.overlay, .login-layer-close-button').click(function(){
         toggleLoginLayer();
@@ -13,15 +14,15 @@ $(document).ready(function(){
         e.stopPropagation();
     });
 
-    $('#login-form').submit(function(e) {
+    form.submit(function(e) {
         e.preventDefault();
 
         var email = $('#login-form input[name=email]').val();
-        var password = $('#login-form input[name=password]').val();
-        if (email === '' || password === '') {
+        var passwd = $('#login-form input[name=passwd]').val();
+        if (email === '' || passwd === '') {
             $('.err-info').css('display', 'block')
         } else {
-            $('#login-form').submit();
+            form[0].submit();
         }
     });
 
@@ -29,7 +30,6 @@ $(document).ready(function(){
     // if ( getUrlParam('login') == 1 ) {
     //     $('#login_sidebar').click();
     // }
-
 });
 
 function toggleLoginLayer() {
