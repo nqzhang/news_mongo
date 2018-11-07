@@ -8,11 +8,11 @@
                 </a>
                 <div class="meta-bar">
                     <!-- <a class="search">搜索</a> -->
-                    {% if is_login %}
-                    <a>用戶</a>
+                    {% if user['is_login'] %}
+                        <a>用戶</a>
                     {% else %}
-                    <a href="/account/register?src=/" target="_blank"class="signup">註冊</a>
-                    <a class="login">登錄</a>
+                        <a href="/account/register?src=/" target="_blank"class="signup">註冊</a>
+                        <a class="login">登錄</a>
                     {% end %}
 
                     <a id='menu-icon'>
