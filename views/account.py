@@ -36,7 +36,7 @@ class LoginHandler(RequestHandler):
 
 class RegisterHandler(RequestHandler):
     async def get(self):
-        self.render('register.html',config=config)
+        self.render('page/register.html',config=config)
     async def post(self):
         next = self.get_query_argument('src','/')
         email = self.get_argument('email')
@@ -47,7 +47,7 @@ class RegisterHandler(RequestHandler):
             hashstr = tornado.escape.utf8(passwd + user_salt)
             user_hash = hashlib.sha512(hashstr).hexdigest()
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1})
-            self.render('register_success.html')
+            self.render('page/register_success.html')
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex

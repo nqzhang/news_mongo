@@ -4,7 +4,7 @@ $(document).ready(function(){
     var login_base_action = form.attr('action');
     var login_action = login_base_action + '?src=' + encodeURI(window.location.href);
     form.attr('action',login_action);
-    console.log(form.attr('action'));
+
     // handle login layer toggling
     $('.login, #login-layer-wrapper.overlay, .login-layer-close-button').click(function(){
         toggleLoginLayer();

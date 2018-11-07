@@ -1,0 +1,42 @@
+{% extends "../base/plain-page-base.html" %} 
+    
+{% block metadata %}
+    <script async type="text/javascript" src="/static/js/register.js" ></script>    
+{% end %}
+
+
+{% block header %}
+    <div class="header-wrapper">
+        <div class="container">
+            <header>
+                <div class="header-top">
+                    <a class="logo" href="/">
+                        <img src="/static/images/logo.png">
+                        <span>{{ config.site_name }}</span>
+                    </a>
+                </div>
+            </header>
+        </div>
+    </div>
+{% end %}
+{% block content-body %}
+    <h1>創建您的通行證賬號</h1>
+    <div class='user-form'>
+        <form id="register-form" action="/account/register" method="post">
+            {% module xsrf_form_html() %}
+            <ul class='form-ul'>
+                <li>
+                    <input name="email" type="text" placeholder="郵箱">
+                </li>
+                <li>
+                    <input name="passwd" type="password" value="" placeholder="請輸入密碼" autocomplete="off" >
+                </li>
+                <div id="showResult"></div>
+                <div class="err-info" style="display:none">請輸入電子郵件和密碼</div>
+                <li>
+                    <input type="submit" value="註冊">
+                </li>           
+            </ul>
+        </form>
+    </div>              
+{% end %}
