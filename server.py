@@ -20,7 +20,7 @@ except:
 
 if __name__ == "__main__":
     #asyncio.set_event_loop(asyncio.new_event_loop())
-    db = motor.motor_tornado.MotorClient(config.mongo['url'],readPreference='secondaryPreferred')[config.mongo['db_name']]
+    db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
     #cron = cron(db)
     #scheduler = TornadoScheduler()
     #scheduler = AsyncIOScheduler()

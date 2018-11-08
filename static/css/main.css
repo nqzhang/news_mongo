@@ -576,6 +576,13 @@ input[type=submit]:hover {
     font-size: 1.35rem;
     line-height: 2.7rem;
 }
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    width: auto;
+}
 
 .article-content small{
     font-size: 0.8rem;
