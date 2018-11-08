@@ -23,6 +23,8 @@ class Application(tornado.web.Application):
             (r'/account/login.*?', account.LoginHandler),
             (r'/account/register.*?', account.RegisterHandler),
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
+            (r'/account/email_verify/.*?', account.EmailVerifyHandler),
+            (r'/account/email_resend/.*?', account.EmailVerifyHandler),
             (r'/u/postedit/?', user.PostEditHandler),
             (r'/u/postedit/(.*)/?', user.PostEditHandler),
             (r'/u/postajax/.*?', user.PostAjaxHandler),
@@ -34,9 +36,7 @@ class Application(tornado.web.Application):
         super(Application, self).__init__(handlers, **config.settings)
 
     def init_with_loop(self, loop):
-       self.redis = loop.run_until_complete(aioredis.create_redis((config.redis['host'], config.redis['port']), loop=loop))
-
-
+       self.redis = loop.run_until_complete(aioredis.create_redis_pool((config.redis['host'], config.redis['port']),maxsize=20, loop=loop))
 
 
 

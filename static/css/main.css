@@ -477,6 +477,13 @@ body {
     color: #3d3d3d;
     padding: 3rem 0 2rem; 
 }
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    display: block;
+    width: auto;
+}
 
 .article-content small{
     font-size: 0.8rem;

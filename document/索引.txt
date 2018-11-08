@@ -21,3 +21,6 @@ db.posts.createIndex({_id:"hashed"},{background:true})
 db.terms.createIndex({_id:"hashed"},{background:true})
 sh.shardCollection("www_smwenku_com.posts", {"_id":"hashed"})
 sh.shardCollection("www_smwenku_com.terms", {"_id":"hashed"})
+
+#验证码过期索引
+db.code.createIndex( { "createTime": 1 },{ expireAfterSeconds: 1800 })
