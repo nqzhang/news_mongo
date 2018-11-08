@@ -23,6 +23,7 @@ $(document).ready(function(){
 
         //检查邮件是否为空
         if (emailField.val() === '') {
+            showError('');
             isEmailValid = false;
             return;
         }
