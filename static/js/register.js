@@ -43,18 +43,13 @@ $(document).ready(function(){
                 showError(response);
             } else {
                 isEmailValid = true;
-                showError(response, false);            
+                showError('');            
             }
         });
     });
 });
 
-function showError(errorMsg, red = true) {
-    if (red) {
-        $('.err-info').css('color', '#fd484d');
-    } else {
-        $('.err-info').css('color', '#3d3d3d');        
-    }
+function showError(errorMsg) {
     $('.err-info').html(errorMsg);
 }
 
