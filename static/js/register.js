@@ -49,8 +49,10 @@ $(document).ready(function(){
 });
 
 function showError(errorMsg, red = true) {
-    if (!red) {
-        $('.err-info').css('color', '#3d3d3d');
+    if (red) {
+        $('.err-info').css('color', '#fd484d');
+    } else {
+        $('.err-info').css('color', '#3d3d3d');        
     }
     $('.err-info').html(errorMsg);
 }
