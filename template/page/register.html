@@ -26,13 +26,13 @@
             {% module xsrf_form_html() %}
             <ul class='form-ul'>
                 <li>
-                    <input name="email" type="text" placeholder="郵箱">
+                    <input autocomplete="off" name="email" type="text" placeholder="郵箱">
                 </li>
                 <li>
-                    <input name="passwd" type="password" value="" placeholder="請輸入密碼" autocomplete="off" >
+                    <input autocomplete="off" name="passwd" type="password" value="" placeholder="請輸入密碼" autocomplete="off" >
                 </li>
                 <div id="showResult"></div>
-                <div class="err-info" style="display:none">請輸入電子郵件和密碼</div>
+                <div class="err-info"></div>
                 <li>
                     <input type="submit" value="註冊">
                 </li>           

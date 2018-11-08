@@ -690,6 +690,9 @@ sub {
 }
 
 /* ==== other ==== */
+.err-info {
+    color: #fd484d;
+}
 /* == login overlay == */
 .overlay {
     display: none;
@@ -752,7 +755,7 @@ ul.form-ul li{
     text-decoration: underline;
 }
 
-/* ==== Sidebar ==== */
+/* ==== plain page ==== */
 .plain-page {
     text-align: center;
     background-color: #fff;
