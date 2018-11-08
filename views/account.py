@@ -41,6 +41,14 @@ class RegisterHandler(RequestHandler):
         next = self.get_query_argument('src','/')
         email = self.get_argument('email')
         passwd = self.get_argument('passwd')
+        if not email:
+            self.set_status(500,'请输入邮箱')
+            self.write('请输入邮箱<br/>')
+        if not passwd:
+            self.set_status(500,'请输入密码')
+            self.write('请输入密码<br/>')
+        if not email or not passwd:
+            return
         user = await self.application.db.users.find_one({'email':email,"is_real":1})
         if not user:
             user_salt = uuid.uuid4().hex
