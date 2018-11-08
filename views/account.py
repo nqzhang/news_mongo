@@ -24,7 +24,7 @@ class EmailHandler(BlockingBaseHandler):
         email_code = uuid.uuid4().hex
         email_hashstr = tornado.escape.utf8(email_code + user_salt + email_code)
         email_hash = hashlib.sha512(email_hashstr).hexdigest()
-        verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_code)
+        verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_hash)
         return email_hash,verify_link
     @run_on_executor
     def send_mail(self,email,text):
@@ -91,8 +91,8 @@ class RegisterHandler(EmailHandler):
             user_hash = hashlib.sha512(hashstr).hexdigest()
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
-            email_code = await self.application.db.code.insert_one(
-                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
+            u_id = u.inserted_id
+            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
             #TODO 邮箱html格式
             await self.send_mail(email,verify_link)
             self.render('page/register_success.html', config=config)
@@ -124,7 +124,7 @@ class EmailVerifyHandler(EmailHandler):
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
                 self.write('链接已失效')
             else:
-                await self.application.db.users.update_one({"_id":email_code['u_id']},{"is_active":1})
+                await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
                 self.write('激活成功')
         else:
             self.write('验证链接无效')
