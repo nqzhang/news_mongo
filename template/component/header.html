@@ -8,8 +8,24 @@
                 </a>
                 <div class="meta-bar">
                     <!-- <a class="search">搜索</a> -->
-                    <a class="signup">注册</a>
-                    <a class="login">登录</a>
+                    {% if user['is_login'] %}
+                        <div class='user-dropdown-wrapper'>
+                            <a class='user-name' >
+                                {{user['user_name'][0].upper()}}
+                            </a>
+                            <div class='user-dropdown'>
+                                <ul>
+                                    <li>
+                                        <a>登出</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="/account/register?src=/" target="_blank"class="signup">註冊</a>
+                        <a class="login">登錄</a>
+                    {% end %}
+
                     <a id='menu-icon'>
                         <img src="/static/svgs/menu.svg" />
                     </a>
@@ -22,6 +38,22 @@
 </div>
 <div class='mobile-menu'>
     <img class="mobile-menu-close" src="/static/svgs/cross.svg" />
+    {% if user['is_login'] %}
+        <div class='mobile-user-section'>
+            <a class='user-icon' >
+                {{user['user_name'][0].upper()}}
+            </a>
+            <span class='user-name'>{{user['user_name']}}</span>
+            <div class='user-dropdown'>
+                <ul>
+                    <li>
+                        <a>登出</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% end %}
+    
     <ul>
         {% for menu in menu_left %}
             <li class="mobile-menu-item">
@@ -32,3 +64,4 @@
         {% end %}
     </ul>
 </div>
+{% include login-layer.html %}

@@ -54,4 +54,4 @@ class ArticleHandler(RequestHandler):
         #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
         categorys = await self.application.db.terms.find({"type": "0"}).to_list(length=100)
-        self.render('article.html',categorys=categorys,post=post)
+        self.render('page/article.html',categorys=categorys,post=post)

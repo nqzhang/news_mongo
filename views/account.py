@@ -71,11 +71,19 @@ class LoginHandler(RequestHandler):
 
 class RegisterHandler(EmailHandler):
     async def get(self):
-        self.render('register.html',config=config)
+        self.render('page/register.html',config=config)
     async def post(self):
         next = self.get_query_argument('src','/')
         email = self.get_argument('email')
         passwd = self.get_argument('passwd')
+        if not email:
+            self.set_status(500,'请输入邮箱')
+            self.write('请输入邮箱<br/>')
+        if not passwd:
+            self.set_status(500,'请输入密码')
+            self.write('请输入密码<br/>')
+        if not email or not passwd:
+            return
         user = await self.application.db.users.find_one({'email':email,"is_real":1})
         if not user:
             user_salt = uuid.uuid4().hex
@@ -87,7 +95,7 @@ class RegisterHandler(EmailHandler):
                 {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
             #TODO 邮箱html格式
             await self.send_mail(email,verify_link)
-            self.render('register_success.html')
+            self.render('page/register_success.html', config=config)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex

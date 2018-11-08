@@ -72,7 +72,7 @@ class ArticleHandler(BaseHandler):
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-            self.render('article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
+            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
         else:
-            self.render('article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
+            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
 

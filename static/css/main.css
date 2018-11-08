@@ -62,7 +62,12 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-
+input {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    outline: 0;
+}
 :after, :before {
     box-sizing: border-box;
 }
@@ -100,7 +105,6 @@ a, a:hover, a:focus {
 p {
     margin:0 0 1.5rem;
     line-height: 2rem;
-    margin: 0 0 16px;
 }
 
 img {
@@ -116,7 +120,6 @@ pre {
 
 code {
     padding: 0.5rem;
-
 }
 
 body {
@@ -125,6 +128,33 @@ body {
 
 .noscroll {
     overflow: hidden;
+}
+
+input {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    background: #fff;
+    vertical-align: top;
+    height: 4rem;
+    padding-left: 10px;
+    border-radius: 6px;
+    border: 1px #e7e7e7 solid;
+    width: 100%;
+}
+
+input:hover,
+input:focus {
+    border-color: #fd484d;
+}
+
+input[type=submit] {
+    color: #fd484d;
+    border-color: #fd484d;
+}
+
+input[type=submit]:hover {
+    color: #fff;
+    background-color: #fd484d;
 }
 
 /* ==== Header ==== */
@@ -193,6 +223,56 @@ body {
 .login:hover {
     color: #fff;
     background-color: #fd484d;
+}
+
+.user-dropdown-wrapper {
+    position: relative;
+}
+
+.user-dropdown-wrapper .user-name {
+    display: inline-block;
+    line-height: 3rem;
+    height: 3rem;
+    width: 3rem;
+    border-radius: 1.5rem;
+    color: #fff;
+    background-color: #fd484d;
+    text-align: center;
+    padding: 0rem;
+    font-size: 1.5rem;
+    letter-spacing: 0;
+}
+
+.user-dropdown-wrapper .user-dropdown {
+    position: absolute;
+    right: 0;
+    top: 3rem;
+    background-color: #fff;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    width: 200px;
+    text-align: left;
+    display: none;
+}
+
+.user-dropdown-wrapper:hover .user-dropdown {
+    display: block;
+}
+
+.user-dropdown-wrapper .user-dropdown ul {
+    padding: 1rem 0;
+}
+
+.user-dropdown-wrapper .user-dropdown a {
+    display: inline-block;
+    width: 100%;
+    padding: 0 2rem;
+}
+
+.user-dropdown-wrapper .user-dropdown a:hover {
+    color: #fd484d;
+    background-color: #F7F7F7;
 }
 
 #menu-icon {
@@ -297,7 +377,7 @@ body {
 }
 
 .mobile-menu-close {
-    width: 2.5rem;
+    width: 1.5rem;
     height: auto;
     position: absolute;
     right: 1rem;
@@ -473,9 +553,28 @@ body {
 }
 
 .article-content {
-    font-size: 1.25rem;
     color: #3d3d3d;
     padding: 3rem 0 2rem; 
+    font-size: 1.35rem;
+    line-height: 2.7rem;
+}
+
+.article-content p,
+.article-content dt,
+.article-content dd,
+.article-content ol,
+.article-content ul,
+.article-content table,
+.article-content tr,
+.article-content td,
+.article-content th,
+.article-content abbr,
+.article-content acronym,
+.article-content blockquote,
+.article-content pre
+ {
+    font-size: 1.35rem;
+    line-height: 2.7rem;
 }
 .article-content img {
     max-width: 100%;
@@ -487,6 +586,7 @@ body {
 
 .article-content small{
     font-size: 0.8rem;
+    line-height: 1.7rem;
 }
 
 .article-content hr {
@@ -571,7 +671,7 @@ sub {
 
 .article-content pre {
     background-color: #fafafa;
-    line-height: 1.6;
+    line-height: 2rem;
     margin-bottom: 1.6rem;
     max-width: 100%;
     overflow: auto;
@@ -596,7 +696,81 @@ sub {
     border-top: 1px solid #f4f4f4;
 }
 
-/* ==== other body ==== */
+/* ==== other ==== */
+.err-info {
+    color: #fd484d;
+}
+/* == login overlay == */
+.overlay {
+    display: none;
+    background-color: rgba(0, 0, 0, 0.3);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    left: 0;
+}
+
+.overlay.active {
+    display: block;
+}
+
+.login-layer {
+    z-index: 3;
+    color: #333;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    margin: -200px 0 0 -265px;
+    width: 530px;
+    padding: 5rem 0 3rem;
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+}
+
+.user-form {
+    display: block;
+    width: 312px;
+    margin: 0 auto;
+}
+
+.login-layer-close-button {
+    width: 1.5rem;
+    height: auto;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+}
+
+ul.form-ul li{
+    margin-bottom: 1.5rem;
+}
+
+.reg-link-container {
+    text-align: right;
+}
+
+.reg-link {
+    font-size: 1.2rem;
+}
+
+.reg-link:hover {
+    text-decoration: underline;
+}
+
+/* ==== plain page ==== */
+.plain-page {
+    text-align: center;
+    background-color: #fff;
+    padding: 4rem 0 6rem;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+}
 
 /* ==== Sidebar ==== */
 .right_sidebar:hover .section-head:after {
@@ -615,7 +789,6 @@ footer {
     }
 }
 
-
 /** tablet breakpoint **/
 @media (max-width: 960px) {
     #menu-icon {
@@ -626,10 +799,54 @@ footer {
         display: none;
     }
 
+    .user-dropdown-wrapper {
+        display: none;
+    }
+
     .secondary-content {
         width: 25%;
         min-width: 250px;
     }
+
+    .mobile-user-section {
+        text-align: center;
+        padding: 2rem 1rem;
+        border-radius: 0.5rem;
+        background: #F7F7F7;
+        margin-bottom: 1rem;
+    }
+
+    .mobile-user-section .user-icon {
+        display: inline-block;
+        line-height: 3rem;
+        height: 3rem;
+        width: 3rem;
+        border-radius: 1.5rem;
+        color: #fff;
+        background-color: #fd484d;
+        text-align: center;
+        padding: 0;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        letter-spacing: 0;
+    }
+
+    .mobile-user-section .user-name {
+        display: block;
+    }
+
+
+    .mobile-user-section .user-dropdown a {
+        display: inline-block;
+        width: 100%;
+        padding: 0 2rem;
+    }
+    
+    .mobile-user-section .user-dropdown a:hover {
+        color: #fd484d;
+        background-color: #F7F7F7;
+    }
+    
 }
 
 /** mobile breakpoint **/
@@ -679,5 +896,15 @@ footer {
 
    .secondary-content {
        width: 100%;
+   }
+
+   .login-layer {
+        width: 90%;
+        margin: -200px 5% 0 5%;
+        left: 0;
+   }
+
+   .login-inner {
+       width: 80%;
    }
 }

@@ -1,0 +1,35 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        {% raw config.custom_meta %}
+        <meta http-equiv="Cache-Control" content="no-transform" />
+        <meta http-equiv="Cache-Control" content="no-siteapp" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <title>{{ config.site_name }}</title>
+        <meta name="keywords" content="">
+        <meta name="description" content="" />
+        <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
+        <script type="text/javascript" src="/static/js/lib/jquery-2.0.3.min.js"></script>
+        {% block metadata %}
+        
+        {% end %}
+        {% raw config.analytics_code %}
+    </head>
+    <body>
+        {% block header %}
+            {% include ../component/header.html %}
+        {% end %}
+        <div class='container'>
+            <div class='plain-page'>
+                {% block content-body %}
+                    
+                {% end %}
+            </div>
+        </div>
+        {% block footer %}
+            {% include ../component/footer.html %}
+        {% end %}
+    </body>
+</html>
