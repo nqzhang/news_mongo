@@ -1,11 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+{% extends "../base/plain-page-base.html" %} 
+
+
+{% block metadata %}
     <meta http-equiv="refresh" content="3; url=/?login=1">
-    <title>註冊成功提示--神馬文庫</title>
-</head>
-<body>
-註冊成功，3秒后跳轉至登錄頁面
-</body>
-</html>
+{% end %}
+{% block header %}
+    <div class="header-wrapper">
+        <div class="container">
+            <header>
+                <div class="header-top">
+                    <a class="logo" href="/">
+                        <img src="/static/images/logo.png">
+                        <span>{{ config.site_name }}</span>
+                    </a>
+                </div>
+            </header>
+        </div>
+    </div>
+{% end %}
+{% block content-body %}
+    <h1>註冊成功，3秒后跳轉至登錄頁面</h1>            
+{% end %}

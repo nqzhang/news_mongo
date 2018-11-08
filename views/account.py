@@ -47,7 +47,7 @@ class RegisterHandler(RequestHandler):
             hashstr = tornado.escape.utf8(passwd + user_salt)
             user_hash = hashlib.sha512(hashstr).hexdigest()
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1})
-            self.render('page/register_success.html')
+            self.render('page/register_success.html', config=config)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex
