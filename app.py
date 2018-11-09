@@ -21,6 +21,7 @@ class Application(tornado.web.Application):
             (r'/backend/newpost', backend.NewPostHandler),
             (r'/views', backend.ViewsHandler),
             (r'/account/login.*?', account.LoginHandler),
+            (r'/account/logout.*?', account.LogoutHandler),
             (r'/account/register.*?', account.RegisterHandler),
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
             (r'/account/email_verify/.*?', account.EmailVerifyHandler),
