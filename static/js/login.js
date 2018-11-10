@@ -50,5 +50,9 @@ function toggleLoginLayer() {
 //     if (r!=null) return unescape(r[2]);
 //     return null;
 // }
+
+
+var _href = $("a#logout").attr("href");
+$("a#logout").attr("href", _href + '?next=' + document.URL);
   
   
