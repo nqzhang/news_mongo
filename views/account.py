@@ -70,7 +70,7 @@ class LoginHandler(RequestHandler):
 
 class LogoutHandler(UserHander):
     @authenticated_async
-    async def post(self):
+    async def get(self):
         next = self.get_argument('next', '/')
         user_id = self.current_user.decode()
         self.clear_cookie('sessionid')
