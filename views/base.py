@@ -25,7 +25,7 @@ def authenticated_async(method):
                         next_url = self.request.uri
                     url += "?" + urlencode(dict(next=next_url))
                 self.redirect(url)
-            raise HTTPError(403)
+            raise tornado.web.HTTPError(403)
         else:
             result = method(self, *args, **kwargs) # updates
             if result is not None:
