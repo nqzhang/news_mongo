@@ -117,10 +117,11 @@ pre {
     white-space: pre-wrap;
     padding: 1rem 0;
 }
-
+/*
 code {
     padding: 0.5rem;
 }
+*/
 
 body {
     background-color: #F7F7F7;
