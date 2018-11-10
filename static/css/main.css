@@ -584,6 +584,16 @@ input[type=submit]:hover {
     display: block;
     width: auto;
 }
+.article-content a {
+    color: #4ea1db;
+    text-decoration: none;
+}
+.article-content a:visited {
+    color: #6795b5;
+}
+.article-content a:hover {
+    color: #ca0c16;
+}
 
 .article-content small{
     font-size: 0.8rem;
@@ -690,13 +700,15 @@ sub {
 .article-content blockquote:after {
     content: "";
 }
-
+/* ==== article related ==== */
 .related-post-list {
     margin-top: 4rem;
     padding-top: 2rem;
     border-top: 1px solid #f4f4f4;
 }
-
+p.post-excerpt {
+    font-size: 1.18rem;
+}
 /* ==== other ==== */
 .err-info {
     color: #fd484d;
