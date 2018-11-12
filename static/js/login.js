@@ -50,8 +50,7 @@ function getUrlParam(name){
      return null;
  }
 
-
-var _href = $("a#logout").attr("href");
-$("a#logout").attr("href", _href + '?next=' + document.URL);
-  
-  
+$.each($("a#logout,a#m-logout"), function(index,value) {
+    var _href = $(this).attr("href");
+    $(this).attr("href", _href + '?next=' + document.URL);
+});
