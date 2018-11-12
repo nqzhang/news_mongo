@@ -206,6 +206,19 @@ input[type=submit]:hover {
     padding: 0px 1.5rem;
 }
 
+.meta-bar .write-btn {
+    color:#fff;
+    border: 1px solid #fd484d;
+    border-radius: 0.25rem;
+    margin-left: 1.5rem;
+    background-color: #fd605e;
+}
+
+.meta-bar .write-btn:hover {
+    color: #fff;
+    background-color: #fd3546;
+}
+
 .search, .login, .signup {
     color: #fd484d;
 }
@@ -876,6 +889,10 @@ footer {
     }
 
    .meta-bar .signup {
+       display: none;
+   }
+
+      .meta-bar .write-btn {
        display: none;
    }
 
