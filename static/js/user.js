@@ -2,11 +2,6 @@ $("#btnPublish").click(publish);
 
 $('a[data-pid]').click(delete_post);
 
-function getCookie(name) {
-    var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
-    return r ? r[1] : undefined;
-}
-
 $(document).on('keyup', '.bootstrap-tagsinput input', function(){
     $(this).attr('placeholder', '')
 })
