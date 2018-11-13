@@ -427,8 +427,7 @@ input[type=submit]:hover {
 }
 
 .secondary-content {
-    width:30%;
-    max-width: 300px;
+    min-width: 300px;
     padding: 1.5rem 2rem;
     background-color: #fff;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
@@ -831,8 +830,7 @@ footer {
     }
 
     .secondary-content {
-        width: 25%;
-        max-width: 250px;
+        min-width: 230px;
     }
 
     .mobile-user-section {
