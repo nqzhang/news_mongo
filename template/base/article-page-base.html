@@ -65,9 +65,9 @@
             {% include ../component/footer.html %}
         {% end %}
     </div>
-</body>
 <script>
     $.post("/views", {post_id:"{{ post['_id'] }}" });
 </script>
+<script src="/static/js/custom_fix.js"></script>
 </body>
 </html>
