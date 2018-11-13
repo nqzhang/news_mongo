@@ -9,6 +9,7 @@ import urllib.parse as urlparse
 from urllib.parse import urlencode
 from lxml import etree
 from bson import ObjectId
+import asyncio
 
 def authenticated_async(method):
     @gen.coroutine
@@ -33,24 +34,6 @@ def authenticated_async(method):
     return wrapper
 
 
-class UserHander(tornado.web.RequestHandler):
-    def prepare(self):
-        self.set_cookie("_xsrf", self.xsrf_token)
-    @gen.coroutine
-    def get_current_user_async(self):
-        sessionid = self.get_secure_cookie('sessionid')
-        sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
-        uid = self.get_secure_cookie('uid')
-        if not (sessionid and sig and uid):
-            return False
-        user_salt = yield self.application.redis.get(uid)
-        hashstr = sessionid + user_salt + uid
-        user = {}
-        #print(hashlib.sha512(hashstr).hexdigest())
-        print()
-        if sig == hashlib.sha512(hashstr).hexdigest():
-            return uid
-        return False
 
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
@@ -88,6 +71,13 @@ class BlockingHandler(BlockingBaseHandler):
 
 
 class BaseHandler(BlockingHandler):
+    async def prepare(self):
+        self.user = await self.get_user()
+    def get_template_namespace(self):
+        ns = super(BaseHandler, self).get_template_namespace()
+        ns.update({"user": self.user})
+        return ns
+
     async def get_user(self):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
@@ -112,4 +102,24 @@ class BaseHandler(BlockingHandler):
         print()
         if sig == hashlib.sha512(hashstr).hexdigest():
             return True
+        return False
+
+class UserHander(BaseHandler):
+    async def prepare(self):
+        self.set_cookie("_xsrf", self.xsrf_token)
+        await super(UserHander, self).prepare()
+    @gen.coroutine
+    def get_current_user_async(self):
+        sessionid = self.get_secure_cookie('sessionid')
+        sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
+        uid = self.get_secure_cookie('uid')
+        if not (sessionid and sig and uid):
+            return False
+        user_salt = yield self.application.redis.get(uid)
+        hashstr = sessionid + user_salt + uid
+        user = {}
+        #print(hashlib.sha512(hashstr).hexdigest())
+        print()
+        if sig == hashlib.sha512(hashstr).hexdigest():
+            return uid
         return False

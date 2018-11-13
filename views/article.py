@@ -21,7 +21,6 @@ class ArticleHandler(BaseHandler):
         return sorted(related_posts, key=lambda x: sort_key[x['_id']])
 
     async def get(self, post_id,language='zh-tw'):
-        user = await self.get_user()
         post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         u_id = post['user']
         u = await self.application.db.users.find_one({"_id":ObjectId(u_id)})
@@ -72,7 +71,7 @@ class ArticleHandler(BaseHandler):
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
+            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts)
         else:
-            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,user=user)
+            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts)
 
