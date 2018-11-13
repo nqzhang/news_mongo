@@ -92,8 +92,8 @@ class BaseHandler(BlockingHandler):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
             user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
-            need_keys = ['user_name','email']
-            user = {key: user[key] for key in need_keys}
+            need_keys = ['user_name','email','is_active']
+            user = {key: user.get(key,0) for key in need_keys}
             user['is_login'] = True
         else:
             user={}
