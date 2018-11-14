@@ -34,7 +34,7 @@ def build_key_u_new_posts(*args):
 @cached(ttl=redis_cache_ttl, cache=RedisCache, key_builder=build_key_u_new_posts, endpoint=redis_cache['host'],
         serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def u_new_posts(db,u_id):
-    u_new_posts = await db.posts.find({ "user": u_id}).limit(hot_news_num).to_list(length=hot_news_num)
+    u_new_posts = await db.posts.find({ "user": u_id},{ "_id": 1,"title": 1 }).limit(hot_news_num).to_list(length=hot_news_num)
     for x in u_new_posts:
         x['_id'] = str(x['_id'])
     return u_new_posts
