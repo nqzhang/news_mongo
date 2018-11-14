@@ -1,0 +1,22 @@
+<div class="right_sidebar">
+    <div>
+        <div class="section-head">
+            作者最新文章
+        </div>
+        <div>
+            <section class="section-item">
+                <ul>
+                    {% for u_new_post in u_new_posts %}
+                    <li>
+                        <h5>
+                            <a href="/a/{{ u_new_post['_id'] }}" target="_blank" class="news-link">
+                                {{ u_new_post['title'] }}
+                            </a>
+                        </h5>
+                    </li>
+                    {% end %}
+                </ul>
+            </section>
+        </div>
+    </div>
+</div>

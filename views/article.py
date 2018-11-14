@@ -48,6 +48,7 @@ class ArticleHandler(BaseHandler):
         post['desc'] = post_desc
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self.application.db)
+        u_new_posts = await sidebar.u_new_posts(self.application.db,u_id)
         #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
         if tags_id:
@@ -71,7 +72,7 @@ class ArticleHandler(BaseHandler):
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts)
+            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,u_new_posts=u_new_posts)
         else:
-            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts)
+            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,u_new_posts=u_new_posts)
 

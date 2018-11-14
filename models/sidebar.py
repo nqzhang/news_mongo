@@ -16,9 +16,9 @@ async def hot_posts(db):
     print(hot_posts)
     return hot_posts
 
-def build_key(*args):
+def build_key_c_hot_posts(*args):
     return "hot_posts_c_{}".format(args[1])
-@cached(ttl=redis_cache_ttl, cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
+@cached(ttl=redis_cache_ttl, cache=RedisCache, key_builder=build_key_c_hot_posts, endpoint=redis_cache['host'],
         serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def c_hot_posts(db,c_id):
     one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -28,3 +28,13 @@ async def c_hot_posts(db,c_id):
     hot_posts = dict({"name":await get_tname_by_tid(db,c_id)})
     hot_posts['list'] = hot_posts_list
     return hot_posts
+
+def build_key_u_new_posts(*args):
+    return "new_posts_u_{}".format(args[1])
+@cached(ttl=redis_cache_ttl, cache=RedisCache, key_builder=build_key_u_new_posts, endpoint=redis_cache['host'],
+        serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
+async def u_new_posts(db,u_id):
+    u_new_posts = await db.posts.find({ "user": u_id}).limit(hot_news_num).to_list(length=hot_news_num)
+    for x in u_new_posts:
+        x['_id'] = str(x['_id'])
+    return u_new_posts
