@@ -62,6 +62,7 @@ class PostAjaxHandler(UserHander):
                 c = await self.application.db.terms.insert_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
                 c_id = c.inserted_id
             category_person_ids.append(c_id)
+        category_ids = category_site_ids + category_person_ids
         # 如果不存在tag,创建
         # 无论是否存在,都返回tag_id
         t_ids = []
@@ -75,12 +76,12 @@ class PostAjaxHandler(UserHander):
             t_ids.append(t_id)
         if post_id == '0':
             post_id = await self.application.db.posts.insert_one(
-                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_site_ids, "category_person":category_person_ids,"tags": t_ids,
+                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now()})
             post_id = str(post_id.inserted_id)
         else:
             await self.application.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
-                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_site_ids,"category_person":category_person_ids, "tags": t_ids,
+                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now()})
             post_id = str(post_id)
         publish_success = {}
