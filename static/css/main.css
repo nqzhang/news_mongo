@@ -428,13 +428,16 @@ input[type=submit]:hover {
 
 .secondary-content {
     min-width: 300px;
-    padding: 1.5rem 2rem;
-    background-color: #fff;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
+.right_sidebar {
+    margin-bottom: 0.67rem;
+    background-color: #fff;
+    padding: 2rem 1.5rem;
+}
 .list-item {
     padding: 2rem;
     border-bottom: 1px solid #f4f4f4;
