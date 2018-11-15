@@ -1,3 +1,4 @@
+{% if u_categorys %}
 <div class="right_sidebar">
     <div>
         <div class="section-head">
@@ -5,7 +6,7 @@
         </div>
         <div>
             <section class="section-item">
-              <!-- TODO -- 多余5个 个人分类时收起来多余分类，点击展开参考 https://blog.csdn.net/qq_31807385/article/details/84072543>
+              <!-- TODO -- 多余5个 个人分类时收起来多余分类，点击展开参考 https://blog.csdn.net/qq_31807385/article/details/84072543> -->
                 <ul>
                     {% for u_category in u_categorys %}
                     <li>
@@ -21,3 +22,4 @@
         </div>
     </div>
 </div>
+{% end %}
