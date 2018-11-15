@@ -102,8 +102,7 @@ class RegisterHandler(EmailHandler):
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
             u_id = str(u.inserted_id)
-            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
-            #TODO 邮箱html格式
+            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
             #註冊后登陸
             sessionid = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
@@ -150,8 +149,11 @@ class EmailVerifyHandler(EmailHandler):
         if email_code:
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
                 self.write('链接已失效')
+            elif email_code['is_used'] == 1:
+                self.write('链接已失效')
             else:
                 await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
+                await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
                 self.write('激活成功')
         else:
             self.write('验证链接无效')
@@ -163,6 +165,6 @@ class EmailResendHandler(EmailHandler,UserHander):
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
-                                                                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()},upsert=True)
+                                                                {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
         await self.send_mail(u['email'], verify_link)
         self.write('邮件已重新发送')
