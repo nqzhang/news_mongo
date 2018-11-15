@@ -2,9 +2,6 @@ $("#btnPublish").click(publish);
 
 $('a[data-pid]').click(delete_post);
 
-$(document).on('keyup', '.bootstrap-tagsinput input', function(){
-    $(this).attr('placeholder', '')
-})
 function publish_success(post) {
     $('#alertSuccess .title').text(post['title']);
     $('#alertSuccess').show();
@@ -97,11 +94,11 @@ $(function() {
     CKEDITOR.instances.editor.setData(jsonData['content']);
     $.each(jsonData['tags'], function(index,value) {
         console.log(index,value);
-        $('input#tags').tagsinput('add', value['name']);
+        // $('input#tags').tagsinput('add', value['name']);
         });
     $.each(jsonData['category'].slice(1), function(index,value) {
     console.log(index,value);
-    $('input#categorys').tagsinput('add', value['name']);
+    // $('input#categorys').tagsinput('add', value['name']);
     });
     $("#radChl option").filter(function() {
         return this.text == jsonData['category'][0]['name'];
