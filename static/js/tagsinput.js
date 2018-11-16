@@ -50,7 +50,7 @@ function renderAddTagButton(index, element) {
                 // update global variable
                 window.hasEmptyTag[index] = true;
                 // focus on the new tag
-                $($('.tag-section')[index]).children('.tags .tag-input:last-child')[0].focus();
+                $($('.tag-section')[index]).find('.tags input.tag-input:last').focus();                
             }
         })
 
