@@ -1,0 +1,50 @@
+.tag-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center
+}
+
+.add-more-tags {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    align-items: center
+}
+
+.add-more-tags:hover {
+    color: #fd484d;
+}
+
+.add-more-tags img{
+    width: 0.8rem;
+    height: 0.8rem;
+    margin-right: 0.5rem;
+}
+
+.tag-wrapper {
+    display: inline-block;
+}
+
+.tag-input {
+    background-color: #c9c9c9;
+    border: 6px solid #c9c9c9;
+    line-height: 1rem;
+    width: auto;
+    min-width: 1rem;
+}
+
+.tag-input:focus {
+    background-color: transparent;
+}
+
+.tag-close{
+    margin: 0 0.5rem;
+    color: #c9c9c9;;
+    cursor: pointer;
+}
+
+.tag-close:hover {
+    color: #fd484d;
+}
+
