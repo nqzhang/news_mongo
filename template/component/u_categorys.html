@@ -1,11 +1,11 @@
 {% if u_categorys %}
-<div class="right_sidebar">
+<div id="person_category" class="right_sidebar" style="padding-bottom:0.5rem;">
     <div>
         <div class="section-head">
             个人分类
         </div>
         <div>
-            <section class="section-item">
+            <section class="section-item flexible-box">
               <!-- TODO -- 多余5个 个人分类时收起来多余分类，点击展开参考 https://blog.csdn.net/qq_31807385/article/details/84072543> -->
                 <ul>
                     {% for u_category in u_categorys %}
@@ -18,8 +18,21 @@
                     </li>
                     {% end %}
                 </ul>
+
+
             </section>
+            <p style="text-align: center;margin: 0;">
+                <a class="flexible-btn" data-fbox="aside-archive" style="color:#79a5e5;">展开</a>
+            </p>
         </div>
     </div>
 </div>
+<script>
+	$("a.flexible-btn").click(function(){
+		//$(this).parents().removeClass('flexible-box');
+		$('#person_category section').removeClass("flexible-box");
+		$('#person_category').removeAttr("style");
+		$(this).remove();
+	})
+</script>
 {% end %}
