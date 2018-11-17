@@ -59,6 +59,7 @@ function renderAddTagButton(index, element) {
 
 function renderNewTag(index) {
     var preVal;
+    var tagIndex = $($('.tag-section')[index]).find('.tags .tag-wrapper').length ;
     //删除按钮
     var closeButton = $('<span class="tag-close">╳</span>')
         .click(function(){
@@ -75,6 +76,7 @@ function renderNewTag(index) {
             'type': 'text',
             'max-length': '50'})
         .change(function() {
+
             //判定是否需要改变hasEmptyTag变量
             if($(this).val() === '' ) {
                 window.hasEmptyTag[index] = true;
@@ -83,6 +85,11 @@ function renderNewTag(index) {
                     window.hasEmptyTag[index] = false;
                 }
             }
+        })
+        .on('input', function() {
+            //更新真正input的value
+            var oldValue = $('input[data-role=tagsinput]').eq(index).val();
+            $('input[data-role=tagsinput]').eq(index).val(updateInputValue(oldValue ,tagIndex, $(this).val()));
         })
         .focus(function() {
             preVal = $(this).val();
@@ -94,11 +101,16 @@ function renderNewTag(index) {
     return wrapper;
 }
 
-
-function renderDefaultTags() {
+function renderOptions() {
 
 }
 
-function renderOptions() {
+function updateInputValue(oldValue, tagIndex, newValue) {
+    if (newValue === '') return oldValue;
+    if (oldValue === '') return newValue;
+    
+    var valueArr = oldValue.split(',');
+    valueArr[tagIndex] = newValue;
 
+    return valueArr.join();
 }
