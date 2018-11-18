@@ -7,7 +7,6 @@
 */
 
 $(document).ready(function(){
-
     // 这个变量用来检查点击新加按钮以后会不会增加新的标签输入栏，如果当前已经有一个空的标签栏，则不会添加新的
     window.hasEmptyTag = {};
 
@@ -26,15 +25,24 @@ function init(index, element) {
     var $content = $('<div/>', {
         'class': 'tag-section'
     })
-    .append(renderExistingTags())
+    .append(renderExistingTags(index, element))
     .append(renderAddTagButton(index, element))
     
     $(element).after($content);
+    updateInputValue(index);
 }
 
 // 加入已有的标签
-function renderExistingTags() {
-    return '<div class="tags"></div>';
+function renderExistingTags(index, element) {
+    if(typeof jsonData === 'undefined' || jsonData === null) return '<div class="tags"></div>';
+
+    var elementName = $(element).attr('name');
+    var $content = $('<div class="tags"></div>');
+    jsonData[elementName].forEach(function(value, i) {
+        $($content).append(renderTag(index, false,i ,value.name))
+    });
+
+    return $content
 }
 
 //加入“添加标签”按钮
@@ -42,24 +50,29 @@ function renderAddTagButton(index, element) {
     //组合“添加标签”按钮，并且连接相应event listener
     var $addTagButton = $('<div class="add-more-tags"><img src="/static/svgs/add-more.svg" />添加新' + $(element).data('display-name') + '</div>')
         .on('click', function() {
-            
             //没有空标签时候才会添加新标签
             if (!window.hasEmptyTag[index]) {
                 // add new tag into DOM
-                $($('.tag-section')[index]).children('.tags').append(renderNewTag(index));
+                $($('.tag-section')[index]).children('.tags').append(renderTag(index));
                 // update global variable
                 window.hasEmptyTag[index] = true;
                 // focus on the new tag
-                $($('.tag-section')[index]).find('.tags input.tag-input:last').focus();                
+                $($('.tag-section')[index]).find('.tags input.tag-input:last').focus();
             }
         })
 
     return $addTagButton;
 }
 
-function renderNewTag(index) {
+function renderTag(index, isNew = true, tagIndex = null, value = null) {
     var preVal;
-    var tagIndex = $($('.tag-section')[index]).find('.tags .tag-wrapper').length ;
+    var _tagIndex;
+    if (isNew) {
+        _tagIndex = $($('.tag-section')[index]).find('.tags .tag-wrapper').length ;
+    } else {
+        _tagIndex = tagIndex;
+    }
+
     //删除按钮
     var closeButton = $('<span class="tag-close">╳</span>')
         .click(function(){
@@ -68,6 +81,7 @@ function renderNewTag(index) {
                 window.hasEmptyTag[index] = false
             }
             $(this).parent().remove();
+            updateInputValue(index);
         });
 
     //标签
@@ -76,7 +90,6 @@ function renderNewTag(index) {
             'type': 'text',
             'max-length': '50'})
         .change(function() {
-
             //判定是否需要改变hasEmptyTag变量
             if($(this).val() === '' ) {
                 window.hasEmptyTag[index] = true;
@@ -88,29 +101,33 @@ function renderNewTag(index) {
         })
         .on('input', function() {
             //更新真正input的value
-            var oldValue = $('input[data-role=tagsinput]').eq(index).val();
-            $('input[data-role=tagsinput]').eq(index).val(updateInputValue(oldValue ,tagIndex, $(this).val()));
+            updateInputValue(index);
         })
         .focus(function() {
             preVal = $(this).val();
         });
     
+    if (!isNew) {
+        $($tag).val(value);
+    }
+
     var wrapper = $('<div class="tag-wrapper"></div>')
         .append($($tag))
         .append($(closeButton))
     return wrapper;
 }
 
-function renderOptions() {
+//全面检查所有tag，并且更新input的value
+function updateInputValue(index) {
+    var $inputElement = $('input[data-role=tagsinput]').eq(index);
+    var tagsArr = [];
+    $inputElement.parent().find('.tag-wrapper .tag-input').each(function(index, tagElement){
+        tagsArr.push($(tagElement).val());
+    });
 
+    $($inputElement).val(tagsArr.join());
 }
 
-function updateInputValue(oldValue, tagIndex, newValue) {
-    if (newValue === '') return oldValue;
-    if (oldValue === '') return newValue;
-    
-    var valueArr = oldValue.split(',');
-    valueArr[tagIndex] = newValue;
+function renderOptions() {
 
-    return valueArr.join();
 }
