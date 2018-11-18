@@ -160,11 +160,21 @@ class EmailVerifyHandler(EmailHandler):
 
 class EmailResendHandler(EmailHandler,UserHander):
     @authenticated_async
-    async def post(self):
+    async def get(self):
+        self.write('郵件已重新發送')
         u_id = self.current_user.decode()
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
+        email=u['email']
+        reg_text = '''
+        感謝您註冊{}!<br/>
+        您的登陸郵箱為：{}<br/>
+        要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
+        <a href='{}'>{}</a><br/>
+        (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
+        如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
+        如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
+        這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''.format(config.site_name, email, verify_link, verify_link)
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
                                                                 {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
-        await self.send_mail(u['email'], verify_link)
-        self.write('邮件已重新发送')
+        await self.send_mail(u['email'], reg_text)
