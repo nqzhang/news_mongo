@@ -5,6 +5,7 @@ db.posts.createIndex({title:"hashed"},{background:true})
 db.posts.createIndex({user:1,post_date:-1},{background:true})
 
 db.terms.createIndex({name:1,type:1},{background:true})
+db.terms.createIndex({user:1,type:1},{background:true})
 db.users.createIndex({username:1},{background:true})
 
 #db.posts.find({'post_date': {'$gte': ISODate("2018-09-10T22:36:37.312Z")}}).sort({"views": -1}).limit(7).explain()
