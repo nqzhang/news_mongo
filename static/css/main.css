@@ -428,6 +428,7 @@ input[type=submit]:hover {
 
 .secondary-content {
     width: 300px;
+    min-width: 300px;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
@@ -854,6 +855,7 @@ footer {
 
     .secondary-content {
         width: 230px;
+        min-width: 230px;
     }
 
     .mobile-user-section {
