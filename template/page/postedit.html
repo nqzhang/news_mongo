@@ -61,6 +61,7 @@
                             <span class="required">*</span>
                         </div>
                     </div>
+                    {% if user['is_active'] != 0 %}
                     <div class="opt-box row unfull">
                         <label class="labTitle col-form-label"></label>
                         <div class="txt-box">
@@ -68,6 +69,7 @@
                                    title="發佈博客">
                         </div>
                     </div>
+                    {% end %}
                 </div>
             </div>
             <div class="alert-container finished-box" id="alertSuccess">
@@ -85,6 +87,9 @@
                 </div>
             </div>
         </div>
+        {% if user['is_active'] == 0 %}
+            {% include ../component/email-validation-layer.html %}
+        {% end %}
 {% end %}
 
 
