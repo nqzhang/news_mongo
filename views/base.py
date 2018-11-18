@@ -10,6 +10,7 @@ from urllib.parse import urlencode
 from lxml import etree
 from bson import ObjectId
 import asyncio
+from models import sidebar
 
 def authenticated_async(method):
     @gen.coroutine
@@ -82,9 +83,11 @@ class BaseHandler(BlockingHandler):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
             user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
+            u_categorys = await sidebar.u_categorys(self.application.db,ObjectId(uid))
             need_keys = ['user_name','email','is_active']
             user = {key: user.get(key,0) for key in need_keys}
             user['is_login'] = True
+            user['categorys'] = u_categorys
         else:
             user={}
             user['is_login'] = False
