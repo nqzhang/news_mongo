@@ -12,7 +12,7 @@
 <script>
 $(document).ready(function(){
     $('#email-resend-button').on('click',function() {
-        $.get("/account/email_resend/{{ user['user_name']}}", null, function(response) {
+        $.get("/account/email_resend/", null, function(response) {
             // 
         });
     })
