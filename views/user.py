@@ -23,7 +23,7 @@ class PostEditHandler(UserHander):
         post_json = dumps(post)
         print(post_json)
         #print(self.current_user)
-        self.render('user/postedit.html',config=config,active=active,post=post,post_json=post_json)
+        self.render('page/postedit.html',config=config,active=active,post=post,post_json=post_json)
 
 
 class PostAjaxHandler(UserHander):
@@ -101,7 +101,7 @@ class PostListHandler(UserHander):
             post['views'] = views
             #print(post)
         print(posts)
-        self.render('user/postlist.html',config=config,active=active,posts=posts)
+        self.render('page/postlist.html',config=config,active=active,posts=posts)
 
 class PostDeleteHandler(UserHander):
     @authenticated_async

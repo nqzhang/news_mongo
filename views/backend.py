@@ -77,8 +77,6 @@ class NewPostHandler(RequestHandler):
             self.write(str(post_id))
 
 class ViewsHandler(RequestHandler):
-    def check_xsrf_cookie(self):
-        pass
     async def post(self):
         post_id = self.get_body_argument('post_id')
         #print(post_id)

@@ -1,4 +1,4 @@
-{% extends "user_base.html" %}
+{% extends "../base/user-base.html" %}
 
 {% block title %}
     <title>寫博客 - {{ config.site_name}}</title>
@@ -15,19 +15,19 @@
             </div>
             <div id="moreDiv">
                 <div class="pos-box">
-                    <div class="form-group row form-control-sm">
+                    <div class="form-group row form-control-sm tags-group">
                         <label class="labTitle col-form-label">文章標籤：</label>
                         <div class="txt-box">
                             <div class="tag-box d-flex flex-row" id="articleTagBox">
-                                <input id="tags" type="text" data-role="tagsinput" value="" placeholder="輸入最多5個文章標籤">
+                                <input id="tags" type="text" name='tags' data-display-name='標籤' data-role="tagsinput" value="" placeholder="輸入最多5個文章標籤">
                             </div>
                         </div>
                     </div>
-                    <div class="form-group row form-control-sm">
+                    <div class="form-group row form-control-sm tags-group">
                         <label class="labTitle col-form-label">個人分類：</label>
                         <div class="txt-box">
                             <div class="tag-box d-flex flex-row" id="articleCatgoryBox">
-                                <input id="categorys" type="text" data-role="tagsinput" value="" placeholder="輸入文章分類">
+                                <input id="category" name='category' type="text" data-display-name='文章分類' data-role="tagsinput" value="" placeholder="輸入文章分類">
                             </div>
                         </div>
                     </div>
@@ -61,6 +61,7 @@
                             <span class="required">*</span>
                         </div>
                     </div>
+                    {% if user['is_active'] != 0 %}
                     <div class="opt-box row unfull">
                         <label class="labTitle col-form-label"></label>
                         <div class="txt-box">
@@ -68,6 +69,7 @@
                                    title="發佈博客">
                         </div>
                     </div>
+                    {% end %}
                 </div>
             </div>
             <div class="alert-container finished-box" id="alertSuccess">
@@ -85,6 +87,9 @@
                 </div>
             </div>
         </div>
+        {% if user['is_active'] == 0 %}
+            {% include ../component/email-validation-layer.html %}
+        {% end %}
 {% end %}
 
 

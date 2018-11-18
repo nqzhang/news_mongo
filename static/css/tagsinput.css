@@ -1,61 +1,54 @@
-/*
- * bootstrap-tagsinput v0.8.0
- *
- */
+.tag-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center
+}
 
-.bootstrap-tagsinput {
-  background-color: transparent;
-  border: 1px solid #ccc;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  display: inline-block;
-  padding: 4px 6px;
-  color: #555;
-  vertical-align: middle;
-  border-radius: 4px;
-  max-width: 100%;
-  line-height: 22px;
-  cursor: text;
+.add-more-tags {
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    align-items: center;
+    color: #349EDF;
+    font-size: 0.875rem;
+    line-height: 2rem;
+    white-space: nowrap;
 }
-.bootstrap-tagsinput input {
-  border: none;
-  box-shadow: none;
-  outline: none;
-  background-color: transparent;
-  padding: 0 6px;
-  margin: 0;
-  width: auto;
-  max-width: inherit;
+
+.add-more-tags img{
+    width: 1rem;
+    height: 1rem;
+    margin-right: 0.5rem;
 }
-.bootstrap-tagsinput.form-control input::-moz-placeholder {
-  color: #777;
-  opacity: 1;
+
+.tag-wrapper {
+    display: inline-block;
+    margin-right: 0.5rem;
+    padding: 0.3rem 0;
 }
-.bootstrap-tagsinput.form-control input:-ms-input-placeholder {
-  color: #777;
+
+.tag-input {
+    display: inline-block;
+    background-color: #e9e9e9;
+    padding: 0.1875rem 0;
+    border-left: 0.8rem solid #e9e9e9;
+    border-right: 0.8rem solid #e9e9e9;    
+    line-height: 1rem;
+    width: auto;
+    min-width: 1rem;
 }
-.bootstrap-tagsinput.form-control input::-webkit-input-placeholder {
-  color: #777;
+
+.tag-close{
+    margin: 0 0.3rem;
+    color: #c9c9c9;;
+    cursor: pointer;
 }
-.bootstrap-tagsinput input:focus {
-  border: none;
-  box-shadow: none;
+
+.tag-close:hover {
+    color: #fd484d;
 }
-.bootstrap-tagsinput .tag {
-  margin-right: 2px;
-  color: #4f4f4f;
-  background: #e9e9e9;
-}
-.bootstrap-tagsinput .tag [data-role="remove"] {
-  margin-left: 8px;
-  cursor: pointer;
-}
-.bootstrap-tagsinput .tag [data-role="remove"]:after {
-  content: "x";
-  padding: 0px 2px;
-}
-.bootstrap-tagsinput .tag [data-role="remove"]:hover {
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
-  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+
+.tags-group {
+    height: auto;
 }

@@ -24,7 +24,7 @@ class EmailHandler(BlockingBaseHandler):
         email_code = uuid.uuid4().hex
         email_hashstr = tornado.escape.utf8(email_code + user_salt + email_code)
         email_hash = hashlib.sha512(email_hashstr).hexdigest()
-        verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_code)
+        verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_hash)
         return email_hash,verify_link
     @run_on_executor
     def send_mail(self,email,text):
@@ -33,7 +33,7 @@ class EmailHandler(BlockingBaseHandler):
         msgRoot.attach(msgBody)
         msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
         msgRoot['to'] = Header(email, 'utf8')
-        msgRoot['Subject'] = Header('subject', 'utf-8')
+        msgRoot['Subject'] = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
         smtp = smtplib.SMTP()
         smtp.connect(config.smtp_hostname)
         smtp.login(config.smtp_login, config.smtp_pass)
@@ -68,6 +68,16 @@ class LoginHandler(RequestHandler):
         #self.redirect("/")
         #self.write(email + passwd)
 
+class LogoutHandler(UserHander):
+    @authenticated_async
+    async def get(self):
+        next = self.get_argument('next', '/')
+        user_id = self.current_user.decode()
+        self.clear_cookie('sessionid')
+        self.clear_cookie('sig')
+        self.clear_cookie('uid')
+        await self.application.redis.delete(user_id)
+        self.redirect(next)
 
 class RegisterHandler(EmailHandler):
     async def get(self):
@@ -91,11 +101,27 @@ class RegisterHandler(EmailHandler):
             user_hash = hashlib.sha512(hashstr).hexdigest()
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
-            email_code = await self.application.db.code.insert_one(
-                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()})
-            #TODO 邮箱html格式
-            await self.send_mail(email,verify_link)
+            u_id = str(u.inserted_id)
+            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
+            #註冊后登陸
+            sessionid = uuid.uuid4().hex
+            hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
+            await self.application.redis.set(u_id, user_salt, expire=session_ttl)
+            sig = hashlib.sha512(hashstr).hexdigest()
+            self.set_secure_cookie('sessionid',sessionid)
+            self.set_secure_cookie('sig', sig)
+            self.set_secure_cookie('uid', u_id)
             self.render('page/register_success.html', config=config)
+            reg_text='''
+            感謝您註冊{}!<br/>
+            您的登陸郵箱為：{}<br/>
+            要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
+            <a href='{}'>{}</a><br/>
+            (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
+            如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
+            如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
+            這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''.format(config.site_name,email,verify_link,verify_link)
+            await self.send_mail(email, reg_text)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex
@@ -123,19 +149,32 @@ class EmailVerifyHandler(EmailHandler):
         if email_code:
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
                 self.write('链接已失效')
+            elif email_code['is_used'] == 1:
+                self.write('链接已失效')
             else:
-                await self.application.db.users.update_one({"_id":email_code['u_id']},{"is_active":1})
+                await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
+                await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
                 self.write('激活成功')
         else:
             self.write('验证链接无效')
 
 class EmailResendHandler(EmailHandler,UserHander):
     @authenticated_async
-    async def post(self):
+    async def get(self):
+        self.write('郵件已重新發送')
         u_id = self.current_user.decode()
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
+        email=u['email']
+        reg_text = '''
+        感謝您註冊{}!<br/>
+        您的登陸郵箱為：{}<br/>
+        要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
+        <a href='{}'>{}</a><br/>
+        (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
+        如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
+        如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
+        這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''.format(config.site_name, email, verify_link, verify_link)
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
-                                                                {"u_id": u['_id'], "type": "email", "code": email_hash, "createTime": datetime.datetime.now()},upsert=True)
-        await self.send_mail(u['email'], verify_link)
-        self.write('邮件已重新发送')
+                                                                {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
+        await self.send_mail(u['email'], reg_text)

@@ -18,6 +18,9 @@ main.container {
     box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.05);
 }
 
+.main-wrapper {
+    position: relative;
+}
 
 *, ::after, ::before {
     box-sizing: border-box;
@@ -525,4 +528,45 @@ span.required {
     margin-left: 2px;
     font-size: 12px;
     color: #CA0C16;
+}
+
+.overlay {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.3);
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    top: 0;
+    left: 0;
+}
+
+.overlay-container {
+    position: relative;
+    z-index: 3;
+    width: 530px;
+    height: 400px;
+    left: 50%;
+    top: 50%;
+    margin: -200px 0 0 -265px;
+    padding: 6rem 0 3rem;
+    background: #fff;
+    border-radius: 7px;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    text-align: center;
+    color: #4f4f4f;
+}
+
+.title {
+    padding-bottom: 1.5rem;
+}
+
+#email-validation-layer a{
+    color: #dc3545;
+}
+
+#email-validation-layer a:hover {
+    color: #fff;
+    background-color: #dc3545;
 }

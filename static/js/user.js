@@ -2,14 +2,6 @@ $("#btnPublish").click(publish);
 
 $('a[data-pid]').click(delete_post);
 
-function getCookie(name) {
-    var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
-    return r ? r[1] : undefined;
-}
-
-$(document).on('keyup', '.bootstrap-tagsinput input', function(){
-    $(this).attr('placeholder', '')
-})
 function publish_success(post) {
     $('#alertSuccess .title').text(post['title']);
     $('#alertSuccess').show();
@@ -54,7 +46,7 @@ function publish() {
         return;
     }
     post['tags']= $('input#tags').val();
-    post['category_person']= $('input#categorys').val();
+    post['category_person']= $('input#category').val();
     token = getCookie('_xsrf');
     $.ajax({
         url: '/u/postajax/',
@@ -100,14 +92,6 @@ $(function() {
     $('input#txtTitle').val(jsonData['title']);
     $('input#txtTitle').focus();
     CKEDITOR.instances.editor.setData(jsonData['content']);
-    $.each(jsonData['tags'], function(index,value) {
-        console.log(index,value);
-        $('input#tags').tagsinput('add', value['name']);
-        });
-    $.each(jsonData['category'].slice(1), function(index,value) {
-    console.log(index,value);
-    $('input#categorys').tagsinput('add', value['name']);
-    });
     $("#radChl option").filter(function() {
         return this.text == jsonData['category'][0]['name'];
     }).attr('selected', true);

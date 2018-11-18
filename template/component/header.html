@@ -16,14 +16,23 @@
                             <div class='user-dropdown'>
                                 <ul>
                                     <li>
-                                        <a>登出</a>
+                                        <a href="/u/postedit/">寫文章</a>
+                                    </li>
+                                    <li>
+                                        <a href="/u/postlist/">管理文章</a>
+                                    </li>
+                                    <li>
+                                        <a id="logout" href="/account/logout">登出</a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     {% else %}
-                        <a href="/account/register?src=/" target="_blank"class="signup">註冊</a>
+                        <a href="/account/register?src=/" target="_blank" class="signup">註冊</a>
                         <a class="login">登錄</a>
+                        <a href="/u/postedit/" class="write-btn">
+                            寫文章
+                        </a>
                     {% end %}
 
                     <a id='menu-icon'>
@@ -47,7 +56,10 @@
             <div class='user-dropdown'>
                 <ul>
                     <li>
-                        <a>登出</a>
+                        <a href="/u/postedit/">發布文章</a>
+                    </li>
+                    <li>
+                        <a id='m-logout' href="/account/logout">登出</a>
                     </li>
                 </ul>
             </div>
