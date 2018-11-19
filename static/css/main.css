@@ -614,6 +614,14 @@ a.flexible-btn {
     font-size: 1.35rem;
     line-height: 2.7rem;
 }
+
+.article-content pre,
+.article-content code
+ {
+    font-size: 1.35rem;
+    line-height: 2rem;
+}
+
 .article-content img {
     max-width: 100%;
     height: auto;
