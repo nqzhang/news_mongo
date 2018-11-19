@@ -18,8 +18,8 @@
 */
 
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
+h1, h2, h3, h4, h5, h6, p, blockquote,
+a, abbr, acronym, address, big, cite,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
 b, u, i, center,
@@ -111,12 +111,13 @@ img {
     width: 100%;
     height: auto;
 }
-
+/*
 pre {
     word-wrap: break-word;
     white-space: pre-wrap;
     padding: 1rem 0;
 }
+*/
 /*
 code {
     padding: 0.5rem;
@@ -608,12 +609,19 @@ a.flexible-btn {
 .article-content th,
 .article-content abbr,
 .article-content acronym,
-.article-content blockquote,
-.article-content pre
+.article-content blockquote
  {
     font-size: 1.35rem;
     line-height: 2.7rem;
 }
+
+.article-content pre,
+.article-content code
+ {
+    font-size: 1.35rem;
+    line-height: 2rem;
+}
+
 .article-content img {
     max-width: 100%;
     height: auto;
@@ -717,6 +725,7 @@ sub {
     text-decoration: none;
 }
 
+/*
 .article-content pre {
     background-color: #fafafa;
     line-height: 2rem;
@@ -725,6 +734,7 @@ sub {
     overflow: auto;
     padding: 1.6rem;
 }
+*/
 
 .article-content blockquote {
     quotes: "" "";
