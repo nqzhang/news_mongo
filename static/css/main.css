@@ -609,7 +609,7 @@ a.flexible-btn {
 .article-content th,
 .article-content abbr,
 .article-content acronym,
-.article-content blockquote,
+.article-content blockquote
  {
     font-size: 1.35rem;
     line-height: 2.7rem;
