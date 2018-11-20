@@ -68,8 +68,10 @@ class ArticleHandler(BaseHandler):
         #print(related_posts)
         related_posts = await join.post_user(related_posts, self.application.db)
         related_posts = await self.get_posts_desc(related_posts)
-        self.set_header('cache-control',
-                        'public, stale-while-revalidate=120,stale-if-error=3600,max-age=5,s-maxage=600')
+        # TODO 用户是否登录等个人数据 可以通过js来实时获取，这样就可以在CDN缓存html页面，当前国内文章页速度响应一般在600ms以内，
+        #  因此可先不做
+        #self.set_header('cache-control',
+        #                'public, stale-while-revalidate=120,stale-if-error=3600,max-age=5,s-maxage=600')
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
