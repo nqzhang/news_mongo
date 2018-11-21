@@ -121,5 +121,5 @@ class UserPageHandler(UserHander):
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
         author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
-        self.render('page/user.html',posts=posts,author=author)
+        self.render('page/author.html',posts=posts,author=author, config=config, page=page)
 

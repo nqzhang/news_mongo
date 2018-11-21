@@ -1,12 +1,18 @@
 
-<div id="menu-wrapper">
-    <ul class="menu" >
-        {% for menu in menu_left %}
-                <li>
-                    <a href="/c/{{ menu['_id'] }}/" >
-                        <span>{{ menu['name'] }}</span>
-                    </a>
-                </li>
-        {% end %}
-    </ul>
-</div>
+{% try %}
+{% if menu_left %}
+    <div id="menu-wrapper">
+        <ul class="menu" >
+            {% for menu in menu_left %}
+                    <li>
+                        <a href="/c/{{ menu['_id'] }}/" >
+                            <span>{{ menu['name'] }}</span>
+                        </a>
+                    </li>
+            {% end %}
+        </ul>
+    </div>
+{% end %}
+{% except %}
+{% end %}
+

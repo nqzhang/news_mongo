@@ -65,15 +65,20 @@
             </div>
         </div>
     {% end %}
-    
-    <ul>
-        {% for menu in menu_left %}
-            <li class="mobile-menu-item">
-                <a href="/c/{{ menu['_id'] }}/" >
-                    <span>{{ menu['name'] }}</span>
-                </a>
-            </li>
-        {% end %}
-    </ul>
+
+    {% try %}
+    {% if menu_left %}
+        <ul>
+            {% for menu in menu_left %}
+                <li class="mobile-menu-item">
+                    <a href="/c/{{ menu['_id'] }}/" >
+                        <span>{{ menu['name'] }}</span>
+                    </a>
+                </li>
+            {% end %}
+        </ul>
+    {% end %}
+    {% except %}
+    {% end %}
 </div>
 {% include login-layer.html %}
