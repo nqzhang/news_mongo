@@ -18,6 +18,8 @@ class Application(tornado.web.Application):
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
             (r'/t/(.*?)/?', tag.TagPageHandler),
+            (r'/u/(.*?)/(\d*)/?', user.UserPageHandler),
+            (r'/u/(.*?)/?', user.UserPageHandler),
             (r'/backend/newpost', backend.NewPostHandler),
             (r'/views', backend.ViewsHandler),
             (r'/account/login.*?', account.LoginHandler),

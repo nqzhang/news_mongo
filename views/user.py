@@ -8,6 +8,8 @@ from bson import ObjectId
 import config
 from models import join
 from bson.json_util import dumps
+from utils.base import attrDict
+from utils.tools import post_time_format
 
 class PostEditHandler(UserHander):
     @authenticated_async
@@ -110,4 +112,14 @@ class PostDeleteHandler(UserHander):
         result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
         self.write(post_id)
 
+class UserPageHandler(UserHander):
+    async def get(self,u_id,page=1):
+        page = 1 if not page else page
+        posts = await self.application.db.posts.find({"user": ObjectId(u_id)}).sort([("post_date", -1)]).skip(
+            config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
+        posts = await self.get_posts_desc(posts)
+        posts = [attrDict(post) for post in posts]
+        posts = map(post_time_format,posts)
+        user = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
+        self.render('page/user.html',posts=posts,user=user)
 
