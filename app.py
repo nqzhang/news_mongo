@@ -26,11 +26,11 @@ class Application(tornado.web.Application):
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
             (r'/account/email_verify/.*?', account.EmailVerifyHandler),
             (r'/account/email_resend/.*?', account.EmailResendHandler),
-            (r'/u/postedit/?', user.PostEditHandler),
-            (r'/u/postedit/(.*)/?', user.PostEditHandler),
-            (r'/u/postajax/.*?', user.PostAjaxHandler),
-            (r'/u/postlist/.*?', user.PostListHandler),
-            (r'/u/postdelete/.*?', user.PostDeleteHandler),
+            (r'/mp/postedit/?', user.PostEditHandler),
+            (r'/mp/postedit/(.*)/?', user.PostEditHandler),
+            (r'/mp/postajax/.*?', user.PostAjaxHandler),
+            (r'/mp/postlist/.*?', user.PostListHandler),
+            (r'/mp/postdelete/.*?', user.PostDeleteHandler),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
         ]
         self.db = db

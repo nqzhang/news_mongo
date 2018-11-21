@@ -49,7 +49,7 @@ function publish() {
     post['category_person']= $('input#category').val();
     token = getCookie('_xsrf');
     $.ajax({
-        url: '/u/postajax/',
+        url: '/mp/postajax/',
         headers: {'X-XSRFToken' : token },
         data: post,
         //contentType: "application/json",
@@ -71,7 +71,7 @@ function delete_post() {
     post['post_id'] = $(this).attr('data-pid');
     token = getCookie('_xsrf');
     $.ajax({
-        url: '/u/postdelete/',
+        url: '/mp/postdelete/',
         headers: {'X-XSRFToken' : token },
         data: post,
         //contentType: "application/json",
