@@ -120,6 +120,6 @@ class UserPageHandler(UserHander):
         posts = await self.get_posts_desc(posts)
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
-        user = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
-        self.render('page/user.html',posts=posts,user=user)
+        author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
+        self.render('page/user.html',posts=posts,author=author)
 
