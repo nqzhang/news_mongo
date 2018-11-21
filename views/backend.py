@@ -79,7 +79,7 @@ class NewPostHandler(RequestHandler):
 class ViewsHandler(RequestHandler):
     async def post(self):
         if 'Googlebot' in self.request.headers["User-Agent"]:
-            raise tornado.web.HTTPError(404)
+            raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")
         post_id = self.get_body_argument('post_id')
         await self.application.db.posts.update_one({'_id': ObjectId(post_id)}, {'$inc': {'views': 1}})
         current_views = await self.application.db.posts.find_one({'_id': ObjectId(post_id)})
