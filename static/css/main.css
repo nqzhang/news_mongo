@@ -467,6 +467,7 @@ input[type=submit]:hover {
     margin-bottom: 0.67rem;
     background-color: #fff;
     padding: 2rem 1.5rem;
+    overflow:hidden;
 }
 .section-item.flexible-box {
     max-height: 170px;
