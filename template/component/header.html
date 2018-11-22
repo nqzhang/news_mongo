@@ -10,7 +10,7 @@
                     <!-- <a class="search">搜索</a> -->
                     {% if user['is_login'] %}
                         <div class='user-dropdown-wrapper'>
-                            <a class='user-name' >
+                            <a class='user-icon' >
                                 {{user['user_name'][0].upper()}}
                             </a>
                             <div class='user-dropdown'>
@@ -52,7 +52,7 @@
             <a class='user-icon' >
                 {{user['user_name'][0].upper()}}
             </a>
-            <span class='user-name'>{{user['user_name']}}</span>
+            <span>{{user['user_name']}}</span>
             <div class='user-dropdown'>
                 <ul>
                     <li>
