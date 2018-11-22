@@ -525,7 +525,10 @@ a.flexible-btn {
 .post-meta span:not(.original) {
     padding-right: 1rem;
 }
-
+.post-meta a {
+    color:#78a5f1;
+    padding-right: 1rem;
+}
 .pagination {
     padding: 3rem 2rem;
 }
