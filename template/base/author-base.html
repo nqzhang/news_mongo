@@ -14,12 +14,22 @@
         <script type="text/javascript" src="/static/js/main.js"></script>
         {% raw config.analytics_code %}
     </head>
-    <body>
+    <body class='author-page'>
         {% block header %}
             {% include ../component/header.html %}
         {% end %}
         {% block content-body %}
-        <div class="author-banner">{{author.user_name}}</div>
+        <div class="container">
+            <div class="author-banner">
+                <img src="/static/svgs/open-book.svg" />
+                <div class="banner-title">
+                    {{author.user_name}} 的主頁
+                <!-- <span class="banner-slogan"> -->
+                        <!-- 個性簽名 -->
+                <!-- </span> -->
+                </div>
+            </div>
+        </div>
         <div id="content-wrapper" class="container">
             <div class="content">
                 <div class="secondary-content">
@@ -31,12 +41,15 @@
                         {% for post in posts %}
                         <section class="list-item">
                             <div>
-                                <h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
-                                <p>{{post.desc}}</p>
+                                <h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class=""><span class='original'>原创</span>{{ post['title'] }}</a></h4>
+                                <p class='item-description'>{{post.desc}}</p>
                                 <div class="post-meta">
                                     <img src="/static/svgs/clock.svg" />
                                     <span>{{ post.post_date }}</span>
-                                    <span>{{ post.views }}</span>
+                                    {% if post.views is not None  %}
+                                        <img src="/static/svgs/view.svg" />
+                                        <span>{{ post.views }}</span>
+                                    {% end %}
                                 </div>
                             </div>
                         </section>
