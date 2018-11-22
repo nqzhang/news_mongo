@@ -871,11 +871,12 @@ ul.form-ul li{
     padding: 0 3rem;
     display: flex;
     flex-direction: row;
-    justify-content: fle-start;
+    justify-content: flex-start;
     align-items: center;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    background:url('/static/images/author-banner-bg.png');
 }
 
 .author-banner img {
