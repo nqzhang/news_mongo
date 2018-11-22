@@ -521,6 +521,17 @@ a.flexible-btn {
     width: auto;
     padding-right: 0.5rem;
 }
+.list .post-meta a {
+    color:#3d3d3d;
+}
+
+.list .post-meta a:hover {
+    color:#157dcf;
+}
+
+.related-posts .post-meta a {
+    color:#3399ea;
+}
 
 .post-meta span:not(.original) {
     padding-right: 1rem;
