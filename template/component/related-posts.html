@@ -15,7 +15,7 @@
                 </p>
                 <div class="post-meta">
                     <img src="/static/svgs/user.svg" />
-                    <span>{{ related_post['user']['user_name'] }}</span>
+                    <a  href="/u/{{ related_post['user']['_id'] }}">{{ related_post['user']['user_name'] }}</a>
                     <img src="/static/svgs/clock.svg" />
                     <span>{{ related_post['post_date'] }}</span>
                 </div>
