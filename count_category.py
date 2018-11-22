@@ -5,7 +5,7 @@ from bson import ObjectId
 client = MongoClient(config.mongo['url'])[config.mongo['db_name']]
 
 excludes_name = ['未分類','推薦']
-excludes = client.terms.find({"name":{"in":excludes_name},"type":"0"})
+excludes = client.terms.find({"name":{"$in":excludes_name},"type":"0"})
 excludes_ids = []
 for x in excludes:
     excludes_ids.append(x['_id'])
