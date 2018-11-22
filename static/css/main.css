@@ -334,6 +334,12 @@ input[type=submit]:hover {
     width: 100%;
     text-align: center;
     padding: 0.5rem 0;
+    margin-bottom: 1px;
+}
+
+.menu li a:hover {
+    background-color: #fd484d;
+    color: #fff;
 }
 
 .menu li a.menu-active {
