@@ -14,22 +14,23 @@ class RotatingFile(object):
         self.directory, self.filename  = directory, filename
         self.max_lines = maxlines
         self.fh = None
-        self.open()
         self.urls = []
+        self.open()
 
     def rotate(self):
         """Rotate the file, if necessary"""
-
         if self.lines>=self.max_lines:
             self.lines=0
-            self.close()
             self.ii += 1
+            self.close()
             self.open()
 
     def open(self):
         if not os.path.exists(os.path.join(os.getcwd(),self.directory, self.filename)):
             os.makedirs(os.path.join(os.getcwd(),self.directory, self.filename))
         self.fh = open(self.filename_template, 'w')
+        url = config.site_domain + '/' + self.directory + '/' + self.filename + '/' + "%0.2d.txt" % self.ii
+        self.urls.append(url)
 
     def write(self, text=""):
         self.fh.write(text)
@@ -39,8 +40,6 @@ class RotatingFile(object):
 
     def close(self):
         self.fh.close()
-        url = config.site_domain + '/' + self.directory + '/' + self.filename + '/' + "%0.2d.txt" % self.ii
-        self.urls.append(url)
     @property
     def filename_template(self):
         return os.path.join(os.getcwd(),self.directory, self.filename,  "%0.2d.txt" % self.ii)
@@ -84,6 +83,6 @@ def main(days_ago):
 
     urls = genarate_sitemap(yesterday_min_time,yesterday_max_time)
     return urls
-urls = main(2)
+urls = main(1)
 append_xml('sitemap/sitemap.xml',urls)
 #generate_xml('sitemap/sitemap.xml',urls)
