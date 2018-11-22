@@ -977,4 +977,7 @@ footer {
    .login-inner {
        width: 80%;
    }
+   .article-content p {
+       word-break: break-all;
+   }
 }
