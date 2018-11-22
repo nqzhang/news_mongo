@@ -79,12 +79,12 @@ class PostAjaxHandler(UserHander):
         if post_id == '0':
             post_id = await self.application.db.posts.insert_one(
                 {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
-                 "post_date": datetime.datetime.now()})
+                 "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id.inserted_id)
         else:
             await self.application.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
                 {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
-                 "post_date": datetime.datetime.now()})
+                 "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id)
         publish_success = {}
         publish_success['post_id'] = post_id

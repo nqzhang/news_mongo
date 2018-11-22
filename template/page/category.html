@@ -41,6 +41,11 @@
 {% block menu %}
 <div id="menu-wrapper">
 	<ul class="menu">
+		 <li>
+                    <a href="/">
+                        <span>推薦</span>
+                    </a>
+		 </li>
 		{% for menu in menu_left %}
 			{% if c_id == str(menu['_id']) %}
 				<li>
