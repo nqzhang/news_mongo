@@ -6,7 +6,7 @@ from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
 import config
-from models import join
+from models import join,sidebar
 from bson.json_util import dumps
 from utils.base import attrDict
 from utils.tools import post_time_format
@@ -121,5 +121,6 @@ class UserPageHandler(UserHander):
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
         author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
-        self.render('page/author.html',posts=posts,author=author, config=config, page=page)
+        u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
+        self.render('page/author.html',posts=posts,author=author, config=config, page=page,u_categorys=u_categorys)
 

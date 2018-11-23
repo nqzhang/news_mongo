@@ -6,7 +6,7 @@ from lxml import etree
 from models import join,sidebar
 from .base import BlockingHandler,BaseHandler
 from config import articles_per_page
-
+from utils.base import attrDict
 
 class ArticleHandler(BaseHandler):
     def related_sort(self,terms_id,related_posts,related_type='tags'):
@@ -24,6 +24,7 @@ class ArticleHandler(BaseHandler):
         post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         u_id = post['user']
         u = await self.application.db.users.find_one({"_id":ObjectId(u_id)})
+        author = attrDict(u)
         post['user'] = u
         tags_id = [i for i in post['tags'] if i]
         category_id = [i for i in post['category'] if i]
@@ -76,8 +77,8 @@ class ArticleHandler(BaseHandler):
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
             self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,u_categorys=u_categorys)
+                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
         else:
             self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,u_categorys=u_categorys)
+                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
