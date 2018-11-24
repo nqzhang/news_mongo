@@ -62,6 +62,7 @@ class ArticleHandler(BaseHandler):
         related_fill_num = articles_per_page - len(related_posts)
         if related_fill_num > 0:
             if category_id:
+                #TODO .sort([("post_date",-1)]) 相关文章排序 根据日期排序 还是浏览量？ 还是其他算法？
                 related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}) \
                 .limit(related_fill_num).to_list(length=related_fill_num)
                 related_posts_category = self.related_sort(category_id, related_posts_category,related_type='category')
