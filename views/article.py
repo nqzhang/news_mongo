@@ -54,16 +54,37 @@ class ArticleHandler(BaseHandler):
         #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
         if tags_id:
-            related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}) \
+            related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
                 .limit(articles_per_page).to_list(length=articles_per_page)
             related_posts = self.related_sort(tags_id,related_posts,related_type='tags')
+            '''通过mongodb aggregate 实现的tags排序
+            related_posts=[]
+            replated_posts_cursor =  self.application.db.posts.aggregate([
+                {"$match": {"tags": {"$in": tags_id},'_id': {'$ne': post['_id']}}},
+                {"$unwind": "$tags"},
+                {"$match": {"tags": {"$in": tags_id}}},
+                {"$group": {
+                    "_id": "$_id",
+                    "title": {"$first": "$title"},
+                    "user": {"$first": "$user"},
+                    "post_date": {"$first": "$post_date"},
+                    "content": {"$first": "$content"},
+                    "matches": {"$sum": 1},
+                }},
+                {"$sort": {"matches": -1}},
+                {"$limit": articles_per_page},
+            ],allowDiskUse=True)
+            async for replated_post in replated_posts_cursor:
+                related_posts.append(replated_post)
+            print(related_posts)
+        '''
         else:
             related_posts = []
         related_fill_num = articles_per_page - len(related_posts)
         if related_fill_num > 0:
             if category_id:
-                #TODO .sort([("post_date",-1)]) 相关文章排序 根据日期排序 还是浏览量？ 还是其他算法？
-                related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}) \
+                #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
+                related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
                 .limit(related_fill_num).to_list(length=related_fill_num)
                 related_posts_category = self.related_sort(category_id, related_posts_category,related_type='category')
                 related_posts += related_posts_category
