@@ -25,10 +25,10 @@ class PostEditHandler(UserHander):
             post = await join.post_category(post, self.application.db)
             #print(post)
         post['post_id'] = post_id
+        content=post.pop('content')
         post_json = dumps(post)
-        print(post_json)
         #print(self.current_user)
-        self.render('page/postedit.html',config=config,active=active,post=post,post_json=post_json)
+        self.render('page/postedit.html',config=config,active=active,post=post,post_json=post_json,content=content)
 
 
 class PostAjaxHandler(UserHander):

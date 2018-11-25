@@ -91,7 +91,7 @@ $(function() {
     //console.log(jsonData);
     $('input#txtTitle').val(jsonData['title']);
     $('input#txtTitle').focus();
-    CKEDITOR.instances.editor.setData(jsonData['content']);
+    CKEDITOR.instances.editor.setData(contentData);
     $("#radChl option").filter(function() {
         return this.text == jsonData['category'][0]['name'];
     }).attr('selected', true);

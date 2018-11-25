@@ -95,10 +95,13 @@
 
 {% block postedit %}
     {% if post['post_id'] !=0 %}
+    <script type="text/template" id="contentData">{% raw content %}</script>
     <script>
         var text = '{% raw post_json %}';
-        jsonData =  JSON.parse(text);
+        var contentData = $('#contentData').html();
+        jsonData = JSON.parse(text);
     </script>
+
     {% end %}
     <script>
         CKEDITOR.replace('editor')
