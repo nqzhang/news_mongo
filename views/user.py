@@ -10,6 +10,9 @@ from models import join,sidebar
 from bson.json_util import dumps
 from utils.base import attrDict
 from utils.tools import post_time_format
+from utils.qetag import get_io_qetag
+import os
+from tornado.concurrent import run_on_executor
 
 class PostEditHandler(UserHander):
     @authenticated_async
@@ -112,15 +115,44 @@ class PostDeleteHandler(UserHander):
         result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
         self.write(post_id)
 
-class UserPageHandler(UserHander):
-    async def get(self,u_id,page=1):
-        page = 1 if not page else page
-        posts = await self.application.db.posts.find({"user": ObjectId(u_id)}).sort([("post_date", -1)]).skip(
-            config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
-        posts = await self.get_posts_desc(posts)
-        posts = [attrDict(post) for post in posts]
-        posts = map(post_time_format,posts)
-        author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
-        u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
-        self.render('page/author.html',posts=posts,author=author, config=config, page=page,u_categorys=u_categorys)
+class ckuploadHandeler(UserHander):
+    @authenticated_async
+    @run_on_executor
+    def post(self):
 
+        """CKEditor file upload"""
+        error = ''
+        url = ''
+        callback = self.get_argument("CKEditorFuncNum")
+
+        if self.request.method == 'POST' and 'upload' in self.request.files:
+            fileobj = self.request.files['upload']
+            fhash = get_io_qetag(fileobj)
+            fbasename, fext = os.path.splitext(fileobj[0]['filename'])
+            fname = '%s%s' % (fhash, fext)
+            filepath = os.path.join(self.settings['static_path'], 'upload', fname)
+            # 检查路径是否存在，不存在则创建
+            dirname = os.path.dirname(filepath)
+            if not os.path.exists(dirname):
+                try:
+                    os.makedirs(dirname)
+                except:
+                    error = 'ERROR_CREATE_DIR'
+
+            elif not os.access(dirname, os.W_OK):
+                error = 'ERROR_DIR_NOT_WRITEABLE'
+            if not error:
+                print(filepath)
+                with open(filepath,'wb') as up:      #有些文件需要已二进制的形式存储，实际中可以更改
+                    up.write(fileobj[0]['body'])
+                urlpath ='%s/%s' % ('upload', fname)
+                url = self.static_url(urlpath)
+                print(url)
+        else:
+            error = 'post error'
+        res = """
+        <script type="text/javascript">
+        window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
+        </script>
+        """ % (callback, url, error)
+        self.write(res)

@@ -1,5 +1,5 @@
 import tornado
-from views import index,backend,article,category,tag,static,account,user
+from views import index,backend,article,category,tag,static,account,user,author
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -18,8 +18,8 @@ class Application(tornado.web.Application):
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
             (r'/t/(.*?)/?', tag.TagPageHandler),
-            (r'/u/(.*?)/(\d*)/?', user.UserPageHandler),
-            (r'/u/(.*?)/?', user.UserPageHandler),
+            (r'/u/(.*?)/(\d*)/?', author.AuthorPageHandler),
+            (r'/u/(.*?)/?', author.AuthorPageHandler),
             (r'/backend/newpost', backend.NewPostHandler),
             (r'/views', backend.ViewsHandler),
             (r'/account/login.*?', account.LoginHandler),
@@ -33,6 +33,7 @@ class Application(tornado.web.Application):
             (r'/mp/postajax/.*?', user.PostAjaxHandler),
             (r'/mp/postlist/.*?', user.PostListHandler),
             (r'/mp/postdelete/.*?', user.PostDeleteHandler),
+            (r'/mp/ckupload/.*?', user.ckuploadHandeler),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
         ]
         self.db = db
