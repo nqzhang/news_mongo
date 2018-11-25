@@ -14,8 +14,14 @@ async def ttt():
 
 async def related():
     x = db.posts.aggregate([
-          {"$match":{'category': {'$in': [ObjectId('5bea62907a2ed52674df4466')]},'_id': {'$ne': [ObjectId('5bf150977a2ed52af08af738')]}}},
-      ])
+        {"$match": {"tags": {"$in": [ObjectId("5bea62907a2ed52674df4468")]}}},
+        {"$unwind": "$tags"},
+        {"$match": {"tags": {"$in": [ObjectId("5bea62907a2ed52674df4468")]}}},
+        {"$group": {
+            "_id": "$_id",
+            "matches": {"$sum": 1}
+        }},
+    {"$sort": {"matches": -1}}])
     async for i in x:
         print(i)
 async def main():
