@@ -23,9 +23,11 @@ class PostEditHandler(UserHander):
             post = await self.application.db.posts.find_one({"_id": ObjectId(post_id),"user":ObjectId(self.current_user.decode())})
             post = await join.post_tags(post, self.application.db)
             post = await join.post_category(post, self.application.db)
+            content = post.pop('content')
+        else:
+            content=''
             #print(post)
         post['post_id'] = post_id
-        content=post.pop('content')
         post_json = dumps(post)
         #print(self.current_user)
         self.render('page/postedit.html',config=config,active=active,post=post,post_json=post_json,content=content)
