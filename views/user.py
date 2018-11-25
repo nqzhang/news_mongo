@@ -13,6 +13,7 @@ from utils.tools import post_time_format
 from utils.qetag import get_io_qetag
 import os
 from tornado.concurrent import run_on_executor
+from io import BytesIO
 
 class PostEditHandler(UserHander):
     @authenticated_async
@@ -125,11 +126,11 @@ class ckuploadHandeler(UserHander):
         """CKEditor file upload"""
         error = ''
         url = ''
-        callback = self.get_argument("CKEditorFuncNum")
-
+        #callback = self.get_argument("CKEditorFuncNum")
+        print(self.request.arguments)
         if self.request.method == 'POST' and 'upload' in self.request.files:
             fileobj = self.request.files['upload']
-            fhash = get_io_qetag(fileobj)
+            fhash = get_io_qetag(BytesIO(fileobj[0]['body']))
             fbasename, fext = os.path.splitext(fileobj[0]['filename'])
             fname = '%s%s' % (fhash, fext)
             filepath = os.path.join(self.settings['static_path'], 'upload', fname)
@@ -152,9 +153,8 @@ class ckuploadHandeler(UserHander):
                 print(url)
         else:
             error = 'post error'
-        res = """
-        <script type="text/javascript">
-        window.parent.CKEDITOR.tools.callFunction(%s, '%s', '%s');
-        </script>
-        """ % (callback, url, error)
+        res = {}
+        res['uploaded'] =1
+        res['fileName']=fname
+        res['url'] = url
         self.write(res)

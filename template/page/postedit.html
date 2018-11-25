@@ -104,6 +104,16 @@
 
     {% end %}
     <script>
-        CKEDITOR.replace('editor')
+        token = getCookie('_xsrf');
+        CKEDITOR.replace('editor',{
+    filebrowserBrowseUrl: '/mp/ckupload/',
+    filebrowserImageBrowseUrl: '/mp/ckupload/',
+    filebrowserUploadUrl: '/mp/ckupload/',
+    filebrowserImageUploadUrl: '/mp/ckupload/',
+    filebrowserUploadMethod :'xhr',
+    fileTools_requestHeaders: {
+            'X-CSRFToken': token,
+        }
+});
     </script>
 {% end %}
