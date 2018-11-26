@@ -603,6 +603,14 @@ a.flexible-btn {
     transition: width 0.3s;
 }
 
+.section-item h5 a {
+    width: 100%;
+    text-overflow: ellipsis;
+    display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
 .section-item li{
     padding-bottom: 0.5rem;
 }
@@ -1054,5 +1062,19 @@ footer {
    }
    .article-content p {
        word-break: break-all;
+   }
+
+   .list-item-title a {
+       font-size: 1.2rem;
+       line-height: 1.6rem;
+   }
+
+   .section-item h5 a {
+        font-size: 1.2rem;
+        line-height: 1.6rem;  
+   }
+
+   .list-item {
+       padding: 1rem 2rem;
    }
 }
