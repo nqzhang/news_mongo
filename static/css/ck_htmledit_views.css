@@ -398,12 +398,14 @@ htmledit_views img.mathcode {
     font-family: Consolas, Inconsolata, Courier, monospace, "PingFang SC", "Microsoft YaHei", sans-serif
 }
 
+/*
 .htmledit_views .prettyprint, .htmledit_views pre.prettyprint {
     margin: 0 0 24px;
     padding: 8px 16px 4px 56px;
     background-color: #f6f8fa;
     border: none
 }
+*/
 
 .htmledit_views .prettyprint .pre-numbering {
     position: absolute;
