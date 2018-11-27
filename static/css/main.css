@@ -258,7 +258,7 @@ input[type=submit]:hover {
     padding-left: 1rem;
 }
 
-.user-icon {
+.user-dropdown-wrapper .user-icon {
     display: block;
     line-height: 3rem;
     height: 3rem;
