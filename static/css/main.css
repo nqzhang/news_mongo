@@ -199,7 +199,7 @@ input[type=submit]:hover {
     align-items: center;
 }
 
-.meta-bar a:not(.user-icon) {
+.meta-bar a{
     display: inline-block;
     line-height: 3rem;
     font-size: 1.25rem;
@@ -234,6 +234,11 @@ input[type=submit]:hover {
     color: #fd484d;
 }
 
+.login:hover {
+    color: #fff;
+    background-color: #fd484d;
+}
+
 .meta-bar .search-toggle {
     height: 3rem;
     width: 3rem;
@@ -248,30 +253,10 @@ input[type=submit]:hover {
     width: 2rem;
 }
 
-.login:hover {
-    color: #fff;
-    background-color: #fd484d;
-}
-
 .user-dropdown-wrapper {
     position: relative;
     padding-left: 1rem;
 }
-
-/* .user-dropdown-wrapper .user-name {
-    display: inline-block;
-    line-height: 3rem;
-    height: 3rem;
-    width: 3rem;
-    border-radius: 1.5rem;
-    color: #fff;
-    background-color: #fd484d;
-    text-align: center;
-    padding: 0rem;
-    font-size: 1.5rem;
-    letter-spacing: 0;
-} */
-
 
 .user-icon {
     display: block;
@@ -976,6 +961,21 @@ footer {
     padding: 0;
 }
 
+.gsc-results .gsc-cursor-box .gsc-cursor-page {
+    display: inline-block !important;
+    width: 2rem;
+    height: 2rem;
+    color: #3d3d3d !important;
+    border: 1px solid #3d3d3d;
+    margin: 1rem 1rem 0 0;
+    text-align: center;
+    line-height: 2rem;
+}
+
+.gsc-results .gsc-cursor-box .gsc-cursor-page.gsc-cursor-current-page {
+    color: #fff !important;
+}
+
 /* ==== Responsive ==== */
 /** max-width breakpoint **/
 @media (max-width: 1228px) {
@@ -1040,25 +1040,20 @@ footer {
         height: 60%;
     }
 
-   .meta-bar .signup {
-       display: none;
-   }
-
-      .meta-bar .write-btn {
-       display: none;
-   }
+    .meta-bar .write-btn,
+    .meta-bar .signup {
+       display: none !important;
+    }
 
    .meta-bar a {
         padding: 0 0.5rem;
         letter-spacing: 0.2rem;
+        margin-left: 1rem;
    }
 
-   .meta-bar .login {
-       margin-left: 0.5rem;
-   }
-
-   .meta-bar #menu-icon {
-        margin-left: 0.5rem;
+   .meta-bar .search-toggle,
+   #menu-icon {
+        margin-left: 1rem;
    }
 
    .main {
@@ -1106,5 +1101,10 @@ footer {
 
    .list-item {
        padding: 1rem 2rem;
+   }
+
+   .gsc-results-wrapper-overlay {
+       width: 90% !important;
+       left: 5% !important;
    }
 }
