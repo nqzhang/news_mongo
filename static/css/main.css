@@ -199,7 +199,7 @@ input[type=submit]:hover {
     align-items: center;
 }
 
-.meta-bar a{
+.meta-bar > a{
     display: inline-block;
     line-height: 3rem;
     font-size: 1.25rem;
@@ -258,7 +258,7 @@ input[type=submit]:hover {
     padding-left: 1rem;
 }
 
-.user-dropdown-wrapper .user-icon {
+.user-icon {
     display: block;
     line-height: 3rem;
     height: 3rem;
@@ -303,6 +303,9 @@ input[type=submit]:hover {
     display: inline-block;
     width: 100%;
     padding: 0 2rem;
+    line-height: 3rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.25rem;
 }
 
 .user-dropdown-wrapper .user-dropdown a:hover {
@@ -877,11 +880,13 @@ ul.form-ul li{
 
 .author-info {
     font-size: 1.2rem;
+    text-align: center;
 }
 
 .author-info .user-icon{
     display:inline-block;
     margin-right: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .author-banner {
@@ -1045,7 +1050,7 @@ footer {
        display: none !important;
     }
 
-   .meta-bar a {
+   .meta-bar > a {
         padding: 0 0.5rem;
         letter-spacing: 0.2rem;
         margin-left: 1rem;
