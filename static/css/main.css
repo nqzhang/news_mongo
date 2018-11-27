@@ -195,8 +195,8 @@ input[type=submit]:hover {
 }
 
 .meta-bar {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
 }
 
 .meta-bar a:not(.user-icon) {
@@ -220,7 +220,7 @@ input[type=submit]:hover {
     background-color: #fd3546;
 }
 
-.search, .login, .signup {
+.login, .signup {
     color: #fd484d;
 }
 
@@ -229,10 +229,23 @@ input[type=submit]:hover {
     border-radius: 0.25rem;
     margin-left: 1.5rem;
 }
-
-.search:hover, 
+ 
 .signup:hover {
     color: #fd484d;
+}
+
+.meta-bar .search-toggle {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 0.25rem;
+    background-color: #fd484d;
+    padding: 0.5rem !important;
+    margin-left: 1.5rem;
+}
+
+.search-toggle img {
+    height: 2rem;
+    width: 2rem;
 }
 
 .login:hover {
@@ -946,6 +959,23 @@ ul.form-ul li{
 footer {
     height: 100px;
 }
+/* ==== google search bar ==== */
+#google-search {
+    padding: 0.5rem 3rem;
+    background-color: #fff;
+    display: none;
+}
+
+#google-search.active {
+    display: block;
+}
+
+#google-search .gsc-control-cse {
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+}
+
 /* ==== Responsive ==== */
 /** max-width breakpoint **/
 @media (max-width: 1228px) {
