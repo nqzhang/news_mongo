@@ -27,11 +27,17 @@
                                 </ul>
                             </div>
                         </div>
+                        <a class='search-toggle signed-in'>
+                            <img src="/static/svgs/search.svg" />
+                        </a>
                     {% else %}
                         <a href="/account/register?src=/" target="_blank" class="signup">註冊</a>
                         <a class="login">登錄</a>
                         <a href="/mp/postedit/" class="write-btn">
                             寫文章
+                        </a>
+                        <a class='search-toggle'>
+                            <img src="/static/svgs/search.svg" />
                         </a>
                     {% end %}
 
@@ -41,6 +47,9 @@
                 </div>
             </div>
         </header>
+        <div id="google-search">
+            <gcse:search></gcse:search>
+        </div>
     </div>
 </div>
 <div class='mobile-menu-background'>
@@ -82,3 +91,14 @@
     {% end %}
 </div>
 {% include login-layer.html %}
+<script>
+    (function() {
+      var cx = '010133422076029144660:t-2gvan5vew';
+      var gcse = document.createElement('script');
+      gcse.type = 'text/javascript';
+      gcse.async = true;
+      gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();
+  </script>

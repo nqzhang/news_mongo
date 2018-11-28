@@ -28,6 +28,12 @@ $(document).ready(function() {
         toggleMobileMenu();
     })
     // toggle mobile menu end
+
+    // toggle toggle google search
+    $(".search-toggle").click(function(){
+        toggleGoogleSearch();
+    })
+    // toggle toggle google search end
 })
 
 function setMenuOffset() {
@@ -88,5 +94,15 @@ function toggleMobileMenu() {
         $('.mobile-menu-background').addClass("active");
         $('.mobile-menu').addClass("active");
         $('body').addClass("noscroll");
+    }
+}
+
+function toggleGoogleSearch(){
+    if ($('#google-search').hasClass('active')) {
+        $('#google-search').removeClass('active')
+        $('.search-toggle img').attr('src','/static/svgs/search.svg')
+    } else {
+        $('#google-search').addClass('active')
+        $('.search-toggle img').attr('src','/static/svgs/cross.svg')
     }
 }
