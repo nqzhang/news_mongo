@@ -11,6 +11,7 @@ from lxml import etree
 from bson import ObjectId
 import asyncio
 from models import sidebar
+from config import session_ttl
 
 def authenticated_async(method):
     @gen.coroutine
@@ -102,6 +103,8 @@ class BaseHandler(BlockingHandler):
         if not user_salt:
             user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
             user_salt = user['password']['salt']
+            user_id = str(user['_id'])
+            await self.application.redis.set(user_id, user_salt, expire=session_ttl)
         hashstr = sessionid + user_salt + uid
         user = {}
         #print(hashlib.sha512(hashstr).hexdigest())
