@@ -34,6 +34,12 @@ $(document).ready(function() {
         toggleGoogleSearch();
     })
     // toggle toggle google search end
+
+    // expand title
+    $(".list-item-title a").each(function(index){
+        addExpandButton(this);
+    })
+    // expand title end
 })
 
 function setMenuOffset() {
@@ -105,4 +111,30 @@ function toggleGoogleSearch(){
         $('#google-search').addClass('active')
         $('.search-toggle img').attr('src','/static/svgs/cross.svg')
     }
+}
+
+function addExpandButton(ele) {
+    var parent = $(ele).parent();
+    
+    if ($(ele).width() > $(parent).width()) {
+        $(ele).css({"padding-right": "4rem"})
+        $(ele).next().css({"display": "inline-block"});
+        $(ele).next().click(function() {
+            expandTitle(ele);
+        });
+    }
+
+    $(ele).css({
+        "text-overflow": "ellipsis",
+        "display": "inline-block",
+        "overflow": "hidden",
+    });
+}
+
+function expandTitle(ele){
+    $(ele).next().css({"display": "none"});
+    $(ele).css({
+        "padding-right": "0",
+        "white-space": "normal",
+    });
 }

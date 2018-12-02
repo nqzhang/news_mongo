@@ -38,7 +38,13 @@
                         {% for post in posts %}
                         <section class="list-item">
                             <div>
-                                <h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class=""><span class='original'>原创</span>{{ post['title'] }}</a></h4>
+                                <h4 class="list-item-title">
+                                    <a href="/a/{{ post['_id'] }}" target="_blank" class="">
+                                        <span class='original'>原创</span>
+                                        {{ post['title'] }}
+                                    </a>
+                                    <span class='expand-title'>[展開]</span>
+                                </h4>
                                 <p class='item-description'>{{post.desc}}</p>
                                 <div class="post-meta">
                                     <img src="/static/svgs/clock.svg" />
