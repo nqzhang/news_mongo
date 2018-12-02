@@ -970,6 +970,9 @@ footer {
 
 #google-search.active {
     display: block;
+    box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
+    -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
 #google-search .gsc-control-cse {
