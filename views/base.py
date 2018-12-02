@@ -99,6 +99,9 @@ class BaseHandler(BlockingHandler):
         if not (sessionid and sig and uid):
             return False
         user_salt = await self.application.redis.get(uid)
+        if not user_salt:
+            user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
+            user_salt = user['password']['salt']
         hashstr = sessionid + user_salt + uid
         user = {}
         #print(hashlib.sha512(hashstr).hexdigest())
