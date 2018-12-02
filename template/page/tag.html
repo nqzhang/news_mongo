@@ -1,13 +1,5 @@
 {% extends "../base/list-page-base.html" %}
 
-{% block page %}
-    <div class="pagination clearfix">
-        {% for i in range(1,11) %}
-            {% if i == int(page) %}
-                <a class="current" href="/t/{{ t_id }}/page/{{ i }}/" title="第 {{ i }} 頁">{{ i }}</a>
-            {% else %}
-                <a href="/t/{{ t_id }}/page/{{ i }}/" title="第 {{ i }} 頁">{{ i }}</a>
-            {% end %}
-        {% end %}
-    </div>
+{% block pagination %}
+{% include "../component/pagination-tag.html" %}
 {% end %}

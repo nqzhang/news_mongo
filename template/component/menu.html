@@ -4,16 +4,16 @@
     <div id="menu-wrapper">
         <ul class="menu" >
              <li>
-                    <a href="/" class="menu-active">
-                        <span>推薦</span>
-                    </a>
+                <a href="/" class="menu-active">
+                    <span>推薦</span>
+                </a>
              </li>
             {% for menu in menu_left %}
-                    <li>
-                        <a href="/c/{{ menu['_id'] }}/" >
-                            <span>{{ menu['name'] }}</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="/c/{{ menu['_id'] }}/" >
+                        <span>{{ menu['name'] }}</span>
+                    </a>
+                </li>
             {% end %}
         </ul>
     </div>

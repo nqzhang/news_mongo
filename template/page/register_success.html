@@ -4,20 +4,11 @@
 {% block metadata %}
     <meta http-equiv="refresh" content="3; url=/?login=1">
 {% end %}
+
 {% block header %}
-    <div class="header-wrapper">
-        <div class="container">
-            <header>
-                <div class="header-top">
-                    <a class="logo" href="/">
-                        <img src="/static/images/logo.png">
-                        <span>{{ config.site_name }}</span>
-                    </a>
-                </div>
-            </header>
-        </div>
-    </div>
+{% include "../component/header-no-menu.html" %}
 {% end %}
+
 {% block content-body %}
     <h1>註冊成功，3秒后跳轉至登錄頁面</h1>            
 {% end %}

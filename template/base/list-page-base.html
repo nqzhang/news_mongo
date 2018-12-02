@@ -30,7 +30,10 @@
 						{% for post in posts %}
 						<section class="list-item">
 							<div>
-								<h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a></h4>
+								<h4 class="list-item-title">
+									<a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a>
+									<span class='expand-title'>[展開]</span>
+								</h4>
 								<div class="post-meta">
 									<a href="/u/{{post['user']['_id']}}" target="_blank" >
 										<img src="/static/svgs/user.svg" />
@@ -43,7 +46,7 @@
 						</section>
 						{% end %}
 					</div>
-					{% block page %}
+					{% block pagination %}
 						{% include ../component/pagination.html %}
 					{% end %}
 				</div>

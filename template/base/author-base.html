@@ -24,9 +24,6 @@
                 <img src="/static/svgs/open-book.svg" />
                 <div class="banner-title">
                     {{author.user_name}} 的主頁
-                <!-- <span class="banner-slogan"> -->
-                        <!-- 個性簽名 -->
-                <!-- </span> -->
                 </div>
             </div>
         </div>
@@ -41,7 +38,13 @@
                         {% for post in posts %}
                         <section class="list-item">
                             <div>
-                                <h4 class="list-item-title"><a href="/a/{{ post['_id'] }}" target="_blank" class=""><span class='original'>原创</span>{{ post['title'] }}</a></h4>
+                                <h4 class="list-item-title">
+                                    <a href="/a/{{ post['_id'] }}" target="_blank" class="">
+                                        <span class='original'>原创</span>
+                                        {{ post['title'] }}
+                                    </a>
+                                    <span class='expand-title'>[展開]</span>
+                                </h4>
                                 <p class='item-description'>{{post.desc}}</p>
                                 <div class="post-meta">
                                     <img src="/static/svgs/clock.svg" />
@@ -55,7 +58,7 @@
                         </section>
                         {% end %}
                     </div>
-                    {% block page %}
+                    {% block pagination %}
                         {% include ../component/pagination.html %}
                     {% end %}
                 </div>
