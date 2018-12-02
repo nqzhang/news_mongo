@@ -24,9 +24,6 @@
                 <img src="/static/svgs/open-book.svg" />
                 <div class="banner-title">
                     {{author.user_name}} 的主頁
-                <!-- <span class="banner-slogan"> -->
-                        <!-- 個性簽名 -->
-                <!-- </span> -->
                 </div>
             </div>
         </div>
@@ -55,7 +52,7 @@
                         </section>
                         {% end %}
                     </div>
-                    {% block page %}
+                    {% block pagination %}
                         {% include ../component/pagination.html %}
                     {% end %}
                 </div>

@@ -1,0 +1,24 @@
+<div id="menu-wrapper">
+	<ul class="menu">
+		<li>
+			<a href="/">
+				<span>推薦</span>
+			</a>
+		</li>
+		{% for menu in menu_left %}
+		{% if c_id == str(menu['_id']) %}
+		<li>
+			<a href="/c/{{ menu['_id'] }}/" class="menu-active">
+				<span>{{ menu['name'] }}</span>
+			</a>
+		</li>
+		{% else %}
+		<li>
+			<a href="/c/{{ menu['_id'] }}/" class="category">
+				<span>{{ menu['name'] }}</span>
+			</a>
+		</li>
+		{% end %}
+		{% end %}
+	</ul>
+</div>

@@ -4,21 +4,10 @@
     <script async type="text/javascript" src="/static/js/register.js" ></script>    
 {% end %}
 
-
 {% block header %}
-    <div class="header-wrapper">
-        <div class="container">
-            <header>
-                <div class="header-top">
-                    <a class="logo" href="/">
-                        <img src="/static/images/logo.png">
-                        <span>{{ config.site_name }}</span>
-                    </a>
-                </div>
-            </header>
-        </div>
-    </div>
+{% include "../component/header-no-menu.html" %}
 {% end %}
+
 {% block content-body %}
     <h1>創建您的通行證賬號</h1>
     <div class='user-form'>
