@@ -1,5 +1,12 @@
 <div class='sidebar author-info'>
-        <a>
+        {% try %}
+                {% if post %}
+                <a href="/u/{{ post['user']['_id'] }}"  target="_blank">
+                {% end %}
+        {% except %}
+                <a>
+        {% end %}
+        
                 <span class='user-icon'>
                         {{author.user_name[0].upper()}}
                 </span>
