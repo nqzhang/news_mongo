@@ -246,6 +246,7 @@ input[type=submit]:hover {
     background-color: #fd484d;
     padding: 0.5rem !important;
     margin-left: 1.5rem;
+    display: none;
 }
 
 .search-toggle img {
@@ -962,20 +963,20 @@ footer {
     height: 100px;
 }
 /* ==== google search bar ==== */
-#google-search {
+#google-search-layer {
     padding: 0.5rem 3rem;
     background-color: #fff;
     display: none;
 }
 
-#google-search.active {
+#google-search-layer.active {
     display: block;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
 
-#google-search .gsc-control-cse {
+#google-search-layer .gsc-control-cse {
     background-color: transparent;
     border-color: transparent;
     padding: 0;
@@ -995,6 +996,55 @@ footer {
 .gsc-results .gsc-cursor-box .gsc-cursor-page.gsc-cursor-current-page {
     color: #fff !important;
 }
+
+#google-search-bar {
+    display: block;
+}
+
+#google-search-bar .gsc-control-cse{
+    padding: 0;
+}
+
+#google-search-bar td.gsc-search-button {
+    height: 3rem;
+    width: 3rem;
+    display: inline-block;
+    border-radius: 0.25rem;
+    background-color: #fd484d;
+    padding: 0.5rem !important;
+    margin-left: 1.5rem;
+    position: relative;
+    top: 2px;
+}
+
+#google-search-bar button.gsc-search-button {
+    padding: 0;
+    border: none;
+    margin-left: 0;
+}
+
+#google-search-bar button.gsc-search-button svg{
+    padding: 0;
+    width: auto;
+    height: 22px;
+}
+
+#google-search-bar .gsc-input{
+    padding: 0;
+    font-size: 1.5rem;
+}
+
+#google-search-bar .gsc-input-box {
+    height: 3rem;
+    border-radius: 3px;
+    position: relative;
+    top: 3px;
+}
+
+#google-search-bar .gsc-input-box table {
+    height: 100%;
+}
+
 
 /* ==== Responsive ==== */
 /** max-width breakpoint **/
@@ -1045,7 +1095,6 @@ footer {
         color: #fd484d;
         background-color: #F2F2F2;
     }
-    
 }
 
 /** mobile breakpoint **/
@@ -1127,4 +1176,12 @@ footer {
        width: 90% !important;
        left: 5% !important;
    }
+
+   .meta-bar .search-toggle {
+        display: block;
+    }
+
+   #google-search-bar {
+        display: none;
+    }
 }

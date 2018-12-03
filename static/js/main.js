@@ -104,11 +104,11 @@ function toggleMobileMenu() {
 }
 
 function toggleGoogleSearch(){
-    if ($('#google-search').hasClass('active')) {
-        $('#google-search').removeClass('active')
+    if ($('#google-search-layer').hasClass('active')) {
+        $('#google-search-layer').removeClass('active')
         $('.search-toggle img').attr('src','/static/svgs/search.svg')
     } else {
-        $('#google-search').addClass('active')
+        $('#google-search-layer').addClass('active')
         $('.search-toggle img').attr('src','/static/svgs/cross.svg')
     }
 }

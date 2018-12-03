@@ -7,7 +7,9 @@
                     <span>{{ config.site_name }}
                 </a>
                 <div class="meta-bar">
-                    <!-- <a class="search">搜索</a> -->
+                    <div id="google-search-bar">
+                        <gcse:search></gcse:search>
+                    </div>
                     {% if user['is_login'] %}
                         <div class='user-dropdown-wrapper'>
                             <a class='user-icon' >
@@ -47,7 +49,7 @@
                 </div>
             </div>
         </header>
-        <div id="google-search">
+        <div id="google-search-layer">
             <gcse:search></gcse:search>
         </div>
     </div>
