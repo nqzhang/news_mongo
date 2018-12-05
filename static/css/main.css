@@ -500,13 +500,8 @@ a.flexible-btn {
     background-color: #fafafa;
 }
 
-.list-item-title {
-    position: relative;
-}
-
 .list-item-title a {
     width: 100%;
-    white-space: nowrap;
     color: #3d3d3d;
 }
 
@@ -514,17 +509,6 @@ a.flexible-btn {
     color: #fd484d;
 }
 
-.list-item-title .expand-title{
-    display: none;
-    font-size: 1rem;
-    line-height: 2.25rem;
-    font-weight: normal;
-    color: #78a5f1;
-    cursor: pointer;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
 .post-meta {
     display: flex;
     flex-direction: row;
@@ -1220,11 +1204,6 @@ footer {
    }
    .article-content p {
        word-break: break-all;
-   }
-
-   .list-item-title a {
-       font-size: 1.2rem;
-       line-height: 1.6rem;
    }
 
    .section-item h5 a {
