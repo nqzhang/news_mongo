@@ -1015,6 +1015,11 @@ footer {
     right: 2px;
 }
 
+#google-search-bar td.gsc-search-button:hover,
+#google-search-bar button.gsc-search-button:hover {
+    cursor: pointer;
+}
+
 #google-search-bar button.gsc-search-button {
     padding: 0;
     border: none;
@@ -1026,7 +1031,7 @@ footer {
     padding: 0;
     width: auto;
     height: 22px;
-    fill: #fd484d;
+    fill: #CCC;
 }
 
 #google-search-bar .gsc-input{
@@ -1036,10 +1041,12 @@ footer {
 
 #google-search-bar .gsc-input-box {
     height: 3rem;
-    border-radius: 3px;
+    border-radius: 5px;
     position: relative;
     top: 3px;
     padding-right: 3rem;
+    padding-left: 1rem;
+    border-color: #CCC;
 }
 
 #google-search-bar .gsc-input-box table {
