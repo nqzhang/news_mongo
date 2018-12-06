@@ -604,9 +604,7 @@ a.flexible-btn {
 
 .section-item h5 a {
     width: 100%;
-    text-overflow: ellipsis;
     display: inline-block;
-    white-space: nowrap;
     overflow: hidden;
 }
 
