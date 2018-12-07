@@ -26,4 +26,5 @@ CKEDITOR.editorConfig = function( config ) {
 	config.bodyClass = 'htmledit_views';
 	config.contentsCss = '/static/css/ck_htmledit_views.css';
 	config.height = 500;
+	config.language = 'zh-tw';
 };
