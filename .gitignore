@@ -123,6 +123,4 @@ dump.rdb
 
 
 # exclude
-!/static/js/lib/
-!/static/css/lib/
 !/static/upload/
