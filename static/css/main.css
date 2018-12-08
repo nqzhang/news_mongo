@@ -668,8 +668,6 @@ a.flexible-btn {
 .article-content img {
     max-width: 100%;
     height: auto;
-    margin: 0 auto;
-    display: block;
     width: auto;
 }
 .article-content a {
@@ -745,8 +743,8 @@ a.flexible-btn {
     top: -0.5rem;
 }
 
-sub {
-    bottom: -0.25rem;
+.article-content sub {
+    bottom: -0.5rem;
 }
 
 .article-content sub, 
@@ -766,6 +764,10 @@ sub {
 .article-content abbr[title] {
     border-bottom: 1px #f4f4f4 dotted;
     text-decoration: none;
+}
+
+.article-content img[src*="ckeditor/plugins"] {
+    display: inline;
 }
 
 /*
