@@ -745,8 +745,8 @@ a.flexible-btn {
     top: -0.5rem;
 }
 
-.article-content sub {
-    bottom: -0.5rem;
+sub {
+    bottom: -0.25rem;
 }
 
 .article-content sub, 
@@ -766,10 +766,6 @@ a.flexible-btn {
 .article-content abbr[title] {
     border-bottom: 1px #f4f4f4 dotted;
     text-decoration: none;
-}
-
-.article-content img[src*="ckeditor/plugins"] {
-    display: inline;
 }
 
 /*
