@@ -55,3 +55,12 @@ analytics_code = """
 
           gtag('config', 'UA-124635989-1');
         </script>"""
+adsense_code = """
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-2073744953016040",
+    enable_page_level_ads: true
+  });
+</script>
+"""
