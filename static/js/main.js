@@ -100,7 +100,7 @@ function toggleMobileMenu() {
 function toggleGoogleSearch(){
     if ($('#google-search-layer').hasClass('active')) {
         $('#google-search-layer').removeClass('active')
-        $('.search-toggle img').attr('src','/static/svgs/search.svg')
+        $('.search-toggle img').attr('src','/static/svgs/search-grey-bold.svg')
     } else {
         $('#google-search-layer').addClass('active')
         $('.search-toggle img').attr('src','/static/svgs/cross.svg')
