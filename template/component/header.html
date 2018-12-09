@@ -2,6 +2,9 @@
     <div class="container">
         <header>
             <div class="header-top">
+                <a class='search-toggle'>
+                    <img src="/static/svgs/search-grey-bold.svg" />
+                </a>
                 <a class="logo" href="/">
                     <img src="/static/images/logo.png" />
                     <span>{{ config.site_name }}
@@ -29,17 +32,11 @@
                                 </ul>
                             </div>
                         </div>
-                        <a class='search-toggle signed-in'>
-                            <img src="/static/svgs/search-grey-bold.svg" />
-                        </a>
                     {% else %}
                         <a href="/account/register?src=/" target="_blank" class="signup">註冊</a>
                         <a class="login">登錄</a>
                         <a href="/mp/postedit/" class="write-btn">
                             寫文章
-                        </a>
-                        <a class='search-toggle'>
-                            <img src="/static/svgs/search-grey-bold.svg" />
                         </a>
                     {% end %}
 
@@ -54,6 +51,7 @@
         </div>
     </div>
 </div>
+<!-- mobile menu slider-->
 <div class='mobile-menu-background'>
 </div>
 <div class='mobile-menu'>
@@ -92,6 +90,7 @@
     {% except %}
     {% end %}
 </div>
+<!-- mobile menu slider end -->
 {% include login-layer.html %}
 <script>
   (function() {

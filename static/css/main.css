@@ -239,11 +239,10 @@ input[type=submit]:hover {
     background-color: #fd484d;
 }
 
-.meta-bar .search-toggle {
+.search-toggle {
     height: 3rem;
     width: 3rem;
     padding: 0.5rem !important;
-    margin-left: 1.5rem;
     display: none;
 }
 
@@ -766,6 +765,10 @@ a.flexible-btn {
     text-decoration: none;
 }
 
+.article-content img[src*="ckeditor/plugins"] {
+    display: inline;
+}
+
 /*
 .article-content pre {
     background-color: #fafafa;
@@ -1143,6 +1146,10 @@ footer {
 
 /** mobile breakpoint **/
 @media (max-width: 720px) {
+    .header-top {
+        padding: 0 1.5rem;
+    }
+
     .logo,
     .logo:hover,
     .logo:focus {
@@ -1164,7 +1171,6 @@ footer {
         margin-left: 1rem;
    }
 
-   .meta-bar .search-toggle,
    #menu-icon {
         margin-left: 1rem;
    }
@@ -1179,10 +1185,6 @@ footer {
 
    .main-content {
        margin-right: 0;
-   }
-
-   .header-top {
-    padding: 0 1.5rem;
    }
 
    .secondary-content {
@@ -1216,7 +1218,7 @@ footer {
        left: 5% !important;
    }
 
-   .meta-bar .search-toggle {
+   .search-toggle {
         display: block;
     }
 
