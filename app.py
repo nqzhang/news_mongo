@@ -35,6 +35,7 @@ class Application(tornado.web.Application):
             (r'/mp/postdelete/.*?', user.PostDeleteHandler),
             (r'/mp/ckupload/.*?', user.ckuploadHandeler),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
+            (r"/ads.txt()", tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
         ]
         self.db = db
         super(Application, self).__init__(handlers, **config.settings)
