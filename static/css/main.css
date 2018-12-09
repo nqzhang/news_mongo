@@ -242,8 +242,6 @@ input[type=submit]:hover {
 .meta-bar .search-toggle {
     height: 3rem;
     width: 3rem;
-    border-radius: 0.25rem;
-    background-color: #fd484d;
     padding: 0.5rem !important;
     margin-left: 1.5rem;
     display: none;
