@@ -126,6 +126,7 @@ class ckuploadHandeler(UserHander):
         """CKEditor file upload"""
         error = ''
         url = ''
+        self.img_data = None
         #callback = self.get_argument("CKEditorFuncNum")
         print(self.request.arguments)
         if self.request.method == 'POST' and 'upload' in self.request.files:
@@ -148,9 +149,9 @@ class ckuploadHandeler(UserHander):
                 print(filepath)
                 with open(filepath,'wb') as up:      #有些文件需要已二进制的形式存储，实际中可以更改
                     up.write(fileobj[0]['body'])
+                    self.img_data = {"u_id": ObjectId(self.current_user.decode()), "fname": fname}
                 urlpath ='%s/%s' % ('upload', fname)
                 url = self.static_url(urlpath)
-                print(url)
         else:
             error = 'post error'
         res = {}
@@ -158,3 +159,15 @@ class ckuploadHandeler(UserHander):
         res['fileName']=fname
         res['url'] = url
         self.write(res)
+
+    def on_finish(self):
+        io_loop = tornado.ioloop.IOLoop.current()
+        io_loop.spawn_callback(self.insert_img_data)
+
+    async def insert_img_data(self):
+        if self.img_data:
+            exists = await self.application.db.images.find_one({ "fname": self.img_data['fname']})
+            if not exists:
+                await self.application.db.images.insert_one(self.img_data)
+            #else:
+                #print('数据库已存在此图片')
