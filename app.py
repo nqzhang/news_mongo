@@ -1,5 +1,5 @@
 import tornado
-from views import index,backend,article,category,tag,static,account,user,author
+from views import index,backend,article,category,tag,static,account,user,author,admin
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -35,6 +35,7 @@ class Application(tornado.web.Application):
             (r'/mp/postdelete/.*?', user.PostDeleteHandler),
             (r'/mp/ckupload/.*?', user.ckuploadHandeler),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
+            #(r"/admin/", admin.AdminHandler ),
             (r"/ads.txt()", tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
         ]
         self.db = db
