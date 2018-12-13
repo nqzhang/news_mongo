@@ -35,6 +35,7 @@ class Application(tornado.web.Application):
             (r'/mp/postdelete/.*?', user.PostDeleteHandler),
             (r'/mp/ckupload/.*?', user.ckuploadHandeler),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
+            #TODO 管理页面
             #(r"/admin/", admin.AdminHandler ),
             (r"/ads.txt()", tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
         ]
