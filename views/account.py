@@ -130,7 +130,9 @@ class RegisterHandler(EmailHandler):
         #self.set_secure_cookie("username", self.get_argument("username"))
         #self.redirect("/")
         #self.write(email + passwd)
-
+class PasswordForgotHandler(EmailHandler):
+    async def get(self):
+        self.render('page/password_forgot.html',config=config)
 class IsEmailExistHandler(RequestHandler):
     def check_xsrf_cookie(self):
         pass

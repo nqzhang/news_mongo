@@ -1,5 +1,5 @@
 import tornado
-from views import index,backend,article,category,tag,static,account,user,author,admin
+from views import index,backend,article,category,tag,static,account,user,author
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -28,6 +28,7 @@ class Application(tornado.web.Application):
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
             (r'/account/email_verify/.*?', account.EmailVerifyHandler),
             (r'/account/email_resend/.*?', account.EmailResendHandler),
+            (r'/account/password_forgot/.*?', account.PasswordForgotHandler),
             (r'/mp/postedit/?', user.PostEditHandler),
             (r'/mp/postedit/(.*)/?', user.PostEditHandler),
             (r'/mp/postajax/.*?', user.PostAjaxHandler),
