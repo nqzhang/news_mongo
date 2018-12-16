@@ -16,6 +16,9 @@ $(document).ready(function(){
 
         $('#forgot-password-form')[0].submit();
     });
+    $('#forgot-password-form input[name=email]').focus(function() {
+            showError('');
+    });
 });
 
 function showError(errorMsg) {
