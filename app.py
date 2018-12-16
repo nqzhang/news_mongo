@@ -28,6 +28,7 @@ class Application(tornado.web.Application):
             (r'/account/is_email_exist/(.*?)', account.IsEmailExistHandler),
             (r'/account/email_verify/.*?', account.EmailVerifyHandler),
             (r'/account/email_resend/.*?', account.EmailResendHandler),
+            (r'/account/password_forgot/send_mail/.*?', account.PasswordForgotSendMailHandler),
             (r'/account/password_forgot/.*?', account.PasswordForgotHandler),
             (r'/account/password_reset/.*?', account.PasswordResetHandler),
             (r'/mp/postedit/?', user.PostEditHandler),

@@ -185,3 +185,7 @@ class EmailResendHandler(EmailHandler,UserHander):
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
                                                                 {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
         await self.send_mail(u['email'], reg_text)
+
+class PasswordForgotSendMailHandler(EmailHandler,UserHander):
+    async def post(self):
+        self.render('page/password_forgot_send_mail_success.html',config=config)
