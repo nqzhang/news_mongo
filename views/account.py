@@ -133,6 +133,11 @@ class RegisterHandler(EmailHandler):
 class PasswordForgotHandler(EmailHandler):
     async def get(self):
         self.render('page/password_forgot.html',config=config)
+
+class PasswordResetHandler(EmailHandler):
+    async def get(self):
+        self.render('page/password_reset.html',config=config)
+
 class IsEmailExistHandler(RequestHandler):
     def check_xsrf_cookie(self):
         pass
