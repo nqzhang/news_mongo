@@ -10,5 +10,10 @@ function getUrlParam(name){
      var r = window.location.search.substr(1).match(reg);
     // 返回参数值
     if (r!=null) return unescape(r[2]);
-     return null;
+    return null;
  }
+
+ function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
