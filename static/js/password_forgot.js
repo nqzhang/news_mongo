@@ -29,22 +29,13 @@ $(document).ready(function(){
 
         // 检查格式是否正确
         if(!validateEmail(emailField.val())) {
-            isEmailValid = false;
-            showError('郵件格式錯誤');
+            isEmailValid = true;
+            showError('');
             return 
         }
-
-        //检查是否邮件为空
-        $.post("/account/is_email_exist/" + emailField.val(), null, function(response) {
-            if (response == "郵箱已經註冊") { 
-                //特别处理
-                isEmailValid = false;
-                showError(response);
-            } else {
-                isEmailValid = true;
-                showError('');            
-            }
-        });
+    });
+    emailField.focus(function() {
+            showError('');
     });
 });
 

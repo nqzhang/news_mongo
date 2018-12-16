@@ -47,6 +47,9 @@ $(document).ready(function(){
             }
         });
     });
+    emailField.focus(function() {
+            showError('');
+    });
 });
 
 function showError(errorMsg) {
