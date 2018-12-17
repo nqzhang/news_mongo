@@ -16,6 +16,23 @@ from .user import UserHander
 from views.base import authenticated_async
 from bson import ObjectId
 
+reg_text = '''
+            感謝您註冊{}!<br/>
+            您的登陸郵箱為：{}<br/>
+            要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
+            <a href='{}'>{}</a><br/>
+            (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
+            如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
+            如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
+            這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''
+
+pass_reset_text = '''
+            尊敬的{}：<br/>
+            我們收到了一項請求，要求通過您的電子郵件地址重設您的帳號密碼。<br/>
+            請點擊以下鏈接重設您的密碼。<br/>
+            <a href='{}'>{}</a><br/>
+            (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新發起密碼重置請求)<br/>'''
+
 class EmailHandler(BlockingBaseHandler):
     def _format_addr(self,s):
         name, addr = parseaddr(s)
@@ -27,13 +44,13 @@ class EmailHandler(BlockingBaseHandler):
         verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_hash)
         return email_hash,verify_link
     @run_on_executor
-    def send_mail(self,email,text):
+    def send_mail(self,email,subject,text):
         msgRoot = MIMEMultipart()
         msgBody = MIMEText(text, 'html')
         msgRoot.attach(msgBody)
         msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
         msgRoot['to'] = Header(email, 'utf8')
-        msgRoot['Subject'] = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
+        msgRoot['Subject'] = subject
         smtp = smtplib.SMTP()
         smtp.connect(config.smtp_hostname)
         smtp.login(config.smtp_login, config.smtp_pass)
@@ -102,7 +119,7 @@ class RegisterHandler(EmailHandler):
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
             u_id = str(u.inserted_id)
-            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
+            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_reg", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
             #註冊后登陸
             sessionid = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
@@ -112,16 +129,9 @@ class RegisterHandler(EmailHandler):
             self.set_secure_cookie('sig', sig)
             self.set_secure_cookie('uid', u_id)
             self.render('page/register_success.html', config=config)
-            reg_text='''
-            感謝您註冊{}!<br/>
-            您的登陸郵箱為：{}<br/>
-            要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
-            <a href='{}'>{}</a><br/>
-            (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
-            如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
-            如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
-            這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''.format(config.site_name,email,verify_link,verify_link)
-            await self.send_mail(email, reg_text)
+            email_text = reg_text.format(config.site_name,email,verify_link,verify_link)
+            subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
+            await self.send_mail(email, subject, email_text)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex
@@ -173,19 +183,24 @@ class EmailResendHandler(EmailHandler,UserHander):
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
         email=u['email']
-        reg_text = '''
-        感謝您註冊{}!<br/>
-        您的登陸郵箱為：{}<br/>
-        要啟用帳戶並確認電子郵件地址，請單擊以下鏈接：<br/> 
-        <a href='{}'>{}</a><br/>
-        (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新填寫註冊信息)<br/>
-        如果通過點擊以上鏈接無法訪問，請將該網址復制並粘貼至新的瀏覽器窗口中。<br/>
-        如果您錯誤地收到了此電子郵件，您無需執行任何操作來取消帳戶！此帳戶將不會啟動。<br/>
-        這只是一封公告郵件。我們並不監控或回答對此郵件的回復。'''.format(config.site_name, email, verify_link, verify_link)
+        email_text = reg_text.format(config.site_name, email, verify_link, verify_link)
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
                                                                 {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
-        await self.send_mail(u['email'], reg_text)
+        subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
+        await self.send_mail(u['email'], subject, email_text)
 
 class PasswordForgotSendMailHandler(EmailHandler,UserHander):
     async def post(self):
         self.render('page/password_forgot_send_mail_success.html',config=config)
+        email = self.get_argument('email')
+        u = await self.application.db.users.find_one({'email':email})
+        u_id = u['_id']
+        user_salt = uuid.uuid4().hex
+        email_hash, verify_link = self.generate_verify_link(user_salt)
+        email_code = await self.application.db.code.insert_one(
+            {"u_id": ObjectId(u_id), "type": "email_pass_reset", "code": email_hash, "is_used": 0,
+             "createTime": datetime.datetime.now()})
+
+        email_text = pass_reset_text.format(email,verify_link, verify_link)
+        subject = Header('[{}]密碼重設確認'.format(config.site_name), 'utf-8')
+        await self.send_mail(email, subject, email_text)
