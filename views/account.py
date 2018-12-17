@@ -43,6 +43,12 @@ class EmailHandler(BlockingBaseHandler):
         email_hash = hashlib.sha512(email_hashstr).hexdigest()
         verify_link = '{}/account/email_verify/?code={}'.format(config.site_domain, email_hash)
         return email_hash,verify_link
+    def generate_pass_reset_link(self,user_salt):
+        email_code = uuid.uuid4().hex
+        email_hashstr = tornado.escape.utf8(email_code + user_salt + email_code)
+        email_hash = hashlib.sha512(email_hashstr).hexdigest()
+        verify_link = '{}/account/password_reset/?code={}'.format(config.site_domain, email_hash)
+        return email_hash,verify_link
     @run_on_executor
     def send_mail(self,email,subject,text):
         msgRoot = MIMEMultipart()
@@ -119,7 +125,7 @@ class RegisterHandler(EmailHandler):
             u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
             u_id = str(u.inserted_id)
-            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_reg", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
+            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_verify", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
             #註冊后登陸
             sessionid = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
@@ -169,9 +175,10 @@ class EmailVerifyHandler(EmailHandler):
             elif email_code['is_used'] == 1:
                 self.write('链接已失效')
             else:
-                await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
-                await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
-                self.write('激活成功')
+                if email_code['type'] == 'email_verify':
+                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
+                    await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
+                    self.write('激活成功')
         else:
             self.write('验证链接无效')
 
@@ -185,7 +192,7 @@ class EmailResendHandler(EmailHandler,UserHander):
         email=u['email']
         email_text = reg_text.format(config.site_name, email, verify_link, verify_link)
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
-                                                                {"u_id": u['_id'], "type": "email", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
+                                                                {"u_id": u['_id'], "type": "email_verify", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
         subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
         await self.send_mail(u['email'], subject, email_text)
 
@@ -196,11 +203,10 @@ class PasswordForgotSendMailHandler(EmailHandler,UserHander):
         u = await self.application.db.users.find_one({'email':email})
         u_id = u['_id']
         user_salt = uuid.uuid4().hex
-        email_hash, verify_link = self.generate_verify_link(user_salt)
+        email_hash, verify_link = self.generate_pass_reset_link(user_salt)
         email_code = await self.application.db.code.insert_one(
             {"u_id": ObjectId(u_id), "type": "email_pass_reset", "code": email_hash, "is_used": 0,
              "createTime": datetime.datetime.now()})
-
         email_text = pass_reset_text.format(email,verify_link, verify_link)
         subject = Header('[{}]密碼重設確認'.format(config.site_name), 'utf-8')
         await self.send_mail(email, subject, email_text)
