@@ -154,6 +154,26 @@ class PasswordResetHandler(EmailHandler):
     async def get(self):
         self.render('page/password_reset.html',config=config)
 
+class ApiPasswordResetHandler(EmailHandler):
+    async def post(self):
+        email_hash = self.get_argument('code')
+        email_code = await self.application.db.code.find_one({"code": email_hash})
+        passwd = self.get_argument('passwd')
+        '''
+        if email_code:
+            if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
+                self.write('链接已失效')
+            elif email_code['is_used'] == 1:
+                self.write('链接已失效')
+            else:
+                if email_code['type'] == 'email_pass_reset':
+                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
+                    await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
+                    self.write('激活成功')
+        else:
+            self.write('验证链接无效')
+        '''
+
 class IsEmailExistHandler(RequestHandler):
     def check_xsrf_cookie(self):
         pass

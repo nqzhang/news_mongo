@@ -31,6 +31,7 @@ class Application(tornado.web.Application):
             (r'/account/password_forgot/send_mail/.*?', account.PasswordForgotSendMailHandler),
             (r'/account/password_forgot/.*?', account.PasswordForgotHandler),
             (r'/account/password_reset/.*?', account.PasswordResetHandler),
+            (r'/api/account/password_reset/.*?', account.ApiPasswordResetHandler),
             (r'/mp/postedit/?', user.PostEditHandler),
             (r'/mp/postedit/(.*)/?', user.PostEditHandler),
             (r'/mp/postajax/.*?', user.PostAjaxHandler),
