@@ -159,7 +159,6 @@ class ApiPasswordResetHandler(EmailHandler):
         email_hash = self.get_argument('code')
         email_code = await self.application.db.code.find_one({"code": email_hash})
         passwd = self.get_argument('passwd')
-        '''
         if email_code:
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
                 self.write('链接已失效')
@@ -167,12 +166,16 @@ class ApiPasswordResetHandler(EmailHandler):
                 self.write('链接已失效')
             else:
                 if email_code['type'] == 'email_pass_reset':
-                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
-                    await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
-                    self.write('激活成功')
+                    u_id = email_code['u_id']
+                    u = await self.application.db.users.find_one({'_id': u_id})
+                    user_salt = u['password']['salt']
+                    hashstr = tornado.escape.utf8(passwd + user_salt)
+                    user_hash = hashlib.sha512(hashstr).hexdigest()
+                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"password.hash":user_hash}})
+                    #await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
+                    self.write('密码重置成功')
         else:
             self.write('验证链接无效')
-        '''
 
 class IsEmailExistHandler(RequestHandler):
     def check_xsrf_cookie(self):
