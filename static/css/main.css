@@ -856,6 +856,8 @@ ul.form-ul li{
 
 .reg-link-container {
     text-align: right;
+    float: right;
+    margin-left: 1.5rem;
 }
 
 .reg-link {
