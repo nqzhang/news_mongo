@@ -985,6 +985,7 @@ footer {
 #google-search-bar {
     display: block;
     position: relative;
+    margin-right: 1.5rem;
 }
 
 #google-search-bar .gsc-control-cse{
