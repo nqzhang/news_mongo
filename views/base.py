@@ -101,14 +101,15 @@ class BaseHandler(BlockingHandler):
             return False
         user_salt = await self.application.redis.get(uid)
         if not user_salt:
-            user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
-            user_salt = user['password']['salt']
+            uid_str = uid.decode()
+            user = await self.application.db.users.find_one({'_id':ObjectId(uid_str)})
+            user_salt_str = user['password']['salt']
+            user_salt = user_salt_str.encode()
             user_id = str(user['_id'])
             await self.application.redis.set(user_id, user_salt, expire=session_ttl)
         hashstr = sessionid + user_salt + uid
         user = {}
         #print(hashlib.sha512(hashstr).hexdigest())
-        print()
         if sig == hashlib.sha512(hashstr).hexdigest():
             return True
         return False
