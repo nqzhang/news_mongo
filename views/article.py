@@ -43,10 +43,6 @@ class ArticleHandler(BaseHandler):
         post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
         #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
-        post_etree = etree.HTML(post['content'])
-        post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
-        #post_desc = post_etree.cssselect('p')[0].text
-        post['desc'] = post_desc
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self.application.db)
         u_new_posts = await sidebar.u_new_posts(self.application.db,u_id)
@@ -98,9 +94,9 @@ class ArticleHandler(BaseHandler):
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-            self.render('page/article.html',menu_left=menu_left,post=post,config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
-        else:
-            self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
+        post_etree = etree.HTML(post['content'])
+        post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
+        post['desc'] = post_desc
+        self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
