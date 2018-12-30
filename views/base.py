@@ -85,7 +85,7 @@ class BaseHandler(BlockingHandler):
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
             user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
             u_categorys = await sidebar.u_categorys(self.application.db,ObjectId(uid))
-            need_keys = ['user_name','email','is_active']
+            need_keys = ['user_name','email','is_active','_id']
             user = {key: user.get(key,0) for key in need_keys}
             user['is_login'] = True
             user['categorys'] = u_categorys
