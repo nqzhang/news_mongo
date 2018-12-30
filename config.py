@@ -59,7 +59,7 @@ adsense_code = """
 <script data-cfasync="false" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script data-cfasync="false">
   (adsbygoogle = window.adsbygoogle || []).push({
-    google_ad_client: "ca-pub-2073744953016040",
+    google_ad_client: "ca-pub-3430805129971197",
     enable_page_level_ads: true
   });
 </script>
