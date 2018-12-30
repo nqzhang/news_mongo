@@ -77,12 +77,15 @@ a {
 }
 /* ==== Common ==== */
 html, body {
-    font-family: 'Microsoft YaHei','SF Pro Display',Roboto,Noto,Arial,'PingFang SC',sans-serif;
+    font-family: PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Verdana,Roboto,Noto,Helvetica Neue,sans-serif !important;
     font-size: 12px;
     line-height: 1.5;
     color: #3d3d3d;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+div.main-content .article-content * {
+    font-family: 'Microsoft YaHei','SF Pro Display',Roboto,Noto,Arial,'PingFang SC',sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
