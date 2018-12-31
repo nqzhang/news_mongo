@@ -100,3 +100,7 @@ class ArticleHandler(BaseHandler):
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
+class ApiCommentsGetAllHandler():
+    async def post(self):
+        pass
+
