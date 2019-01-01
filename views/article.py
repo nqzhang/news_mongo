@@ -98,6 +98,9 @@ class ArticleHandler(BaseHandler):
         post_etree = etree.HTML(post['content'])
         post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
         post['desc'] = post_desc
+        #处理author.user_name为空的情况
+        if not author.user_name:
+            author.user_name = 'None'
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
