@@ -7,3 +7,14 @@
     'comment_date':'',
     'comment_content':''
 }
+
+例如：
+{
+    "_id" : ObjectId("5c2af5189f091dc6adf92d00"),
+    "post_id" : "5c2997fb7a2ed50fc0f2c0f0",
+    "reply_to" : "",
+    "comment_author_id" : "5c1964737a2ed524b4b24ed7",
+    "comment_author_name" : "898611548@qq.com",
+    "comment_date" : ISODate("2018-07-03T11:01:49.665Z"),
+    "comment_content" : "测试评论&&&&    %%%%% （））（）（{}{}[][][][())))){{}}}~~~~~~~~~~~!@@@@@@@@#$%^%&^*(*(&*，，，。。。。"
+}
