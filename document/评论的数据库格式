@@ -1,11 +1,11 @@
 {
-    '_id':'',
-    'post_id':'',
-    'reply_to':'',
-    'comment_author_id':'',
-    'comment_author_name':'',
-    'comment_date':'',
-    'comment_content':''
+    '_id':'',  //这条评论的id
+    'post_id':'',  //所属于的post的id
+    'reply_to':'', // 这条评论所回复的评论的id，如果为空，则是直接回复的文章
+    'comment_author_id':'', //这条评论的用户id
+    'comment_author_name':'', // 这条评论的用户名字
+    'comment_date':'', // 评论时间
+    'comment_content':'' // 评论内容
 }
 
 例如：
