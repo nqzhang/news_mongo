@@ -823,6 +823,10 @@ a.flexible-btn {
 p.post-excerpt {
     font-size: 1.18rem;
 }
+
+.post-excerpt a {
+    word-break: break-all;
+}
 /* ==== other ==== */
 .err-info {
     color: #fd484d;
