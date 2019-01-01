@@ -1,0 +1,9 @@
+{
+    '_id':'',
+    'post_id':'',
+    'reply_to':'',
+    'comment_author_id':'',
+    'comment_author_name':'',
+    'comment_date':'',
+    'comment_content':''
+}

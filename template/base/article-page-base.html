@@ -77,11 +77,14 @@
         {% end %}
     </div>
 <script>
+    var post_id = "{{ post['_id'] }}";
     var token = getCookie('_xsrf');
+</script>
+<script>
     $.ajax({
         url: '/views',
         headers: {'X-XSRFToken' : token },
-        data: {post_id:"{{ post['_id'] }}" },
+        data: {post_id: post_id },
         type: "POST",
     });
 </script>

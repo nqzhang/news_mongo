@@ -7,6 +7,7 @@ from models import join,sidebar
 from .base import BlockingHandler,BaseHandler
 from config import articles_per_page
 from utils.base import attrDict
+from bson.json_util import dumps
 
 class ArticleHandler(BaseHandler):
     def related_sort(self,terms_id,related_posts,related_type='tags'):
@@ -100,7 +101,9 @@ class ArticleHandler(BaseHandler):
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
-class ApiCommentsGetAllHandler():
+class ApiCommentsGetAllHandler(RequestHandler):
     async def post(self):
-        pass
+        post_id = self.get_argument('post_id')
+        comments = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
+        self.write(dumps(comments))
 
