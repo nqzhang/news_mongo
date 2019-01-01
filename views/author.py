@@ -14,5 +14,8 @@ class AuthorPageHandler(UserHander):
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
         author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
+        #处理author.user_name为空的情况
+        if not author.user_name:
+            author.user_name = 'None'
         u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
         self.render('page/author.html',posts=posts,author=author, config=config, page=page,u_categorys=u_categorys)
