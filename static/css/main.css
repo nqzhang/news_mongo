@@ -814,12 +814,58 @@ a.flexible-btn {
 .article-content blockquote:after {
     content: "";
 }
+/* ==== article comment ==== */
+#comment-form textarea {
+    width: 100%;
+    border-radius: 0.4rem;
+    border-color: #3d3d3d;
+    font-size: 1.2rem;
+    padding: 1rem;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#comment-form input[type="submit"] {
+    width: 6rem;
+    height: 3.5rem;
+    text-align: center;
+    padding-left: 0;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.comment-content,
+.comment-meta {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.comment-content {
+    justify-content: flex-start;
+}
+
+.comment-meta {
+    justify-content: flex-end;
+}
+
+.comment-meta img {
+    height: 1rem;
+    width: auto;
+    padding-right: 0.5rem;
+}
+
 /* ==== article related ==== */
-.related-post-list {
+.related-post-list,
+#comment-form-wrapper,
+#article-comments
+ {
     margin-top: 4rem;
     padding-top: 2rem;
     border-top: 1px solid #f4f4f4;
 }
+
 p.post-excerpt {
     font-size: 1.18rem;
 }
