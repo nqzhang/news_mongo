@@ -7,26 +7,46 @@ function ApiCommentsGetAll() {
         success: function (res, textStatus, jqXHR) {
             var data = JSON.parse(res);
             if(data.length > 0) {
-                $('#comment-form-wrapper').after("<div id='article-comments'><div class='section-head'>所有留言</div></div>");
+                $('#comment-list').text('');
+                $('#comment-list').append("<ul class='top'></ul>")
 
                 data.forEach(function(comment){
-                    $('#article-comments').append(
-                        "<div class='comment-item'>" + 
-                            "<div class='comment-content'>" +
-                                "<div class='comment-author'>" + comment.comment_author_name.charAt(0) + "</div>" +
-                                "<a href=''>" + comment.comment_author_name + "</a>" +
+                    console.log(comment);
+                    $('#comment-list ul.top').append(
+                        "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "'>" + 
+                            "<div class='comment-meta'>" +
+                                "<div class='comment-author user-icon'>" + comment.comment_author_name.charAt(0) + "</div>" +
+                                "<div class='author-info-wrapper'>" +
+                                    "<a class='author-name' href='/u/" + comment.comment_author_id + "' target='_blank'>" + comment.comment_author_name + "</a>" +
+                                    "<div class='comment-time'>" +
+                                        "<img src='/static/svgs/clock.svg' />" +
+                                        "<div>" + getDateTime(comment.comment_date.$date) + "</div>" +
+                                    "</div>" +
+                                "</div>" +
+                            "</div>" + 
+                            "<div class='comment-content'>" + 
                                 "<div>" + comment.comment_content + "</div>" +
                             "</div>" + 
-                            "<div class='comment-meta'>" + 
-                                "<img src='/static/svgs/clock.svg' />" +
-                                "<div>" + comment.comment_date.$date + "</div>" +
-                            "</div>" + 
-                        "</div>"
+                            "<ul></ul>" +
+                        "</li>"
                     )
+                });
+
+                data.forEach(function(comment){
+                    if (comment.reply_to !== '') {
+                        console.log(comment.reply_to);
+                        $("#comment-list li[data-comment-id='" + comment.reply_to + "'] > ul").append($("#comment-list li[data-comment-id='" + comment._id.$oid + "']"));
+
+                    }
                 });
             }
         }
     });
+}
+
+function getDateTime(dateInMillionSecond) {
+    var date = new Date(dateInMillionSecond);
+    return date.toISOString().slice(0, 10) + ' ' + date.getHours() + ':' + date.getMinutes();
 }
 
 ApiCommentsGetAll()
