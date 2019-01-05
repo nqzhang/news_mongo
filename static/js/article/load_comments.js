@@ -11,7 +11,6 @@ function ApiCommentsGetAll() {
                 $('#comment-list').append("<ul class='top'></ul>")
 
                 data.forEach(function(comment){
-                    console.log(comment);
                     $('#comment-list ul.top').append(
                         "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "'>" + 
                             "<div class='comment-meta'>" +
@@ -34,7 +33,6 @@ function ApiCommentsGetAll() {
 
                 data.forEach(function(comment){
                     if (comment.reply_to !== '') {
-                        console.log(comment.reply_to);
                         $("#comment-list li[data-comment-id='" + comment.reply_to + "'] > ul").append($("#comment-list li[data-comment-id='" + comment._id.$oid + "']"));
 
                     }
