@@ -2,9 +2,17 @@
     <div class='section-head'>發表評論</div>
     <form id="comment-form" action="/account/register" method="post">
         {% module xsrf_form_html() %}
-        <textarea autocomplete="off" rows='6' cols='50' name="comment" placeholder="留下您想說的..."></textarea>
+        {% if user['is_login'] == False %} 
+            <textarea autocomplete="off" rows='6' cols='50' placeholder="登錄以後才評論..." disabled></textarea>
+            <a class='login'>登录</a>
+        {% elif user['is_active'] == 0 %}
+            <textarea autocomplete="off" rows='6' cols='50' placeholder="若要評論，請先驗證您的郵箱..." disable></textarea>
+            <a class='activate-email'>驗證郵箱</a>
+        {% else %}
+            <textarea autocomplete="off" rows='6' cols='50' name="comment" placeholder="留下您想說的..."></textarea>
+            <div class="err-info"></div>
+            <input type="submit" value="發布">
+        {% end %}
 
-        <div class="err-info"></div>
-        <input type="submit" value="發布">
     </form>
 </div>

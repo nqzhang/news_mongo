@@ -826,13 +826,24 @@ a.flexible-btn {
     box-sizing: border-box;
 }
 
-#comment-form input[type="submit"] {
+#comment-form input[type="submit"]{
     width: 6rem;
     height: 3.5rem;
     text-align: center;
     padding-left: 0;
     margin-top: 1rem;
     cursor: pointer;
+}
+
+#comment-form .login,
+#comment-form .activate-email {
+    display: inline-block;
+    line-height: 3rem;
+    font-size: 1.25rem;
+    letter-spacing: 0.25rem;
+    padding: 0px 1.5rem;
+    margin-left: 0;
+    margin-top: 1rem;
 }
 
 .comment-content,
