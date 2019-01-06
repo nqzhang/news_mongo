@@ -27,3 +27,6 @@ sh.shardCollection("www_smwenku_com.terms", {"_id":"hashed"})
 
 #验证码过期索引
 db.code.createIndex( { "createTime": 1 },{ expireAfterSeconds: 1800 })
+
+#评论索引
+db.comments.createIndex({post_id:1},{background:true})
