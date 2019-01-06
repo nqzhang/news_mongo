@@ -8,6 +8,9 @@ from .base import BlockingHandler,BaseHandler
 from config import articles_per_page
 from utils.base import attrDict
 from bson.json_util import dumps
+from views.base import authenticated_async
+from views.base import UserHander
+import datetime
 
 class ArticleHandler(BaseHandler):
     def related_sort(self,terms_id,related_posts,related_type='tags'):
@@ -109,4 +112,15 @@ class ApiCommentsGetAllHandler(RequestHandler):
         post_id = self.get_argument('post_id')
         comments = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
         self.write(dumps(comments))
+
+class ApiCommentsAddHandler(UserHander):
+    @authenticated_async
+    async def post(self):
+        post_id = self.get_argument('post_id')
+        reply_to = self.get_argument('reply_to')
+        comment_content = self.get_argument('comment_content')
+        comment_author = await self.get_uid_name()
+        comment_author_id = comment_author['_id']
+        comment_author_name =  comment_author['user_name']
+        comment_date = datetime.datetime.now()
 
