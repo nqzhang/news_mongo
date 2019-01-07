@@ -183,6 +183,9 @@ input[type=submit]:hover {
     background-color: #fd484d;
 }
 
+.hidden {
+    display: none;
+}
 /* ==== Header ==== */
 .header-wrapper {
     margin: 1rem 0;

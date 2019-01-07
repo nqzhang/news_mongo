@@ -10,6 +10,9 @@ function ApiCommentsGetAll() {
                 $('#comment-list').text('');
                 $('#comment-list').append("<ul class='top'></ul>")
 
+                //按照时间排列，越晚越靠前
+                data.sort(sortDataByDate);
+
                 data.forEach(function(comment){
                     $('#comment-list ul.top').append(
                         "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "'>" + 
@@ -34,7 +37,6 @@ function ApiCommentsGetAll() {
                 data.forEach(function(comment){
                     if (comment.reply_to !== '') {
                         $("#comment-list li[data-comment-id='" + comment.reply_to + "'] > ul").append($("#comment-list li[data-comment-id='" + comment._id.$oid + "']"));
-
                     }
                 });
             }
@@ -45,6 +47,15 @@ function ApiCommentsGetAll() {
 function getDateTime(dateInMillionSecond) {
     var date = new Date(dateInMillionSecond);
     return date.toISOString().slice(0, 10) + ' ' + date.getHours() + ':' + date.getMinutes();
+}
+
+function sortDataByDate(a, b) {
+    if (a.comment_date.$date > b.comment_date.$date)
+        return -1;
+    if (a.comment_date.$date < b.comment_date.$date)
+        return 1;
+        
+    return 0;
 }
 
 ApiCommentsGetAll()
