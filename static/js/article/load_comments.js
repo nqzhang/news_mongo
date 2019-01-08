@@ -119,9 +119,9 @@ function getDateTime(dateInMillionSecond) {
 }
 
 function sortDataByDate(a, b) {
-    if (a.comment_date.$date > b.comment_date.$date)
-        return -1;
     if (a.comment_date.$date < b.comment_date.$date)
+        return -1;
+    if (a.comment_date.$date > b.comment_date.$date)
         return 1;
         
     return 0;
