@@ -881,6 +881,10 @@ a.flexible-btn {
     margin-bottom: 3rem;
 }
 
+.reply-comment {
+    margin-left: 1.5rem;
+}
+
 .author-name,
 .author-name:hover,
 .author-name:focus {
