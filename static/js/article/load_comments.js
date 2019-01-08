@@ -8,7 +8,7 @@ $(document).ready(function(){
     $('#comment-form').submit(function(e) {
         e.preventDefault();
 
-        var comment = $('#comment-form textarea[name=comment]').val();
+        var comment = extractRepliedContent($('#comment-form textarea[name=comment]').val());
         var post_id = $('#comment-form input[name=post_id]').val();
 
         if (comment !== '') {
@@ -17,7 +17,7 @@ $(document).ready(function(){
                 headers: {'X-XSRFToken': token},
                 data: {
                     post_id,
-                    reply_to: window.replyTo,
+                    reply_to: window.replyTo ? window.replyTo : "",
                     comment_content: comment
                 },
                 type: "POST",
@@ -57,12 +57,13 @@ function ApiCommentsGetAll() {
 
                 // 2. 先列出所有评论，无论他们是在第几层
                 data.forEach(function(comment){
+                    console.log(comment);
                     $('#comment-list ul.top').append(
                         "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" + 
                             "<div class='comment-meta'>" +
                                 "<div class='comment-author user-icon'>" + comment.comment_author_name.charAt(0) + "</div>" +
                                 "<div class='author-info-wrapper'>" +
-                                    "<a class='author-name' href='/u/" + comment.comment_author_id + "' target='_blank'>" + comment.comment_author_name + "</a>" +
+                                    "<a class='author-name' href='/u/" + comment.comment_author_id.$oid + "' target='_blank'>" + comment.comment_author_name + "</a>" +
                                     "<div class='comment-time'>" +
                                         "<img src='/static/svgs/clock.svg' />" +
                                         "<div>" + getDateTime(comment.comment_date.$date) + "</div>" +
@@ -101,6 +102,11 @@ function ApiCommentsGetAll() {
 
                     window.replyTo = $(this).attr("data-reply-to");
                     $('#comment-form textarea[name=comment]').val(addReplyToText(content, author_name));
+
+                    //页面自动上移到评论表格
+                    $('html, body').animate({
+                        scrollTop: $("#comment-form-wrapper").offset().top
+                    }, 200);
                 })
             }
         }
@@ -141,6 +147,16 @@ function hasReplyTo(content){
         return true;
     } else {
         return false;
+    }
+}
+
+function extractRepliedContent(content){
+    var content_prefix_index = content.indexOf("@");
+    var content_suffix_index = content.indexOf(":");
+    if(content_prefix_index !== -1 && content_suffix_index !== -1) {
+        return content.slice(content_suffix_index + 2, content.length);
+    } else {
+        return content;
     }
 }
 

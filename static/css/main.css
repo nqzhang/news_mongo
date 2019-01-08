@@ -883,6 +883,7 @@ a.flexible-btn {
 
 .reply-comment {
     margin-left: 1.5rem;
+    cursor: pointer;
 }
 
 .author-name,
