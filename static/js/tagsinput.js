@@ -36,6 +36,9 @@ function renderExistingTags(index, element) {
     var elementName = $(element).attr('name');
     var $content = $('<div class="tags"></div>');
     jsonData[elementName].forEach(function(value, i) {
+        if ( elementName === 'category' && value.type != 2) {
+            return;
+        }
         $($content).append(renderTag(index, false,i ,value.name))
     });
 
