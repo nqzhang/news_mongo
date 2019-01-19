@@ -59,24 +59,25 @@ function ApiCommentsGetAll() {
                 data.forEach(function(comment){
                     console.log(comment);
                     $('#comment-list ul.top').append(
-                        "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" + 
+                        "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" +
                             "<div class='comment-meta'>" +
                                 "<div class='comment-author user-icon'>" + comment.comment_author_name.charAt(0) + "</div>" +
-                                "<div class='author-info-wrapper'>" +
+                                "<div class='comment-body'>" +
                                     "<a class='author-name' href='/u/" + comment.comment_author_id.$oid + "' target='_blank'>" + comment.comment_author_name + "</a>" +
                                     "<div class='comment-time'>" +
                                         "<img src='/static/svgs/clock.svg' />" +
                                         "<div>" + "<a title=" + "'" + getDateTime(comment.comment_date.$date) + "'>"  + timeago(comment.comment_date.$date) + "</a>" + "</div>" +
                                     "</div>" +
-                                "</div>" +
-                                "<div class='reply-comment' data-reply-to='" + comment._id.$oid + "' data-author-name='" + comment.comment_author_name + "'>" +
-                                    "<img src='/static/svgs/reply.svg' />" +
-                                    "<span>回复</span>" +
+                                    "<div class='comment-content'>" +
+                                        "<div>" + comment.comment_content + "</div>" +
+                                    "</div>" +
+                                     "<div class='reply-comment' data-reply-to='" + comment._id.$oid + "' data-author-name='" + comment.comment_author_name + "'>" +
+                                        "<img src='/static/svgs/reply.svg' />" +
+                                        "<span>回复</span>" +
+                                    "</div>" +
                                 "</div>" +
                             "</div>" + 
-                            "<div class='comment-content'>" + 
-                                "<div>" + comment.comment_content + "</div>" +
-                            "</div>" + 
+
                             "<ul></ul>" +
                         "</li>"
                     )

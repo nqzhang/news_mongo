@@ -849,16 +849,20 @@ a.flexible-btn {
     margin-top: 1rem;
 }
 
-.comment-content,
+.comment-content {
+    margin-bottom: 0.35rem;
+}
+
 .comment-meta {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 1rem;
+    display: block;
+    margin-bottom: 2rem;
 }
 
 .comment-author.user-icon {
     margin: 0;
     margin-right: 1rem;
+    float: left;
+    display: block;
 }
 
 .comment-meta img {
@@ -868,21 +872,23 @@ a.flexible-btn {
 }
 
 .comment-time {
-    display: flex;
+    display: inline-flex;
     flex-direction: row;
     align-items: center;
+    margin-left: 1rem;
 }
 
 #comment-list ul.top ul {
     margin-left: 4rem;
 }
 
-#comment-list ul.top > li{
-    margin-bottom: 3rem;
+/*
+#comment-list ul.top  li{
+    margin-bottom: 2rem;
 }
+*/
 
 .reply-comment {
-    margin-left: 1.5rem;
     cursor: pointer;
 }
 
@@ -996,6 +1002,11 @@ ul.form-ul li{
     margin-right: 1rem;
     margin-bottom: 0.5rem;
 }
+
+.comment-body {
+    overflow: hidden;
+}
+
 
 .author-banner {
     height: 5rem;

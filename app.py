@@ -3,7 +3,7 @@ from views import index,backend,article,category,tag,static,account,user,author
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
-#client = motor_tornado.MotorClient('mongodb://192.168.99.12:27017')
+#client = motor_tornado.MotorClient('mongodb://192.168.31.33:27017')
 #db = client.test
 
 class Application(tornado.web.Application):
