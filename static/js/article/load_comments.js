@@ -152,7 +152,7 @@ function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意
     var month = day * 30;
     var now = new Date().getTime();   //获取当前时间毫秒
     var diffValue = now - toLocalTimestamp(dateTimeStamp);//时间差
-    console.log(diffValue);
+    //console.log(diffValue);
     if(diffValue < 0){
         result = undefined;
     } else {
