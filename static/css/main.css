@@ -899,8 +899,8 @@ span.reply-open {
 }
 
 @font-face{font-family:icons;
-src:url(https://c.disquscdn.com/next/embed/assets/font/icons.4cc7a703d2fdfe684151ff8ac24d45f1.woff2
-)format("woff2"),url(https://c.disquscdn.com/next/embed/assets/font/icons.690eabaf849f09912ee323188780339b.woff) format("woff");font-weight:400;font-style:normal}
+src:url(/static/font/icons.4cc7a703d2fdfe684151ff8ac24d45f1.woff2
+)format("woff2"),url(/static/font/icons.690eabaf849f09912ee323188780339b.woff) format("woff");font-weight:400;font-style:normal}
 .icon-forward {
    margin-left: 6px;
 }
