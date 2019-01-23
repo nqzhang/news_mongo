@@ -4,40 +4,8 @@ $(document).ready(function(){
     window.replyTo = undefined;
 
     ApiCommentsGetAll();
+    $('.comment-form').submit(comment_submit);
 
-    $('#comment-form').submit(function(e) {
-        e.preventDefault();
-
-        var comment = extractRepliedContent($('#comment-form textarea[name=comment]').val());
-        var post_id = $('#comment-form input[name=post_id]').val();
-
-        if (comment !== '') {
-            $.ajax({
-                url: '/api/comments/add/',
-                headers: {'X-XSRFToken': token},
-                data: {
-                    post_id,
-                    reply_to: window.replyTo ? window.replyTo : "",
-                    comment_content: comment
-                },
-                type: "POST",
-                success: function (res, textStatus, jqXHR) {
-                    $("#success-info").text("留言成功");
-                    $('#comment-form textarea[name=comment]').val("");
-                    ApiCommentsGetAll();
-                },
-                error: function (jqXHR, status, err) {
-                    $("#success-info").text("留言失敗，請檢查網絡或者聯繫管理員");
-                },
-            });
-        }
-    });
-
-    $('#comment-form textarea[name=comment]').on("input", function() {
-        if (!hasReplyTo($(this).val())) {
-            window.replyTo = undefined;
-        } 
-    })
 });
 
 function ApiCommentsGetAll() {
@@ -54,12 +22,11 @@ function ApiCommentsGetAll() {
 
                 // 1. 按照时间排列数据，越晚越靠前
                 data.sort(sortDataByDate);
-
+                //console.log(data)
                 // 2. 先列出所有评论，无论他们是在第几层
                 data.forEach(function(comment){
-                    console.log(comment);
-                    $('#comment-list ul.top').append(
-                        "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" +
+                    //console.log(comment);
+                    var comment_element = "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" +
                             "<div class='comment-meta'>" +
                                 "<div class='comment-author user-icon'>" + comment.comment_author_name.charAt(0) + "</div>" +
                                 "<div class='comment-body'>" +
@@ -72,43 +39,84 @@ function ApiCommentsGetAll() {
                                         "<div>" + comment.comment_content + "</div>" +
                                     "</div>" +
                                      "<div class='reply-comment' data-reply-to='" + comment._id.$oid + "' data-author-name='" + comment.comment_author_name + "'>" +
-                                        "<img src='/static/svgs/reply.svg' />" +
-                                        "<span>回复</span>" +
+                                        "<span class='reply'>回复</span>" +
                                     "</div>" +
                                 "</div>" +
-                            "</div>" + 
+                            "</div>" +
 
                             "<ul></ul>" +
                         "</li>"
-                    )
+                    $('#comment-list ul.top').append(comment_element);
                 });
 
                 data.forEach(function(comment){
                     // 3. 检查reply_to变量，如果不为空，则将这条评论移动至他父评论下。
-                    if (comment.reply_to !== '') {
-                        $("#comment-list li[data-comment-id='" + comment.reply_to + "'] > ul").append($("#comment-list li[data-comment-id='" + comment._id.$oid + "']"));
-
-                        // 如果是第三层或者以上，则删除当前评论给回复按钮
-                        if($("#comment-list li[data-comment-id='" + comment.reply_to + "']").attr('data-reply-to') !== "") {
-                            $("#comment-list li[data-comment-id='" + comment._id.$oid + "'] .reply-comment").remove();
+                    var is_reply = (comment.reply_to !== '' && comment.reply_to != "undefined" & comment.reply_to != null);
+                    var reply_to_element = $("#comment-list li[data-comment-id='" + comment.reply_to + "']");
+                    var reply_element = $("#comment-list li[data-comment-id='" + comment._id.$oid + "']");
+                    if (is_reply) {
+                        var reply_info = `<i class='icon-forward' title='in reply to'></i>  <a title=${reply_to_element.find('> .comment-meta .comment-content').text()}> ${reply_to_element.find('> .comment-meta a.author-name').text()}  </a>`;
+                        //console.log(reply_info)
+                        reply_element.find('.comment-meta a.author-name').after(reply_info);
+                    }
+                    if (is_reply) {
+                        var parent_depth = parseInt(reply_to_element.attr('depth'));
+                        if (parent_depth) {
+                            var depth = parent_depth + 1;
+                        } else {
+                            reply_to_element.attr('depth',0);
+                            var depth = 1;
                         }
+
+                        reply_to_element.children('ul').append($("#comment-list li[data-comment-id='" + comment._id.$oid + "']"));
+                        reply_element.attr('depth',depth);
+                        if (depth >= 3) {
+                            reply_element.parent('ul').addClass('comment-max-depth');
+                            //console.log('depth');
+                        }
+                        // 如果是第三层或者以上，则删除当前评论给回复按钮
+                        //var comment_item = $("#comment-list li[data-comment-id='" + comment.reply_to + "']").attr('data-reply-to');
+                        //if( comment_item !== '' && comment_item !== "undefined" && comment_item !== null) {
+                        //    $("#comment-list li[data-comment-id='" + comment._id.$oid + "'] .reply-comment").remove();
+                        //}
                     }
 
                 });
 
                 //5. 生成DOM完成以后，才能监听“回复评论”按钮
                 $('.reply-comment').click(function() {
+                    comment_form = $(this).parent('.comment-body').children('.comment-form');
+                    if (comment_form.length) {
+                        comment_form.remove();
+                        $(this).children('span').removeClass('reply-open');
+                        return;
+                    }
                     var author_name = $(this).attr("data-author-name");
                     var content = $('#comment-form textarea[name=comment]').val();
 
                     window.replyTo = $(this).attr("data-reply-to");
-                    $('#comment-form textarea[name=comment]').val(addReplyToText(content, author_name));
+                    //$('#comment-form textarea[name=comment]').val(addReplyToText(content, author_name));
+                    var reply_form = $('#comment-form').clone();
+                    reply_form.find('textarea').attr("placeholder",'');
+                    reply_form.removeAttr('id');
+                    reply_form.attr('data-reply-to',$(this).attr("data-reply-to"));
+                    $(this).parent('.comment-body').append(reply_form);
+                    $(this).children('span').addClass('reply-open');
+                    $(this).parent().children('.comment-form').submit(comment_submit);
+                    reply_form.find('a.login').click(function(){
+                        $(".header-top a.login").click()
+                        }
+                    );
 
+
+                    /*
                     //页面自动上移到评论表格
                     $('html, body').animate({
                         scrollTop: $("#comment-form-wrapper").offset().top
                     }, 200);
-                })
+                    */
+                });
+
             }
         }
     });
@@ -135,40 +143,6 @@ function sortDataByDate(a, b) {
     return 0;
 }
 
-function addReplyToText(content, author_name) {
-    var _content = content;
-    var content_prefix_index = content.indexOf("@");
-    var content_suffix_index = content.indexOf(":");
-    if(content_prefix_index !== -1 && content_suffix_index !== -1) {
-        
-        //逻辑应该是content_suffix_index + 1,这里的 + 2 是为了移除后面的一个空格
-        _content = _content.slice(content_suffix_index + 2, _content.length);
-    }
-
-    return "@回复用戶 " + author_name + ": " + _content;
-}
-
-function hasReplyTo(content){
-    var content_prefix_index = content.indexOf("@");
-    var content_suffix_index = content.indexOf(":");
-    if(content_prefix_index !== -1 && content_suffix_index !== -1) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-function extractRepliedContent(content){
-    var content_prefix_index = content.indexOf("@");
-    var content_suffix_index = content.indexOf(":");
-    if(content_prefix_index !== -1 && content_suffix_index !== -1) {
-        return content.slice(content_suffix_index + 2, content.length);
-    } else {
-        return content;
-    }
-}
-
-
 function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意时间戳是秒的形式，在这个毫秒的基础上除以1000，就是十位数的时间戳。13位数的都是时间毫秒。
     var minute = 1000 * 60;      //把分，时，天，周，半个月，一个月用毫秒表示
     var hour = minute * 60;
@@ -178,7 +152,7 @@ function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意
     var month = day * 30;
     var now = new Date().getTime();   //获取当前时间毫秒
     var diffValue = now - toLocalTimestamp(dateTimeStamp);//时间差
-    console.log(diffValue);
+    //console.log(diffValue);
     if(diffValue < 0){
         return;
     }
@@ -212,4 +186,32 @@ function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意
     }
     return result;
 }
+
+function comment_submit(e) {
+        e.preventDefault();
+        var comment = $(this).children('.comment-form textarea[name=comment]').val();
+        var post_id = $('.comment-form input[name=post_id]').val();
+        var reply_to = $(this).attr('data-reply-to') || '';
+        //console.log(reply_to);
+        if (comment !== '') {
+            $.ajax({
+                url: '/api/comments/add/',
+                headers: {'X-XSRFToken': token},
+                data: {
+                    post_id:post_id,
+                    reply_to: reply_to,
+                    comment_content: comment
+                },
+                type: "POST",
+                success: function (res, textStatus, jqXHR) {
+                    //$("#success-info").text("留言成功");
+                    $('.comment-form textarea[name=comment]').val("");
+                    ApiCommentsGetAll();
+                },
+                error: function (jqXHR, status, err) {
+                    $("#success-info").text("留言失敗，請檢查網絡或者聯繫管理員");
+                },
+            });
+        }
+    }
 

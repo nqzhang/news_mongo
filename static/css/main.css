@@ -818,7 +818,7 @@ a.flexible-btn {
     content: "";
 }
 /* ==== article comment ==== */
-#comment-form textarea {
+.comment-form textarea {
     width: 100%;
     border-radius: 0.4rem;
     border-color: #3d3d3d;
@@ -829,7 +829,7 @@ a.flexible-btn {
     box-sizing: border-box;
 }
 
-#comment-form input[type="submit"]{
+.comment-form input[type="submit"]{
     width: 6rem;
     height: 3.5rem;
     text-align: center;
@@ -837,9 +837,25 @@ a.flexible-btn {
     margin-top: 1rem;
     cursor: pointer;
 }
+span.reply  {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-weight: 500;
+    font-size:110%;
+}
 
-#comment-form .login,
-#comment-form .activate-email {
+span.reply-open {
+    color: rgb(46, 159, 255) !important;
+    font-weight: 700;
+}
+
+.comment-max-depth {
+    margin-left: 0 !important;
+}
+.comment-form .login,
+.comment-form .activate-email {
     display: inline-block;
     line-height: 3rem;
     font-size: 1.25rem;
@@ -875,11 +891,33 @@ a.flexible-btn {
     display: inline-flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 1rem;
+    margin-left: 0.5rem;
 }
 
 #comment-list ul.top ul {
     margin-left: 4rem;
+}
+
+@font-face{font-family:icons;
+src:url(https://c.disquscdn.com/next/embed/assets/font/icons.4cc7a703d2fdfe684151ff8ac24d45f1.woff2
+)format("woff2"),url(https://c.disquscdn.com/next/embed/assets/font/icons.690eabaf849f09912ee323188780339b.woff) format("woff");font-weight:400;font-style:normal}
+.icon-forward {
+   margin-left: 6px;
+}
+.icon-forward:before {
+    content: "\3e";
+}
+
+[class*=" icon-"]:before, [class^=icon-]:before {
+    font-family: icons;
+    speak: none;
+    font-style: normal;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /*
@@ -890,6 +928,7 @@ a.flexible-btn {
 
 .reply-comment {
     cursor: pointer;
+    display:inline-block;
 }
 
 .author-name,
@@ -1006,7 +1045,6 @@ ul.form-ul li{
 .comment-body {
     overflow: hidden;
 }
-
 
 .author-banner {
     height: 5rem;

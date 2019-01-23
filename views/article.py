@@ -123,9 +123,15 @@ class ApiCommentsAddHandler(UserHander):
         comment_author_id = comment_author['_id']
         comment_author_name =  comment_author['user_name']
         comment_date = datetime.datetime.now()
-        comment_id = await self.application.db.comments.insert_one(
-            {"post_id": post_id, "reply_to": reply_to, "comment_author_id": comment_author_id, "comment_author_name": comment_author_name, "comment_date": comment_date
-             ,"comment_content":comment_content})
+        comment = {}
+        comment['post_id'] = post_id
+        if reply_to:
+            comment['reply_to'] = reply_to
+        comment['comment_author_id'] = comment_author_id
+        comment['comment_author_name'] = comment_author_name
+        comment['comment_date'] =  comment_date
+        comment['comment_content'] = comment_content
+        comment_id = await self.application.db.comments.insert_one(comment)
         comment_id_str = str(comment_id)
         self.write(comment_id_str)
 

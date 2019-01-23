@@ -1,6 +1,6 @@
 <div id='comment-form-wrapper'>
     <div class='section-head'>發表評論</div>
-    <form id="comment-form" action="/account/register" method="post">
+    <form id="comment-form" class='comment-form' action="/account/register" method="post">
         {% module xsrf_form_html() %}
             <input name="post_id" value="{{ post['_id'] }}" class='hidden'/>
         {% if not user['is_login'] %}
