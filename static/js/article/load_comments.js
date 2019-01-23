@@ -55,7 +55,8 @@ function ApiCommentsGetAll() {
                     var reply_to_element = $("#comment-list li[data-comment-id='" + comment.reply_to + "']");
                     var reply_element = $("#comment-list li[data-comment-id='" + comment._id.$oid + "']");
                     if (is_reply) {
-                        var reply_info = `<i class='icon-forward' title='in reply to'></i>  <a title=${reply_to_element.find('> .comment-meta .comment-content').text()}> ${reply_to_element.find('> .comment-meta a.author-name').text()}  </a>`;
+                        var reply_info = "<i class='icon-forward' title='in reply to'></i>  <a title=" + reply_to_element.find('> .comment-meta .comment-content').text() + ">" +
+                            reply_to_element.find('> .comment-meta a.author-name').text()  + "</a>";
                         //console.log(reply_info)
                         reply_element.find('.comment-meta a.author-name').after(reply_info);
                     }
