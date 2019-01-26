@@ -1,9 +1,16 @@
 // hidemenu breakpoint: 960
 
 $(document).ready(function() {
-
+    if (is_scroll) {
+        $('#pagination').hide();
+        if ($(window).width()<=720) {
+            $('.secondary-content').hide();
+        }
+    }
     // sticky menu
     setMenuOffset();
+    sticky_sidebar();
+
     $(window).scroll(function() {
         if($(window).width() > 960) {
             toggleStickyMenu(window.menuOffsetTop, window.menuOffsetLeft);
@@ -106,3 +113,51 @@ function toggleGoogleSearch(){
         $('.search-toggle img').attr('src','/static/svgs/cross.svg')
     }
 }
+
+
+function sticky_sidebar() {
+        let el = $('.secondary-content')
+        var el_height = el.height();
+        var el_height = 100;
+        var el_width = el.width();
+        var window_height = $(window).height();
+        var el_right = el.offset().left;
+        var el_offset_top = el.offset().top;
+        let is_sticky = false;
+
+        if (el_height < window_height) {
+            var fixed_css = {"position": "fixed", "top": 0, "left": el_right}
+        } else {
+            var fixed_css = {"position": "fixed", "bottom": 0, "left": el_right}
+        }
+        function sticky() {
+              if (!is_sticky) {
+                        let c = el.clone();
+                        c.html('')
+                        el.after(c);
+                        is_sticky = c;
+
+                    }
+                    el.css(fixed_css);
+        }
+        function unsticky(){
+                   if (is_sticky) {
+                        el.removeAttr('style');
+                        is_sticky.remove()
+                        is_sticky = false;
+                    }
+        }
+            $(window).scroll(function () {
+                let scrollTop = $(window).scrollTop();
+                if (scrollTop >= el_offset_top) {
+                    sticky();
+                } else {
+                    unsticky();
+                }
+            })
+
+        $(window).resize(function () {
+
+            }
+        )
+};

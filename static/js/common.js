@@ -1,3 +1,6 @@
+is_scroll = false;
+articles_per_page = 15;
+
 function getCookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
     return r ? r[1] : undefined;
@@ -60,4 +63,10 @@ function passUrlParamsToObj() {
 	}
 
 	return result;
+}
+
+function load_js_before_close_body(src) {
+	var script = document.createElement('script');
+	script.src = 'static/js/list/list_scroll.js';
+	document.body.appendChild(script);
 }

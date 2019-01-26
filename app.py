@@ -1,5 +1,5 @@
 import tornado
-from views import index,backend,article,category,tag,static,account,user,author
+from views import index,backend,article,category,tag,static,account,user,author,api
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -34,6 +34,7 @@ class Application(tornado.web.Application):
             (r'/api/account/password_reset/.*?', account.ApiPasswordResetHandler),
             (r'/api/comments/get_all/', article.ApiCommentsGetAllHandler),
             (r'/api/comments/add/', article.ApiCommentsAddHandler),
+            (r'/api/list/.*', api.ApiListHandler),
             #(r'/api/comments/add/', article.ApiCommentsAddHandler),
             (r'/mp/postedit/?', user.PostEditHandler),
             (r'/mp/postedit/(.*)/?', user.PostEditHandler),

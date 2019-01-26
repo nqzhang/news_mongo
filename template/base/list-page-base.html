@@ -27,25 +27,10 @@
 					{% include ../component/menu.html %}
 				{% end %}
 				<div class="main-content">
-					<div class="list">
-						{% for post in posts %}
-						<section class="list-item">
-							<div>
-								<h4 class="list-item-title">
-									<a href="/a/{{ post['_id'] }}" target="_blank" class="">{{ post['title'] }}</a>
-								</h4>
-								<div class="post-meta">
-									<a href="/u/{{post['user']['_id']}}" target="_blank" >
-										<img src="/static/svgs/user.svg" />
-										<span>{{ post['user']['user_name'] }}</span>
-									</a>
-									<img src="/static/svgs/clock.svg" />
-									<span>{{ post['post_date'] }}</span>
-								</div>
-							</div>
-						</section>
-						{% end %}
+					<div class="list" id="content-list">
+						{% include ../component/list-page/content-list.html %}
 					</div>
+                <div class="loading ball-pulse" style="display: none;"><div></div> <div></div> <div></div> <span>加载中⋅⋅⋅</span></div>
 					{% block pagination %}
 						{% include ../component/pagination.html %}
 					{% end %}
@@ -60,6 +45,6 @@
 			{% end %}
 		</div>
 		{% end %}
-
+		<script src="/static/js/list/list_scroll.js"></script>
  	</body>
  </html>

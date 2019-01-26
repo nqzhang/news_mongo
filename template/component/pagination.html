@@ -1,4 +1,4 @@
-<div class="pagination clearfix">
+<div id ="pagination" class="pagination clearfix">
     {% for i in range(1,11) %}
         {% if i == int(page) %}
             <a class="current" href="/page/{{ i }}/" title="第 {{ i }} 页">{{ i }}</a>

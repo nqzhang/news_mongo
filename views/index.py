@@ -7,6 +7,7 @@ import time
 from models import join,sidebar
 from views.base import BaseHandler
 
+
 class IndexPageHandler(BaseHandler):
     async def get(self,page=1):
         user = await self.get_user()
