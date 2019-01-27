@@ -110,7 +110,7 @@ class ArticleHandler(BaseHandler):
 class ApiCommentsGetAllHandler(RequestHandler):
     def check_xsrf_cookie(self):
         if 'Googlebot' not in self.request.headers["User-Agent"]:
-            RequestHandler.check_xsrf_cookie()
+            RequestHandler.check_xsrf_cookie(self)
     async def post(self):
         post_id = self.get_argument('post_id')
         comments = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
