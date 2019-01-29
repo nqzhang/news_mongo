@@ -2,7 +2,6 @@ function get_post_offset() {
     return document.querySelector("#content-list section:last-child a").getAttribute('data-post-id');
 }
 (function() {
-    is_scroll = true;
     // 加载中状态锁
     var fetching = false;
     let scroll_end = false;
@@ -23,7 +22,7 @@ function get_post_offset() {
             }
             var post_offset = get_post_offset();
             $.ajax({
-                url: '/api/list/?path=index&postoffset=' + post_offset,
+                url: '/api/list/?path=' + list_path + '&postoffset=' + post_offset,
                 timeout: 30000,
                 //dataType: 'json',
                 dataType: 'html',
