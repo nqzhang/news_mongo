@@ -98,9 +98,10 @@ class ArticleHandler(BaseHandler):
         if language == 'zh-cn':
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
-        post_etree = etree.HTML(post['content'])
-        post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
-        post['desc'] = post_desc
+        #post_etree = etree.HTML(post['content'])
+        #post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
+        #post['desc'] = post_desc
+        post = await self.get_post_desc(post)
         #处理author.user_name为空的情况
         if not author.user_name:
             author.user_name = 'None'

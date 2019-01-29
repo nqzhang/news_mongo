@@ -63,13 +63,21 @@ class BlockingHandler(BlockingBaseHandler):
                             post['post_thumb'] = post_thumb
         return posts
     @run_on_executor
-    def get_posts_desc(self,posts):
-        for post in posts:
+    def get_post_desc(self,post):
+        if not post['content']:
+            post_desc=''
+        else:
             post_etree = etree.HTML(post['content'])
             post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
             # post_desc = post_etree.cssselect('p')[0].text
-            post['desc'] = post_desc
-        return posts
+        post['desc'] = post_desc
+        return post
+    async def get_posts_desc(self,posts):
+        new_posts = []
+        for post in posts:
+            post =  await self.get_post_desc(post)
+            new_posts.append(post)
+        return new_posts
 
 
 class BaseHandler(BlockingHandler):

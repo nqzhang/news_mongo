@@ -3,3 +3,11 @@
 {% block pagination %}
 {% include "../component/pagination-tag.html" %}
 {% end %}
+
+{% block script %}
+    <script>
+        is_scroll = true;
+        let list_path = 'tag&id={{t_id}}';
+    </script>
+    <script src="/static/js/list/list_scroll.js"></script>
+{% end %}
