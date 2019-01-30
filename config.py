@@ -57,5 +57,4 @@ analytics_code = """
         </script>"""
 adsense_code = """
 <script data-cfasync="false" async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-</script>
 """
