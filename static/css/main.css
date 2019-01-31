@@ -39,6 +39,7 @@ time, mark, audio, video {
     vertical-align: baseline;
     -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
+    max-width: 100%;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
