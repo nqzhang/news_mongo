@@ -175,7 +175,7 @@ function sticky_sidebar() {
 function showbackTop() {
     let window_height = $(window).height();
     let scrollTop = $(window).scrollTop();
-    console.log(window_height,scrollTop)
+    //console.log(window_height,scrollTop)
     if (scrollTop > window_height ) {
         $('#backTop').show();
     } else {
