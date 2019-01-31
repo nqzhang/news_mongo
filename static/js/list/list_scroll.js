@@ -54,20 +54,20 @@ function get_post_offset() {
 
     function handleScroll (e, force) {
         // 如果时间间隔内，没有发生滚动，且并未强制触发加载，则do nothing，再次间隔100毫秒之后查询
-        if (!force && lastScrollY === window.scrollY) {
+        if (!force && lastScrollY === $(window).scrollTop()) {
             window.setTimeout(handleScroll, 100);
             return;
         }
         else {
             // 更新文档滚动位置
-            lastScrollY = window.scrollY;
+            lastScrollY = $(window).scrollTop();
         }
-        scrollY = window.scrollY;
+        scrollY = $(window).scrollTop();
         // 浏览器窗口的视口（viewport）高度赋值
         innerHeight = window.innerHeight;
         // 判断是否需要加载
         // document.body.offsetHeight;返回当前网页高度
-        if (window.scrollY + innerHeight + 200 > document.body.offsetHeight) {
+        if ($(window).scrollTop() + innerHeight + 200 > document.body.offsetHeight) {
             if (!scroll_end) {
                 fetchContent();
             }
