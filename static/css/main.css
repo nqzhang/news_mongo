@@ -217,7 +217,7 @@ input[type=submit]:hover {
 }
 
 .logo img {
-    height: 80%;
+    height: 5.41rem;
     width: auto;
     padding-right: 1rem;
 }
@@ -1154,6 +1154,7 @@ footer {
     position: absolute;
     top: 5px;
     right: 2px;
+    display:flex;
 }
 
 #google-search-bar td.gsc-search-button:hover,
