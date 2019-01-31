@@ -1,6 +1,7 @@
 // hidemenu breakpoint: 960
 
 $(document).ready(function() {
+    $('#backTop').click(backTop);
     if (is_scroll) {
         $('#pagination').hide();
     }
@@ -19,6 +20,7 @@ $(document).ready(function() {
         if($(window).width() > 960) {
             toggleStickyMenu(window.menuOffsetTop, window.menuOffsetLeft);
         }
+         showbackTop();
     });
 
     $(window).resize(function(){
@@ -169,3 +171,23 @@ function sticky_sidebar() {
             }
         )
 };
+
+function showbackTop() {
+    let window_height = $(window).height();
+    let scrollTop = $(window).scrollTop();
+    console.log(window_height,scrollTop)
+    if (scrollTop > window_height ) {
+        $('#backTop').show();
+    }
+}
+function backTop () {
+  window.scrollBy(0, -100);
+
+  scrolldelay = setTimeout('backTop()', 1);
+
+  let sTop = document.documentElement.scrollTop + document.body.scrollTop;
+
+  if (sTop === 0) {
+    clearTimeout(scrolldelay);
+  }
+}
