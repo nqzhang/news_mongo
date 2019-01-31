@@ -178,6 +178,8 @@ function showbackTop() {
     console.log(window_height,scrollTop)
     if (scrollTop > window_height ) {
         $('#backTop').show();
+    } else {
+        $('#backTop').hide();
     }
 }
 function backTop () {
