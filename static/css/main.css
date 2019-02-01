@@ -689,6 +689,10 @@ a.flexible-btn {
     line-height: 2rem;
 }
 
+.article-content video {
+    max-width:100%;
+}
+
 .article-content img {
     max-width: 100%;
     height: auto;
