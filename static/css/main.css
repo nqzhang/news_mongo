@@ -1351,6 +1351,7 @@ footer {
 
     .logo img {
         width: 27%;
+        height: auto;
     }
 
     .meta-bar .write-btn,
