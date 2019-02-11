@@ -187,7 +187,7 @@ function backTop () {
 
   scrolldelay = setTimeout('backTop()', 1);
 
-  let sTop = $(window).scrollTop();
+  let sTop = document.documentElement.scrollTop + document.body.scrollTop;
 
   if (sTop === 0) {
     clearTimeout(scrolldelay);
