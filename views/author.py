@@ -6,10 +6,15 @@ from bson import ObjectId
 from models import join,sidebar
 
 class AuthorPageHandler(UserHander):
-    async def get(self,u_id,page=1):
+    async def get(self,u_id,u_c_id=None,page=1):
         page = 1 if not page else page
-        posts = await self.application.db.posts.find({"user": ObjectId(u_id)}).sort([("post_date", -1)]).skip(
+        if u_c_id:
+            print(u_c_id)
+            posts = await self.application.db.posts.find({"user": ObjectId(u_id),"category":ObjectId(u_c_id)}).sort([("post_date", -1)]).skip(
             config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
+        else:
+            posts = await self.application.db.posts.find({"user": ObjectId(u_id)}).sort([("post_date", -1)]).skip(
+                config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
         posts = await self.get_posts_desc(posts)
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)

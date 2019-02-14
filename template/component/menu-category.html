@@ -1,24 +1,22 @@
 <div id="menu-wrapper">
 	<ul class="menu">
 		<li>
-			<a href="/">
+			<a href="/" class="menu-active">
 				<span>推薦</span>
 			</a>
 		</li>
-		{% for menu in menu_left %}
-		{% if c_id == str(menu['_id']) %}
 		<li>
-			<a href="/c/{{ menu['_id'] }}/" class="menu-active">
-				<span>{{ menu['name'] }}</span>
-			</a>
+					 <a href="/newest" class="category">
+                    <span>最新</span>
+			 </a>
 		</li>
-		{% else %}
+		{% for menu in menu_left %}
+
 		<li>
 			<a href="/c/{{ menu['_id'] }}/" class="category">
 				<span>{{ menu['name'] }}</span>
 			</a>
 		</li>
-		{% end %}
 		{% end %}
 	</ul>
 </div>
