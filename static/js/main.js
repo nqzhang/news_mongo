@@ -193,3 +193,15 @@ function backTop () {
     clearTimeout(scrolldelay);
   }
 }
+
+$(document).ready(function() {
+    let url = location.href;
+    $("ul.menu li a").each(function () {
+                let element_url = $(this).prop('href');
+                if  (element_url == url) {
+                    $("ul.menu li a").removeClass('menu-active');
+                    $(this).addClass('menu-active');
+                }
+        });
+
+});
