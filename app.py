@@ -1,5 +1,5 @@
 import tornado
-from views import index,backend,article,category,tag,static,account,user,author,api
+from views import index,recommend,backend,article,category,tag,static,account,user,author,api
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -10,7 +10,8 @@ class Application(tornado.web.Application):
     def __init__(self,db):
         #tornado.ioloop.IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
         handlers = [
-            (r'/?',index.IndexPageHandler),
+            (r'/?',recommend.recommendPageHandler),
+            (r'/newest', index.IndexPageHandler),
             (r'/page/(\d*)/?', index.IndexPageHandler),
             (r'/a/(.*?)/(.*?)/?', article.ArticleHandler),
             (r'/a/(.*?)/?', article.ArticleHandler),
@@ -18,8 +19,10 @@ class Application(tornado.web.Application):
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
             (r'/t/(.*?)/?', tag.TagPageHandler),
-            (r'/u/(.*?)/(\d*)/?', author.AuthorPageHandler),
-            (r'/u/(.*?)/?', author.AuthorPageHandler),
+            (r'/u/(?P<u_id>.*?)/c/(?P<u_c_id>.*?)/(?P<page>\d*)/?', author.AuthorPageHandler),
+            (r'/u/(?P<u_id>.*?)/c/(?P<u_c_id>.*?)/?', author.AuthorPageHandler),
+            (r'/u/(?P<u_id>.*?)/(?P<page>\d*)/?', author.AuthorPageHandler),
+            (r'/u/(?P<u_id>.*?)/?', author.AuthorPageHandler),
             (r'/backend/newpost', backend.NewPostHandler),
             (r'/views', backend.ViewsHandler),
             (r'/account/login.*?', account.LoginHandler),
