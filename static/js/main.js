@@ -177,22 +177,18 @@ function showbackTop() {
     let scrollTop = $(window).scrollTop();
     //console.log(window_height,scrollTop)
     if (scrollTop > window_height ) {
+        //$('#backTop').css({"position": "fixed"});
         $('#backTop').show();
+
     } else {
+        //$('#backTop').css({"position": "static"});
         $('#backTop').hide();
     }
 }
 function backTop () {
-  window.scrollBy(0, -100);
-
-  scrolldelay = setTimeout('backTop()', 1);
-
-  let sTop = $(window).scrollTop();
-
-  if (sTop === 0) {
-    clearTimeout(scrolldelay);
-  }
+    scrollTo(0,0);
 }
+
 
 $(document).ready(function() {
     let url = location.href;
