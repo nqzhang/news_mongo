@@ -6,7 +6,7 @@ from tornado.platform.asyncio import to_asyncio_future, AsyncIOMainLoop
 import uuid
 
 async def news_post():
-    tornado.httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+    #tornado.httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
     http_client = tornado.httpclient.AsyncHTTPClient()
     body = {}
     for n in range(1,200):
