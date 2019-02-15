@@ -11,12 +11,18 @@
     {% block title %}
     <title>{{ config.site_name}}</title>
     {% end %}
+
     {% raw config.analytics_code %}
-</head>
- <script type="text/javascript" src="/static/js/lib/jquery-3.3.1.min.js"></script>
+     <script type="text/javascript" src="/static/js/lib/jquery-3.3.1.min.js"></script>
 <!--<script src="/static/js/lib/bootstrap.bundle.min.js"></script>-->
 <script src="/static/ckeditor/ckeditor.js"></script>
 <script src="/static/js/common.js"></script>
+    {% block postedit_highlight %}
+{% end %}
+</head>
+
+
+
 
 <body>
 <header class="bg-white">
@@ -72,7 +78,6 @@
 {% block postedit %}
 {% end %}
 <script src="/static/js/tagsinput.js"></script>
-<script type="text/javascript" src="/static/js/common.js" ></script>
 <script src="/static/js/user.js"></script>
 </body>
 </html>

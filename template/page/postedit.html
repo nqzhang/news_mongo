@@ -3,6 +3,10 @@
 {% block title %}
     <title>寫博客 - {{ config.site_name}}</title>
 {% end %}
+{% block postedit_highlight %}
+       <script src="/static/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
+        <link rel="stylesheet" href="/static/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css">
+{% end %}
 
 {% block content-body %}
         <div class="col-12 col-md-10" id="content-body">
@@ -115,5 +119,7 @@
             'X-CSRFToken': token,
         }
 });
+        <!--hljs.initHighlightingOnLoad();-->
+
     </script>
 {% end %}

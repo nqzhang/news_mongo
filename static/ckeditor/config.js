@@ -25,9 +25,10 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'NewPage,Source,Save,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Replace,Find,SelectAll,Scayt,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,CreateDiv,Language,BidiRtl,BidiLtr,SpecialChar,PageBreak,Iframe,Styles,ShowBlocks,About,Form';
 	config.bodyClass = 'htmledit_views';
 	config.contentsCss = '/static/css/ck_htmledit_views.css';
+	config.codeSnippet_theme = 'default';
 	config.height = 500;
 	config.language = 'zh-tw';
 	config.removePlugins = 'image'
-	config.extraPlugins = 'image2';
+	config.extraPlugins = 'image2,codesnippet';
 
 };

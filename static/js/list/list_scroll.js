@@ -43,7 +43,7 @@ function get_post_offset() {
                 if (data_len>=articles_per_page){
                 } else {
                     scroll_end = true;
-                      $(".loading").text('沒有更多內容啦');
+                      $(".loading").text('沒有更多文章啦');
                       $(".loading").show();
                 }
             }, function (xhr, type) {
