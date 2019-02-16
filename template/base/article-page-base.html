@@ -81,7 +81,7 @@
         type: "POST",
     });
 </script>
-<script src="/static/js/custom_fix.js"></script>
+<script src="{{ static_url('js/custom_fix.js') }}"></script>
 <script>
 $(document).ready(function() {
   $('pre code').each(function(i, block) {
@@ -89,6 +89,6 @@ $(document).ready(function() {
   });
 });
 </script>
-<script src="/static/js/article/load_comments.js"></script>
+<script src="{{ static_url('js/article/load_comments.js') }}"></script>
 </body>
 </html>
