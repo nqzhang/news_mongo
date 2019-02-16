@@ -996,6 +996,9 @@ footer {
     color: #fff !important;
 }
 
+.gsc-result .gs-title {
+    height: 1.4em !important;
+}
 /* ==== Responsive ==== */
 /** max-width breakpoint **/
 @media (max-width: 1228px) {
