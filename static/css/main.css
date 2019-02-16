@@ -1140,6 +1140,10 @@ footer {
     color: #fff !important;
 }
 
+.gsc-result .gs-title {
+    height: 1.4em !important;
+}
+
 #google-search-bar {
     display: block;
     position: relative;
