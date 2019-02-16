@@ -1,1 +1,1 @@
-for x in `supervisorctl status | grep www.smwenku.com | awk '{print $1}'`;do supervisorctl restart $x;done
+for x in `supervisorctl status | grep www.smwenku.com | awk '{print $1}'`;do supervisorctl restart $x;sleep 5;done
