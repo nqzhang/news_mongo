@@ -11,8 +11,7 @@
 		<meta name="description" content="" />
 		<link rel="stylesheet" type="text/css" href="/static/css/main.css"/>
 		{% include common-header.html %}
-        <script type="text/javascript" src="/static/js/lib/jquery-3.3.1.min.js"></script>
-    	<script type="text/javascript" src="/static/js/main.js"></script>
+		{% include common-front-header.html %}
 		{% raw config.analytics_code %}
 		{% raw config.adsense_code %}
  	</head>
@@ -48,5 +47,6 @@
 		{% end %}
 		{% block script %}
 		{% end %}
+	    <script src="{{ static_url('js/list/list_scroll.js') }}"></script>
  	</body>
  </html>
