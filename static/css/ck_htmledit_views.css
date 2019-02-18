@@ -257,7 +257,8 @@ p[align=center] {
     color: #4f4f4f;
     line-height: 22px;
     padding: 8px;
-    text-align: left
+    text-align: left;
+    word-break: break-all;
 }
 
 .htmledit_views table tr td p, .htmledit_views table tr th p {
