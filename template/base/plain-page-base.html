@@ -9,8 +9,10 @@
         <title>{{ config.site_name }}</title>
         <meta name="keywords" content="">
         <meta name="description" content="" />
-        {% include common-header.html %}
-        {% include common-front-header.html %}
+        {% block commen-header %}
+            {% include common-header.html %}
+            {% include common-front-header.html %}
+        {% end %}
         {% block metadata %}
         
         {% end %}

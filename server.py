@@ -53,7 +53,7 @@ if __name__ == "__main__":
     #scheduler.add_job(cron.count_category, 'date', run_date=datetime(2018, 8, 17, 4, 54, 0))
     #scheduler.start()
     app = Application(db)
-    app.listen(sys.argv[1])
+    app.listen(48000)
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
     signal.signal(signal.SIGINT, partial(sig_handler, app))
     loop = asyncio.get_event_loop()

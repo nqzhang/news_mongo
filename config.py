@@ -3,18 +3,18 @@ from views import static
 BASE_DIR = os.path.dirname(__file__)
 
 mongo = {
-    "url":"mongodb://admin:11QQqqWW@192.168.31.33",
+    "url":"mongodb://admin:11QQqqWW@192.168.100.107",
     "urlbak": "mongodb://95.216.6.102:27016",
     "db_name":"news"
 }
 redis ={
-    "host":"192.168.31.33",
+    "host":"192.168.100.107",
     "port":6379,
     "db":0,
 }
 
 redis_cache ={
-    "host":"192.168.31.33",
+    "host":"192.168.100.107",
     "port":6379,
     "db":1
 }

@@ -109,6 +109,18 @@ class RegisterHandler(EmailHandler):
         next = self.get_query_argument('src','/')
         email = self.get_argument('email')
         passwd = self.get_argument('passwd')
+        userAgent = self.request.headers['user-agent']
+        url = self.request.path
+        x = self.get_cookie("_xsrf")
+        verify_str = userAgent + url + x + email + passwd
+        def md5(str):
+            str = str.encode('utf-8')
+            import hashlib
+            m = hashlib.md5()
+            m.update(str)
+            return m.hexdigest()
+        if md5(verify_str) != self.get_argument('verify'):
+            raise tornado.web.HTTPError(500, reason='register blocked')
         if not email:
             self.set_status(500,'请输入邮箱')
             self.write('请输入邮箱<br/>')
@@ -137,7 +149,7 @@ class RegisterHandler(EmailHandler):
             self.render('page/register_success.html', config=config)
             email_text = reg_text.format(config.site_name,email,verify_link,verify_link)
             subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
-            await self.send_mail(email, subject, email_text)
+            #await self.send_mail(email, subject, email_text)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex

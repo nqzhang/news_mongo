@@ -1,8 +1,12 @@
 {% extends "../base/plain-page-base.html" %} 
-    
+{% block commen-header %}
+    <link rel="stylesheet" type="text/css" href="{{ static_url('css/main.css') }}"/>
+    <script type="text/javascript" src="{{ static_url('js/lib/md5.js') }}"></script>
+    {% include ../base/common-header.html %}
+{% end %}
 {% block metadata %}
-    <script async type="text/javascript" src="/static/js/register.js" ></script>    
-    <script async type="text/javascript" src="/static/js/common.js" ></script>
+    <script async type="text/javascript" src="{{ static_url('js/register.js') }}" ></script>
+    <script async type="text/javascript" src="{{ static_url('js/common.js') }}" ></script>
 {% end %}
 
 {% block header %}

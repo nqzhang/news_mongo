@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
     $('#reset-password-form').submit(function(e) {
+        e.preventDefault();
         showError("");
         var password = $('#reset-password-form input[name=password]').val();
         var data = passUrlParamsToObj();
@@ -12,7 +13,7 @@ $(document).ready(function(){
           .attr('name', "code")
           .attr('value', data['code'])
           .appendTo('#reset-password-form');
-        return true;
+        $('#forgot-password-form')[0].submit();
     });
 });
 
