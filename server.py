@@ -21,7 +21,7 @@ except:
 
 MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 
-def sig_handler(server, sig, frame):
+def sig_handler(app):
     io_loop = tornado.ioloop.IOLoop.instance()
 
     def stop_loop(deadline):
@@ -35,12 +35,12 @@ def sig_handler(server, sig, frame):
 
     def shutdown():
         logging.info('Stopping http server')
+        server = tornado.httpserver.HTTPServer(app)
         server.stop()
         logging.info('Will shutdown in %s seconds ...',
                      MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
         stop_loop(time.time() + MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
 
-    logging.warning('Caught signal: %s', sig)
     io_loop.add_callback_from_signal(shutdown)
 
 if __name__ == "__main__":
