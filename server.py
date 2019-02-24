@@ -21,17 +21,18 @@ except:
 
 MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 
-def sig_handler(app):
+def sig_handler(app,sig,frame):
     io_loop = tornado.ioloop.IOLoop.instance()
 
     def stop_loop(deadline):
         now = time.time()
-        if now < deadline and (io_loop._callbacks or io_loop._timeouts):
+        if now < deadline:
             logging.info('Waiting for next tick')
-            io_loop.add_timeout(now + 1, stop_loop, deadline)
+            io_loop.call_later(1, stop_loop,deadline)
         else:
-            io_loop.stop()
-            logging.info('Shutdown finally')
+            if len(asyncio.Task.all_tasks(io_loop)) == 0:
+                io_loop.stop()
+                logging.info('Shutdown finally')
 
     def shutdown():
         logging.info('Stopping http server')
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     #scheduler.add_job(cron.count_category, 'date', run_date=datetime(2018, 8, 17, 4, 54, 0))
     #scheduler.start()
     app = Application(db)
-    app.listen(48000)
+    app.listen(sys.argv[1])
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
     signal.signal(signal.SIGINT, partial(sig_handler, app))
     loop = asyncio.get_event_loop()
