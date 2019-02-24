@@ -195,7 +195,7 @@ function timeago(dateTimeStamp){   //dateTimeStamp是一个时间毫秒，注意
 
 function comment_submit(e) {
         e.preventDefault();
-        var comment = $(this).children('.comment-form textarea[name=comment]').val();
+        var comment = $(this).children('.comment-form textarea[name=comment]').val().replace(/(?:\r\n|\r|\n)/g, '<br>');
         var post_id = $('.comment-form input[name=post_id]').val();
         var reply_to = $(this).attr('data-reply-to') || '';
         //console.log(reply_to);
