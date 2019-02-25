@@ -12,10 +12,10 @@ function publish_success(post) {
 
 function delete_success(post) {
     $('span.notice').text('刪除成功');
-    $('.notice-box').show().delay(1500).fadeOut(1500);
+    $('.notice-box').fadeIn('slow').delay(5000).fadeOut('slow');
     setTimeout(function(){
     location.reload();
-    },1500);
+    },2000);
     return function(data, textStatus, jqXHR) {
         //pass
     };
