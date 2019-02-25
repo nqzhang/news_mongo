@@ -84,12 +84,12 @@ class PostAjaxHandler(UserHander):
             t_ids.append(t_id)
         if post_id == '0':
             post_id = await self.application.db.posts.insert_one(
-                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
+                {"title": title, "content": content, "user": ObjectId(u_id),type:0,"category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id.inserted_id)
         else:
             await self.application.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
-                {"title": title, "content": content, "user": ObjectId(u_id), "category": category_ids, "tags": t_ids,
+                {"title": title, "content": content, "user": ObjectId(u_id),type:0,"category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id)
         publish_success = {}
@@ -102,7 +102,7 @@ class PostListHandler(UserHander):
     async def get(self):
         #print(self.current_user)
         active = 'list'
-        posts = await self.application.db.posts.find({'user':ObjectId(self.current_user.decode())}).sort([("post_date", -1)]).to_list(length=None)
+        posts = await self.application.db.posts.find({'user':ObjectId(self.current_user.decode()),type:0}).sort([("post_date", -1)]).to_list(length=None)
         for post in posts:
             post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M:%S")
             views = post.get('views',0)

@@ -2,3 +2,17 @@ terms数据库中
 type为0代表site_category
 type为1代表tags
 type为2代表person_category
+type为3代表question_tags
+
+
+post数据库中
+type为0代表article
+type为1代表question
+
+#添加字段
+db.posts.update(
+    {"type" : {$exists : false}},
+    {"$set" : {"type" : 0}},
+    false,
+    true
+)
