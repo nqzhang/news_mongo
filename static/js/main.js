@@ -1,4 +1,8 @@
 // hidemenu breakpoint: 960
+$(window).on('load', function(){
+    $('ins.adsbygoogle').css("overflow","hidden");
+    }
+);
 
 $(document).ready(function() {
     $('#backTop').click(backTop);

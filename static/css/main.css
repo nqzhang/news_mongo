@@ -93,6 +93,11 @@ div.feed * {
     font-family: PingFang SC,Hiragino Sans GB,Arial,Microsoft YaHei,Verdana,Roboto,Noto,Helvetica Neue,sans-serif !important
 }
 
+div.feed h5 {
+    margin-bottom:0;
+    font-weight:400;
+}
+
 div.main-content .list a:active {
     color:#ca0c16;
 }
@@ -489,7 +494,7 @@ input[type=submit]:hover {
 .sidebar {
     margin-bottom: 0.67rem;
     background-color: #fff;
-    padding: 2rem 1.5rem;
+    padding: 0.833333rem 1.16666rem 1.335rem 1.16666rem;
     overflow:hidden;
     box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
@@ -612,8 +617,7 @@ a.flexible-btn {
 .section-head {
     font-size: 1.5rem;
     display: inline-block;
-    padding-bottom: 0.5rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 .section-head:after {
@@ -630,10 +634,17 @@ a.flexible-btn {
     width: 100%;
     display: inline-block;
     overflow: hidden;
+    vertical-align: bottom;
+    word-break: break-all;
 }
 
 .section-item li{
-    padding-bottom: 0.5rem;
+    padding-bottom: 0rem;
+    /**border-bottom: 1px dashed #c4cece;**/
+    margin: 0.5rem 0 0.5rem 0;
+}
+.section-item li:last-child {
+    border-bottom: 0;
 }
 
 .section-item a:hover {
@@ -761,11 +772,6 @@ a.flexible-btn {
 .article-content th {
     padding: 0.4rem;
     text-align: left;
-}
-
-.article-content th:first-child,
-.article-content td:first-child {
-    padding-left: 0;
 }
 
 .article-content sup {

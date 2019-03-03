@@ -1,5 +1,5 @@
 import tornado
-from views import index,recommend,backend,article,category,tag,static,account,user,author,api
+from views import index,recommend,backend,article,category,tag,static,account,user,author,api,question
 import config
 from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
@@ -15,6 +15,7 @@ class Application(tornado.web.Application):
             (r'/page/(\d*)/?', index.IndexPageHandler),
             (r'/a/(.*?)/(.*?)/?', article.ArticleHandler),
             (r'/a/(.*?)/?', article.ArticleHandler),
+            (r'/q/(.*?)/?', question.QuestionHandler),
             (r'/c/(.*?)/page/(\d*)/?', category.CategoryPageHandler),
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
@@ -35,7 +36,7 @@ class Application(tornado.web.Application):
             (r'/account/password_forgot/.*?', account.PasswordForgotHandler),
             (r'/account/password_reset/.*?', account.PasswordResetHandler),
             (r'/api/account/password_reset/.*?', account.ApiPasswordResetHandler),
-            (r'/api/comments/get_all/', article.ApiCommentsGetAllHandler),
+            (r'/api/comments/get_all/', api.ApiCommentsGetAllHandler),
             (r'/api/comments/add/', article.ApiCommentsAddHandler),
             (r'/api/list/.*', api.ApiListHandler),
             #(r'/api/comments/add/', article.ApiCommentsAddHandler),

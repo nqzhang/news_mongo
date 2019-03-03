@@ -258,7 +258,6 @@ p[align=center] {
     line-height: 22px;
     padding: 8px;
     text-align: left;
-    word-break: break-all;
 }
 
 .htmledit_views table tr td p, .htmledit_views table tr th p {

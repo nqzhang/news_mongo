@@ -1,0 +1,14 @@
+{% extends "../base/question-base.html" %}
+
+{% block right_sidebar %}
+    {% include ../component/author-info.html %}
+    {% include ../component/hot-news.html %}
+    {% include ../component/new-articles.html %}
+    {% include ../component/u_categorys.html %}
+{% end %}
+
+{% block more-content %}
+    {% include ../component/comment-form.html %}
+    {% include ../component/user-comments.html %}
+    {% include ../component/related-posts.html %}
+{% end %}

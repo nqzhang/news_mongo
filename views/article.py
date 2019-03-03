@@ -11,19 +11,9 @@ from bson.json_util import dumps
 from views.base import authenticated_async
 from views.base import UserHander
 import datetime
+from utils.tools import *
 
 class ArticleHandler(BaseHandler):
-    def related_sort(self,terms_id,related_posts,related_type='tags'):
-        orders = {}
-        for i, term_id in enumerate(terms_id):
-            orders[term_id] = i
-        sort_key = {}
-        for related_post in related_posts:
-            order_match_count = -sum(el in  terms_id for el in related_post[related_type])
-            order_first = min(orders[t] for t in related_post[related_type] if t in terms_id)
-            sort_key[related_post['_id']] = (order_match_count,order_first)
-        return sorted(related_posts, key=lambda x: sort_key[x['_id']])
-
     async def get(self, post_id,language='zh-tw'):
         post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         u_id = post['user']
@@ -56,7 +46,7 @@ class ArticleHandler(BaseHandler):
         if tags_id:
             related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
                 .limit(articles_per_page).to_list(length=articles_per_page)
-            related_posts = self.related_sort(tags_id,related_posts,related_type='tags')
+            related_posts = await related_sort(tags_id,related_posts,related_type='tags')
             '''通过mongodb aggregate 实现的tags排序
             related_posts=[]
             replated_posts_cursor =  self.application.db.posts.aggregate([
@@ -86,7 +76,7 @@ class ArticleHandler(BaseHandler):
                 #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
                 related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
                 .limit(related_fill_num).to_list(length=related_fill_num)
-                related_posts_category = self.related_sort(category_id, related_posts_category,related_type='category')
+                related_posts_category = await related_sort(category_id, related_posts_category,related_type='category')
                 related_posts += related_posts_category
         #print(related_posts)
         related_posts = await join.post_user(related_posts, self.application.db)
@@ -107,15 +97,6 @@ class ArticleHandler(BaseHandler):
             author.user_name = 'None'
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
-
-class ApiCommentsGetAllHandler(RequestHandler):
-    def check_xsrf_cookie(self):
-        if 'Googlebot' not in self.request.headers["User-Agent"]:
-            RequestHandler.check_xsrf_cookie(self)
-    async def post(self):
-        post_id = self.get_argument('post_id')
-        comments = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
-        self.write(dumps(comments))
 
 class ApiCommentsAddHandler(UserHander):
     @authenticated_async

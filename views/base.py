@@ -12,7 +12,7 @@ from bson import ObjectId
 import asyncio
 from models import sidebar
 from config import session_ttl
-
+import config
 def authenticated_async(method):
     @gen.coroutine
     def wrapper(self, *args, **kwargs):
@@ -133,7 +133,7 @@ class BaseHandler(BlockingHandler):
 
 class UserHander(BaseHandler):
     async def prepare(self):
-        self.set_cookie("_xsrf", self.xsrf_token)
+        self.set_cookie("_xsrf", self.xsrf_token,domain=config.cookie_domain)
         await super(UserHander, self).prepare()
     @gen.coroutine
     def get_current_user_async(self):
