@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ static_url('css/lib/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/user.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/tagsinput.css') }}">
+
+
     {% include common-header.html %}
     {% block title %}
     <title>{{ config.site_name}}</title>
@@ -14,6 +16,9 @@
 
     {% raw config.analytics_code %}
 <!--<script src="/static/js/lib/bootstrap.bundle.min.js"></script>-->
+    <script>
+            let main_css = "{{ static_url('css/main.css') }}";
+        </script>
 <script src="/static/ckeditor/ckeditor.js"></script>
 <script src="/static/js/common.js"></script>
     {% block postedit_highlight %}

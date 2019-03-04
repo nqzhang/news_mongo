@@ -13,7 +13,6 @@
         {% include common-front-header.html %}
         <script src="{{ static_url('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js') }}"></script>
         <link rel="stylesheet" href="{{ static_url('ckeditor/plugins/codesnippet/lib/highlight/styles/default.css') }}">
-        <link rel="stylesheet" href="{{ static_url('css/ck_htmledit_views.css') }}">
         <link rel="alternate" hreflang="zh-Hant" href="{{ config.site_domain }}/a/{{post['_id']}}" />
         <link rel="alternate" hreflang="zh-Hans" href="{{ config.site_domain }}/a/{{post['_id']}}/zh-cn" />
         {% raw config.analytics_code %}
@@ -44,7 +43,7 @@
                         <img src="/static/svgs/clock.svg" />
                         <span> {{ post['post_date'] }} </span>
                     </div>
-                    <div class="article-content htmledit_views">
+                    <div class="article-content">
                         {% raw post['content'] %}
                     </div>
                     <div id="ads-article-bottom-match">

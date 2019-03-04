@@ -8,7 +8,9 @@
 {% end %}
 
 {% block more-content %}
-    {% include ../component/comment-form.html %}
     {% include ../component/user-comments.html %}
-    {% include ../component/related-posts.html %}
+    {% include ../component/comment-form.html %}
+    {% if related_posts %}
+        {% include ../component/related-question.html %}
+    {% end %}
 {% end %}

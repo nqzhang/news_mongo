@@ -27,7 +27,7 @@ class NewPostHandler(RequestHandler):
             post_type_num = 0
         else:
             category = None
-            tag_type_num = 1
+            tag_type_num = 3
             post_type_num = 1
         #thumb = body['thumb']
         #guid = uuid.uuid4().hex

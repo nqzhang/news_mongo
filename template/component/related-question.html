@@ -1,0 +1,25 @@
+<div class="related-post-list">
+    <div class="section-head">相關問題</div>
+    <div class="related-posts">
+        {% for related_post in related_posts%}
+            <div class="list-item">
+                <h3 class="list-item-title">
+                    <a href="/a/{{ related_post['_id'] }}" target="_blank" title="{{ related_post['title'] }}">
+                        {{ related_post['title'] }}
+                    </a>
+                </h3>
+                <p class="post-excerpt">
+                    <a href="/a/{{ related_post['_id'] }}" target="_blank" title="{{ related_post['title'] }}">
+                        {{ related_post['desc'] }}
+                    </a>
+                </p>
+                <div class="post-meta">
+                    <img src="/static/svgs/user.svg" />
+                    <a  href="/u/{{ related_post['user']['_id'] }}">{{ related_post['user']['user_name'] }}</a>
+                    <img src="/static/svgs/clock.svg" />
+                    <span>{{ related_post['post_date'] }}</span>
+                </div>
+            </div>
+        {% end %}
+    </div>
+</div>

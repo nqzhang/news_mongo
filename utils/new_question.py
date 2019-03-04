@@ -15,7 +15,7 @@ async def news_post():
         body['code'] = 'qtRjhwcGLHnXPQlC'
         body['title'] = '问题标题{}'.format(n)
         body['content'] = '''问题描述'''
-        body['user'] = '雪花新闻11'
+        body['user'] = '雪花新闻1'
         body['tags'] = ['涉及','爱情']
         body['thumb'] = ''
         body['post_type'] = 'question'
