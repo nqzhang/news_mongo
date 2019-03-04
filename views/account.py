@@ -96,9 +96,9 @@ class LogoutHandler(UserHander):
     async def get(self):
         next = self.get_argument('next', '/')
         user_id = self.current_user.decode()
-        self.clear_cookie('sessionid')
-        self.clear_cookie('sig')
-        self.clear_cookie('uid')
+        self.clear_cookie('sessionid',domain=config.cookie_domain)
+        self.clear_cookie('sig',domain=config.cookie_domain)
+        self.clear_cookie('uid',domain=config.cookie_domain)
         await self.application.redis.delete(user_id)
         self.redirect(next)
 
