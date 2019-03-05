@@ -35,14 +35,14 @@ time, mark, audio, video {
 	border: 0;
 	font-size: 100%;
 	font: inherit;
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue','PingFang TC','Microsoft YaHei','WenQuanYi Micro Hei', sans-serif;
     vertical-align: baseline;
     -webkit-tap-highlight-color: transparent;
     box-sizing: border-box;
 }
 
 code *,pre * {
-        font-family: Consolas, Inconsolata, Courier, monospace, "PingFang SC", "Microsoft YaHei", sans-serif;
+        font-family: Consolas, Inconsolata, Courier, monospace, "Microsoft YaHei", sans-serif;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -82,7 +82,6 @@ a {
 }
 /* ==== Common ==== */
 html, body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', 'Source Han Sans SC', 'Noto Sans CJK SC', 'WenQuanYi Micro Hei', sans-serif;
     font-size: 62.5%;
     line-height: 1.5;
     color: #3d3d3d;
@@ -100,6 +99,7 @@ div.feed * {
 div.feed h5 {
     margin-bottom:0;
     font-weight:400;
+    font-size:1.4rem;
 }
 
 div.main-content .list a:active {
@@ -227,7 +227,7 @@ input[type=submit]:hover {
 }
 
 .logo img {
-    height: 6.492rem;
+    height: 4.5rem;
     width: auto;
     padding-right: 1.2rem;
 }
@@ -387,7 +387,6 @@ input[type=submit]:hover {
 .menu li a{
     font-size: 1.32rem;
     color: #232323;
-    font-weight: 700;
     display: inline-block;
     width: 100%;
     text-align: center;
@@ -1370,7 +1369,7 @@ footer {
     }
 
     .logo img {
-        width: 27%;
+        width: 44%;
         height: auto;
     }
 
