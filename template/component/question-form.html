@@ -1,0 +1,18 @@
+<div id='comment-form-wrapper'>
+    <div class='section-head'>寫回答</div>
+    <form id="comment-form" class='comment-form' action="/account/register" method="post">
+        {% module xsrf_form_html() %}
+            <input name="post_id" value="{{ post['_id'] }}" class='hidden'/>
+        {% if not user['is_login'] %}
+            <textarea autocomplete="off" rows='2' cols='50' placeholder="登錄以後才評論..." disabled></textarea>
+            <a class='login'>登录</a>
+        {% elif user['is_active'] == 0 %}
+            <textarea autocomplete="off" rows='2' cols='50' placeholder="若要評論，請先驗證您的郵箱..." disable></textarea>
+            <a class='activate-email'>驗證郵箱</a>
+        {% else %}
+            <textarea autocomplete="off" rows='2' cols='50' name="comment" placeholder=""></textarea>
+            <div id="success-info"></div>
+            <input type="submit" value="發布">
+        {% end %}
+    </form>
+</div>

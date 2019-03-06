@@ -136,6 +136,16 @@ a, a:hover, a:focus {
     color: #3d3d3d;
 }
 
+a.question-noanswer-share  {
+    cursor: pointer;
+    text-decoration: none;
+    color: #07C;
+}
+
+a.question-noanswer-share:hover, a.question-noanswer-share:active {
+    color: #3af;
+}
+
 p {
     margin:0 0 0.3rem;
     line-height: 1.2rem;
@@ -186,6 +196,7 @@ input:focus {
 input[type=submit] {
     color: #fd484d;
     border-color: #fd484d;
+    text-indent: unset;
 }
 
 input[type=submit]:hover {
