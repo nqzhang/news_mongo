@@ -82,7 +82,7 @@ analytics_code = """
 adsense_code = """<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({
-                google_ad_client: "ca-pub-2073744953016040",
+                google_ad_client: "ca-pub-3219336841483159",
                 enable_page_level_ads: true
                     });
         </script>"""
