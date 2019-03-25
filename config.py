@@ -20,6 +20,22 @@ if env == 'dev':
         "port": 6379,
         "db": 0,
     }
+elif env == 'test':
+    redis_cache = {
+        "host": "176.9.3.102",
+        "port": 6379,
+        "db": 1
+    }
+    redis = {
+        "host": "176.9.3.102",
+        "port": 6379,
+        "db": 0,
+    }
+    mongo = {
+        "url": "mongodb://195.201.197.26:27016",
+        "urlbak": "mongodb://95.216.6.102:27016",
+        "db_name": "www_smwenku_com"
+    }
 elif env == 'production':
     redis_cache = {
         "host": "176.9.3.102",
@@ -58,6 +74,9 @@ if env == 'dev':
 elif env == 'production':
     site_domain = 'https://www.twblogs.net'
     cookie_domain = 'twblogs.net'
+elif env == 'test':
+    site_domain = 'https://test.smwenku.com'
+    cookie_domain = 'smwenku.com'
 
 redis_cache_ttl = 600
 session_ttl = 30 * 24 * 60 * 60

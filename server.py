@@ -56,6 +56,8 @@ if __name__ == "__main__":
     app = Application(db)
     if config.env == 'dev':
         app.listen(48000)
+    elif config.env == 'test':
+        app.listen(sys.argv[1])
     elif config.env == 'production':
         app.listen(sys.argv[1])
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
