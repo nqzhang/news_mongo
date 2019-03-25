@@ -3,6 +3,7 @@ from views import static
 
 BASE_DIR = os.path.dirname(__file__)
 
+is_debug=True
 env = 'dev'
 if env == 'dev':
     mongo = {
@@ -52,11 +53,12 @@ elif env == 'production':
         "urlbak": "mongodb://95.216.6.102:27016",
         "db_name": "www_smwenku_com"
     }
+    is_debug = False
 settings = {
     "static_path": os.path.join(BASE_DIR, 'static'),
     "static_handler_class": static.StaticFileHandler,
     "template_path": os.path.join(BASE_DIR, 'template'),
-    "debug": True,
+    "debug": is_debug,
     "autoreload": False,
     # "compiled_template_cache": False,
     # "static_hash_cache": False,
