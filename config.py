@@ -60,6 +60,7 @@ settings = {
     "template_path": os.path.join(BASE_DIR, 'template'),
     "debug": is_debug,
     "autoreload": False,
+    "compress_response": True,
     # "compiled_template_cache": False,
     # "static_hash_cache": False,
     # "serve_traceback": True,
