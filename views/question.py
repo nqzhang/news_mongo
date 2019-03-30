@@ -27,9 +27,8 @@ class QuestionHandler(BaseHandler):
         #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
         menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
-        hot_posts = await sidebar.hot_posts(self.application.db)
-        u_new_posts = await sidebar.u_new_posts(self.application.db,u_id)
-        u_categorys =  await sidebar.u_categorys(self.application.db,u_id)
+        hot_posts = await sidebar.hot_posts(self.application.db,post_type=1)
+        u_new_posts = await sidebar.u_new_posts(self.application.db,u_id,post_type=1)
         #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
         if tags_id:
@@ -55,4 +54,4 @@ class QuestionHandler(BaseHandler):
         if not author.user_name:
             author.user_name = 'None'
         self.render('page/question.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
+                        u_new_posts=u_new_posts,author=author)

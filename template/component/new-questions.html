@@ -1,17 +1,17 @@
-{% if hot_posts %}
+{% if u_new_posts %}
 <div class="right_sidebar">
     <div>
         <div class="section-head">
-            24小時熱門文章
+            最新问题
         </div>
         <div>
             <section class="section-item">
                 <ul>
-                    {% for hot_post in hot_posts %}
+                    {% for u_new_post in u_new_posts %}
                     <li>
                         <h5>
-                            <a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
-                                {{ hot_post['title'] }}
+                            <a href="/q/{{ u_new_post['_id'] }}" target="_blank" class="news-link">
+                                {{ u_new_post['title'] }}
                             </a>
                         </h5>
                     </li>

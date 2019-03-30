@@ -2,7 +2,7 @@
 <div class="right_sidebar">
     <div>
         <div class="section-head">
-            24小時熱門文章
+            24小時熱門问答
         </div>
         <div>
             <section class="section-item">
@@ -10,7 +10,7 @@
                     {% for hot_post in hot_posts %}
                     <li>
                         <h5>
-                            <a href="/a/{{ hot_post['_id'] }}" target="_blank" class="news-link">
+                            <a href="/q/{{ hot_post['_id'] }}" target="_blank" class="news-link">
                                 {{ hot_post['title'] }}
                             </a>
                         </h5>
