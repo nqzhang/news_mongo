@@ -134,7 +134,8 @@ class RegisterHandler(EmailHandler):
             user_salt = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(passwd + user_salt)
             user_hash = hashlib.sha512(hashstr).hexdigest()
-            u = await self.application.db.users.insert_one({"user_name": email,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
+            user_name = email.split('@')[0]
+            u = await self.application.db.users.insert_one({"user_name": user_name,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
             u_id = str(u.inserted_id)
             email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_verify", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
