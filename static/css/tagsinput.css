@@ -27,9 +27,12 @@
     margin-right: 0.5rem;
     padding: 0.3rem 0;
 }
-.txt-box {font-size:0.7rem;}
+.txt-box {
+    font-size:0.7rem;
+}
 #btnPublish{
     font-size:0.8rem;
+    margin-top:1rem;
 }
 .tag-input {
     display: inline-block;

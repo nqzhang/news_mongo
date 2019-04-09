@@ -203,13 +203,13 @@ input, select, textarea {
 .form-group {
     color: #4f4f4f;
     align-items: center;
+    line-height: 2rem;
 
 }
 
 label.labTitle {
     margin-right: 6px;
     padding: 0;
-    line-height: 32px;
     font-size:0.7rem;
 }
 div.tag-box {
@@ -641,3 +641,5 @@ button, input, optgroup, select, textarea {
     font-size: inherit;
     line-height: inherit;
 }
+
+
