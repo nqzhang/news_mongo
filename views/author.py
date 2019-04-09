@@ -4,6 +4,7 @@ from utils.base import attrDict
 from utils.tools import post_time_format
 from bson import ObjectId
 from models import join,sidebar
+import math
 
 class AuthorPageHandler(UserHander):
     async def get(self,u_id,u_c_id=None,page=1):
@@ -26,5 +27,6 @@ class AuthorPageHandler(UserHander):
         data['post_number'] = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).count()
         data['author'] = author
         data['page'] = page
+        data['max_page'] = math.ceil(data['post_number'] / config.articles_per_page)
         u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
         self.render('page/author.html',posts=posts, config=config, page=page,u_categorys=u_categorys,data=data)

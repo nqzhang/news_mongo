@@ -4,18 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{{ static_url('css/lib/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/user.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/tagsinput.css') }}">
-
-
+    <link rel="stylesheet" type="text/css" href="{{ static_url('css/header.css') }}"/>
     {% include common-header.html %}
     {% block title %}
     <title>{{ config.site_name}}</title>
     {% end %}
 
     {% raw config.analytics_code %}
-<!--<script src="/static/js/lib/bootstrap.bundle.min.js"></script>-->
     <script>
             let main_css = "{{ static_url('css/main.css') }}";
         </script>
@@ -25,9 +22,7 @@
 {% end %}
 </head>
 
-
-
-
+<!--
 <body>
 <header class="bg-white">
     <nav class="navbar navbar-expand-md navbar-light container">
@@ -44,6 +39,8 @@
         </div>
     </nav>
 </header>
+-->
+{% include ../component/header.html %}
 
 <main role="main" class="container">
     <div class="row row-offcanvas row-offcanvas-right main-wrapper">

@@ -1,3 +1,38 @@
-<div id='pagination' style='text-align:center;'>
+<div style="text-align: center;">
+<div class="pagination clearfix">
+    {% if int(data['page']) != 1 %}
+        <a href="/u/{{ data['author']['_id'] }}/1/" class="pagination-prev">首頁</a>
+        <a href="/u/{{ data['author']['_id'] }}/{{ int(data['page'])-1 }}" class="pagination-prev">上一页</a>
+    {% end %}
 
+    {% if int(data['page']) <= 4 %}
+        {% set p_range = range(int(data['page'])-4,10) %}
+    {% elif int(data['page']) <=  data['max_page'] -4 %}
+        {% set p_range = range(int(data['page'])-4,int(data['page'])  +5) %}
+    {% elif int(data['page']) >=  data['max_page'] -4 %}
+        {% set p_range = range(int(data['page'])- (8 - (data['max_page'] - int(data['page']))),data['max_page'] + 1) %}
+    {{p_range}}}
+    {% end %}
+    {% for i in p_range %}
+        {% if 1 <= i <= data ['max_page'] %}
+                {% if i == int(page) %}
+                    <a class="current" href="/u/{{data['author']['_id']}}/{{ i }}/" title="第 {{ i }} 頁">{{ i }}</a>
+                {% else %}
+                    <a href="/u/{{data['author']['_id']}}/{{ i }}/" title="第 {{ i }} 頁">{{ i }}</a>
+                {% end %}
+        {% end %}
+    {% end %}
+    {% if int(data['page']) < data ['max_page'] %}
+
+        <a href="/u/{{data['author']['_id']}}/{{ int(data['page'])+1 }}" class="pagination-prev">下一页</a>
+    {% end %}
+
+    {% if int(data['page']) != data['max_page'] %}
+    <a href="/u/{{data['author']['_id']}}/{{data['max_page']}}" class="pagination-prev">尾頁</a>
+
+    {% end %}
+
+
+
+</div>
 </div>
