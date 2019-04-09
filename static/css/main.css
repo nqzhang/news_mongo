@@ -743,7 +743,7 @@ p.post-excerpt {
     font-size: 0.72rem;
 }
 
-.author-info .user-icon{
+.author-info #user-icon{
     display:inline-block;
     margin-right: 0.6rem;
     margin-bottom: 0.3rem;
