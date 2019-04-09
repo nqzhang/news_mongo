@@ -53,5 +53,7 @@ class QuestionHandler(BaseHandler):
         #处理author.user_name为空的情况
         if not author.user_name:
             author.user_name = 'None'
+        data={}
+        data['author'] = author
         self.render('page/question.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,author=author)
+                        u_new_posts=u_new_posts,author=author,data=data)
