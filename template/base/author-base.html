@@ -5,7 +5,7 @@
         <meta http-equiv="Cache-Control" content="no-transform" />
         <meta http-equiv="Cache-Control" content="no-siteapp" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <title>{{ config.site_name }}{{author['user_name']}}</title>
+        <title>{{ config.site_name }}{{ data['author']['user_name']}}</title>
         <meta name="keywords" content="">
         <meta name="description" content="" />
         {% include common-header.html %}
@@ -22,7 +22,7 @@
             <div class="author-banner">
                 <img src="/static/svgs/open-book.svg" />
                 <div class="banner-title">
-                    {{author.user_name}} 的主頁
+                    {{data['author']['user_name']}} 的主頁
                 </div>
             </div>
         </div>
@@ -34,29 +34,7 @@
                     {% end %}
                 </div>
                 <div class="main-content">
-                    <div class="list">
-                        {% for post in posts %}
-                        <section class="list-item">
-                            <div>
-                                <h4 class="list-item-title">
-                                    <a href="/a/{{ post['_id'] }}" target="_blank" class="">
-                                        <span class='original'>原创</span>
-                                        {{ post['title'] }}
-                                    </a>
-                                </h4>
-                                <p class='item-description'>{{post.desc}}</p>
-                                <div class="post-meta">
-                                    <img src="/static/svgs/clock.svg" />
-                                    <span>{{ post.post_date }}</span>
-                                    {% if post.views is not None  %}
-                                        <img src="/static/svgs/view.svg" />
-                                        <span>{{ post.views }}</span>
-                                    {% end %}
-                                </div>
-                            </div>
-                        </section>
-                        {% end %}
-                    </div>
+                    {% include ../component/author/author_list.html %}
                     {% block pagination %}
                         {% include ../component/pagination.html %}
                     {% end %}
@@ -67,5 +45,32 @@
             {% end %}
         </div>
         {% end %}
+    <script>
+        author_id = "{{ data['author']['_id'] }}";
+        layui.use('laypage', function(){
+            var laypage = layui.laypage;
+
+          //执行一个laypage实例
+          laypage.render({
+            elem: 'pagination', //注意，这里的 test1 是 ID，不用加 # 号
+            count: {{ data['post_number'] }} ,
+            curr: {{ data['page']}},
+             limit:15 ,
+                 layout: ['count', 'prev', 'page', 'next'],
+                theme: '#fd484d',
+                jump: function(obj, first){
+        //obj包含了当前分页的所有参数，比如：
+        //console.log(obj.curr); //得到当前页，以便向服务端请求对应页的数据。
+        //console.log(obj.limit); //得到每页显示的条数
+
+            //首次不执行
+            if(!first){
+                current = '/u/' + "{{ data['author']['_id'] }}" + '/' + obj.curr;
+                window.location.href = current;
+            }
+          }
+          });
+        });
+    </script>
     </body>
 </html>

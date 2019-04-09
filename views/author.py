@@ -18,9 +18,13 @@ class AuthorPageHandler(UserHander):
         posts = await self.get_posts_desc(posts)
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
-        author = attrDict(await self.application.db.users.find_one({"_id": ObjectId(u_id)}))
+        author = await self.application.db.users.find_one({"_id": ObjectId(u_id)})
         #处理author.user_name为空的情况
-        if not author.user_name:
-            author.user_name = 'None'
+        if not author['user_name']:
+            author['user_name'] = 'None'
+        data={}
+        data['post_number'] = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).count()
+        data['author'] = author
+        data['page'] = page
         u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
-        self.render('page/author.html',posts=posts,author=author, config=config, page=page,u_categorys=u_categorys)
+        self.render('page/author.html',posts=posts, config=config, page=page,u_categorys=u_categorys,data=data)

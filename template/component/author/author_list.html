@@ -1,0 +1,23 @@
+                    <div class="list">
+                        {% for post in posts %}
+                        <section class="list-item">
+                            <div>
+                                <h4 class="list-item-title">
+                                    <a href="/a/{{ post['_id'] }}" target="_blank" class="">
+                                        <span class='original'>原创</span>
+                                        {{ post['title'] }}
+                                    </a>
+                                </h4>
+                                <p class='item-description'>{{post['desc']}}</p>
+                                <div class="post-meta">
+                                    <img src="/static/svgs/clock.svg" />
+                                    <span>{{ post['post_date'] }}</span>
+                                    {% if 'views' in post %}
+                                        <img src="/static/svgs/view.svg" />
+                                        <span>{{ post['views'] }}</span>
+                                    {% end %}
+                                </div>
+                            </div>
+                        </section>
+                        {% end %}
+                    </div>

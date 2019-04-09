@@ -1,5 +1,7 @@
 from views.index import *
 from bson.json_util import dumps
+from utils.tools import post_time_format
+from .base import UserHander
 
 class ApiListHandler(RequestHandler):
     async def get(self):
@@ -33,4 +35,18 @@ class ApiCommentsGetAllHandler(RequestHandler):
         post_id = self.get_argument('post_id')
         comments = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
         self.write(dumps(comments))
+
+class ApiAuthorHandler(UserHander):
+    async def get(self):
+        page = self.get_argument('page')
+        author_id = self.get_argument('author')
+        posts = await self.application.db.posts.find({"user": ObjectId(author_id), "type": 0}).sort(
+            [("post_date", -1)]).skip(
+            config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(
+            length=config.articles_per_page)
+        posts = await self.get_posts_desc(posts)
+        posts = map(post_time_format, posts)
+        data={}
+        data['page'] = page
+        self.render('component/author/author_list.html',posts=posts,data=data)
 

@@ -39,6 +39,7 @@ class Application(tornado.web.Application):
             (r'/api/comments/get_all/', api.ApiCommentsGetAllHandler),
             (r'/api/comments/add/', article.ApiCommentsAddHandler),
             (r'/api/list/.*', api.ApiListHandler),
+            (r'/api/author/.*', api.ApiAuthorHandler),
             #(r'/api/comments/add/', article.ApiCommentsAddHandler),
             (r'/mp/postedit/?', user.PostEditHandler),
             (r'/mp/postedit/(.*)/?', user.PostEditHandler),
