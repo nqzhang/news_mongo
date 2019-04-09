@@ -1,7 +1,7 @@
 from views.base import UserHander
 import tornado.web
 import tornado
-from views.base import authenticated_async
+from tornado.web import authenticated
 from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
@@ -16,7 +16,7 @@ from tornado.concurrent import run_on_executor
 from io import BytesIO
 
 class PostEditHandler(UserHander):
-    @authenticated_async
+    @tornado.web.authenticated
     async def get(self,post_id=0):
         active = 'edit'
         post={}
@@ -35,7 +35,7 @@ class PostEditHandler(UserHander):
 
 
 class PostAjaxHandler(UserHander):
-    @authenticated_async
+    @authenticated
     async def post(self):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         u_id =  self.current_user.decode()
@@ -98,7 +98,7 @@ class PostAjaxHandler(UserHander):
         self.write(publish_success)
 
 class PostListHandler(UserHander):
-    @authenticated_async
+    @authenticated
     async def get(self):
         #print(self.current_user)
         active = 'list'
@@ -112,14 +112,14 @@ class PostListHandler(UserHander):
         self.render('page/postlist.html',config=config,active=active,posts=posts)
 
 class PostDeleteHandler(UserHander):
-    @authenticated_async
+    @authenticated
     async def post(self):
         post_id = self.get_argument('post_id')
         result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
         self.write(post_id)
 
 class ckuploadHandeler(UserHander):
-    @authenticated_async
+    @authenticated
     @run_on_executor
     def post(self):
 

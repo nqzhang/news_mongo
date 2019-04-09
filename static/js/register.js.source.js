@@ -63,7 +63,7 @@ $(document).ready(function(){
 function showError(errorMsg) {
     $('.err-info').html(errorMsg);
 }
-
+// https://www.sojson.com/jshtml.html
 // https://www.sojson.com/charEncode.html
 // https://javascriptobfuscator.com/Javascript-Obfuscator.aspx
 function gen_token(email,password) {

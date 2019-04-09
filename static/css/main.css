@@ -272,11 +272,11 @@ input[type=submit]:hover {
     background-color: #fd3546;
 }
 
-.login, .signup {
+.login, .signup, .activate-email {
     color: #fd484d;
 }
 
-.login {
+.login, .activate-email{
     border: 1px solid #fd484d;
     border-radius: 0.15rem;
     margin-left: 0.9rem;
@@ -286,7 +286,7 @@ input[type=submit]:hover {
     color: #fd484d;
 }
 
-.login:hover {
+.login:hover, .activate-email:hover{
     color: #fff;
     background-color: #fd484d;
 }

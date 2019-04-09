@@ -1,5 +1,6 @@
 from tornado.web import RequestHandler
 import tornado
+from tornado.web import authenticated
 from bson import ObjectId
 import config
 from lxml import etree
@@ -8,7 +9,6 @@ from .base import BlockingHandler,BaseHandler
 from config import articles_per_page
 from utils.base import attrDict
 from bson.json_util import dumps
-from views.base import authenticated_async
 from views.base import UserHander
 import datetime
 from utils.tools import *
@@ -99,7 +99,7 @@ class ArticleHandler(BaseHandler):
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author)
 
 class ApiCommentsAddHandler(UserHander):
-    @authenticated_async
+    @authenticated
     async def post(self):
         post_id = self.get_argument('post_id')
         reply_to = self.get_argument('reply_to')

@@ -37,6 +37,7 @@ elif env == 'test':
         "urlbak": "mongodb://95.216.6.102:27016",
         "db_name": "www_smwenku_com"
     }
+    is_debug = True
 elif env == 'production':
     redis_cache = {
         "host": "176.9.3.102",

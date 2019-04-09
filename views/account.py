@@ -4,6 +4,7 @@ import uuid
 import hashlib
 from config import session_ttl
 import tornado
+from tornado.web import authenticated
 import config
 from .base import BlockingBaseHandler
 import smtplib
@@ -13,7 +14,6 @@ from email.header import Header
 from email.utils import parseaddr,formataddr
 import datetime
 from .user import UserHander
-from views.base import authenticated_async
 from bson import ObjectId
 
 reg_text = '''
@@ -92,7 +92,7 @@ class LoginHandler(RequestHandler):
         #self.write(email + passwd)
 
 class LogoutHandler(UserHander):
-    @authenticated_async
+    @authenticated
     async def get(self):
         next = self.get_argument('next', '/')
         user_id = self.current_user.decode()
@@ -219,7 +219,7 @@ class EmailVerifyHandler(EmailHandler):
             self.write('验证链接无效')
 
 class EmailResendHandler(EmailHandler,UserHander):
-    @authenticated_async
+    @authenticated
     async def get(self):
         self.write('郵件已重新發送')
         u_id = self.current_user.decode()

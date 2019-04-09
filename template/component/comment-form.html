@@ -8,7 +8,7 @@
             <a class='login'>登录</a>
         {% elif user['is_active'] == 0 %}
             <textarea autocomplete="off" rows='2' cols='50' placeholder="若要評論，請先驗證您的郵箱..." disabled></textarea>
-            <a class='activate-email'>驗證郵箱</a>
+            <a class='activate-email' href="/mp/postedit/" target="_blank">驗證郵箱</a>
         {% else %}
             <textarea autocomplete="off" rows='2' cols='50' name="comment" placeholder="留下您想說的..."></textarea>
             <div id="success-info"></div>

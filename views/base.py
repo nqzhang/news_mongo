@@ -13,30 +13,6 @@ import asyncio
 from models import sidebar
 from config import session_ttl
 import config
-def authenticated_async(method):
-    @gen.coroutine
-    def wrapper(self, *args, **kwargs):
-        self.current_user = yield gen.Task(self.get_current_user_async)
-        if not self.current_user:
-            if self.request.method in ("GET", "HEAD"):
-                url = self.get_login_url()
-                if "?" not in url:
-                    if urlparse.urlsplit(url).scheme:
-                        # if login url is absolute, make next absolute too
-                        next_url = self.request.full_url()
-                    else:
-                        next_url = self.request.uri
-                    url += "?" + urlencode(dict(next=next_url))
-                self.redirect(url)
-            raise tornado.web.HTTPError(403)
-        else:
-            result = method(self, *args, **kwargs) # updates
-            if result is not None:
-                yield result
-    return wrapper
-
-
-
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -135,18 +111,28 @@ class UserHander(BaseHandler):
     async def prepare(self):
         self.set_cookie("_xsrf", self.xsrf_token,domain=config.cookie_domain)
         await super(UserHander, self).prepare()
-    @gen.coroutine
-    def get_current_user_async(self):
+        await self.check_authentication()
+    async def check_authentication(self, optional=False):
+        if not hasattr(self, '_current_user'):
+            try:
+                self._current_user = await self.get_current_user_async()
+            except NotImplementedError:
+                self._current_user = self.get_current_user()
+        if self._current_user is None and not optional:
+            login_url = self.get_login_url()
+            if login_url:
+                self.redirect(login_url)
+            else:
+                raise tornado.web.HTTPError(403)
+    async def get_current_user_async(self):
         sessionid = self.get_secure_cookie('sessionid')
         sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
         uid = self.get_secure_cookie('uid')
         if not (sessionid and sig and uid):
             return False
-        user_salt = yield self.application.redis.get(uid)
+        user_salt = await self.application.redis.get(uid)
         hashstr = sessionid + user_salt + uid
-        user = {}
         #print(hashlib.sha512(hashstr).hexdigest())
-        print()
         if sig == hashlib.sha512(hashstr).hexdigest():
             return uid
         return False
