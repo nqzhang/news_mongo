@@ -55,6 +55,7 @@ class EmailHandler(BlockingBaseHandler):
         msgBody = MIMEText(text, 'html')
         msgRoot.attach(msgBody)
         msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
+
         msgRoot['to'] = Header(email, 'utf8')
         msgRoot['Subject'] = subject
         smtp = smtplib.SMTP()
@@ -150,7 +151,7 @@ class RegisterHandler(EmailHandler):
             self.render('page/register_success.html', config=config)
             email_text = reg_text.format(config.site_name,email,verify_link,verify_link)
             subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
-            #await self.send_mail(email, subject, email_text)
+            await self.send_mail(email, subject, email_text)
         else:
             self.write('邮箱已存在')
             #salt = uuid.uuid4().hex
