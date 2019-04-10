@@ -11,7 +11,6 @@
         {% set p_range = range(int(data['page'])-4,int(data['page'])  +5) %}
     {% elif int(data['page']) >=  data['max_page'] -4 %}
         {% set p_range = range(int(data['page'])- (8 - (data['max_page'] - int(data['page']))),data['max_page'] + 1) %}
-    {{p_range}}}
     {% end %}
     {% for i in p_range %}
         {% if 1 <= i <= data ['max_page'] %}
@@ -28,8 +27,9 @@
     {% end %}
 
     {% if int(data['page']) != data['max_page'] %}
-    <a href="/u/{{data['author']['_id']}}/{{data['max_page']}}" class="pagination-prev">尾頁</a>
-
+        {% if data['max_page'] > 1 %}
+            <a href="/u/{{data['author']['_id']}}/{{data['max_page']}}" class="pagination-prev">尾頁</a>
+        {% end %}
     {% end %}
 
 

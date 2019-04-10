@@ -1,0 +1,2 @@
+将文章从首页移除
+db.getCollection("posts").update( { _id: ObjectId("5cad8ddcbd9eee7fd992b2e6") }, { $set: { "is_recommend": false } } )
