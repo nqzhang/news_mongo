@@ -28,5 +28,7 @@ class AuthorPageHandler(UserHander):
         data['author'] = author
         data['page'] = page
         data['max_page'] = math.ceil(data['post_number'] / config.articles_per_page)
+        if data['max_page'] <= 0:
+            data['max_page'] = 1
         u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
         self.render('page/author.html',posts=posts, config=config, page=page,u_categorys=u_categorys,data=data)
