@@ -7,8 +7,11 @@ async def post_user(posts,db):
         user_dict[user['_id']] = user
     posts_new = []
     for post in posts:
-        post['user'] = user_dict[post['user']]
-        post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
+        try:
+            post['user'] = user_dict[post['user']]
+            post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
+        except:
+            continue
         posts_new.append(post)
     return posts_new
 

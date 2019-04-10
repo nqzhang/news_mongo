@@ -554,7 +554,7 @@ span.required {
     color: #CA0C16;
 }
 
-.overlay {
+.user-overlay {
     position: absolute;
     background-color: rgba(0, 0, 0, 0.3);
     height: 100%;
@@ -564,7 +564,7 @@ span.required {
     left: 0;
 }
 
-.overlay-container {
+.user-overlay-container {
     position: relative;
     z-index: 3;
     width: 530px;

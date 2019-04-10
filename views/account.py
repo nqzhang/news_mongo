@@ -55,7 +55,6 @@ class EmailHandler(BlockingBaseHandler):
         msgBody = MIMEText(text, 'html')
         msgRoot.attach(msgBody)
         msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
-
         msgRoot['to'] = Header(email, 'utf8')
         msgRoot['Subject'] = subject
         smtp = smtplib.SMTP()
@@ -222,7 +221,7 @@ class EmailVerifyHandler(EmailHandler):
 class EmailResendHandler(EmailHandler,UserHander):
     @authenticated
     async def get(self):
-        self.write('郵件已重新發送')
+        self.finish('郵件已重新發送')
         u_id = self.current_user.decode()
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
