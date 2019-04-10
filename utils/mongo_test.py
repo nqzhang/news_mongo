@@ -11,7 +11,10 @@ async def ttt():
                                                         {"$setOnInsert": {"type": "1", "name": t_name}},
                                                         upsert=True, return_document=ReturnDocument.AFTER)
     print(x)
-
+async def qqq():
+    post_id = ObjectId("5c6721a67a2ed534b85deb52")
+    x = await db.posts.find({"_id":post_id}).to_list(length=None)
+    print(x)
 async def related():
     x = db.posts.aggregate([
         {"$match": {"tags": {"$in": [ObjectId("5bea62907a2ed52674df4468")]}}},
@@ -25,8 +28,9 @@ async def related():
     async for i in x:
         print(i)
 async def main():
+    await qqq()
     #await ttt()
-    await related()
+    #await related()
 
 import asyncio
 loop = asyncio.get_event_loop()
