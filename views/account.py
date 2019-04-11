@@ -55,7 +55,8 @@ class EmailHandler(BlockingBaseHandler):
         msgBody = MIMEText(text, 'html')
         msgRoot.attach(msgBody)
         msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
-        msgRoot['to'] = Header(email, 'utf8')
+        msgRoot['to'] = email
+        #Header(email, 'utf8')
         msgRoot['Subject'] = subject
         smtp = smtplib.SMTP()
         smtp.connect(config.smtp_hostname)
