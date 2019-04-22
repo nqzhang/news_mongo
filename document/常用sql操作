@@ -1,2 +1,10 @@
 将文章从首页移除
 db.getCollection("posts").update( { _id: ObjectId("5cad8ddcbd9eee7fd992b2e6") }, { $set: { "is_recommend": false } } )
+
+删除文章
+db.posts.remove({ _id: ObjectId("5ca87804bd9eee5b1a0779c3")})
+
+删除用户
+db.users.remove({ _id: ObjectId("5ca87804bd9eee5b1a0779c3")})
+
+
