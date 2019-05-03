@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% include common-header.html %}
     <link rel="stylesheet" href="{{ static_url('css/user.css') }}">
     <link rel="stylesheet" href="{{ static_url('css/tagsinput.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ static_url('css/header.css') }}"/>
-    {% include common-header.html %}
     {% block title %}
     <title>{{ config.site_name}}</title>
     {% end %}

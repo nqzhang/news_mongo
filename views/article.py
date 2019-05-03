@@ -98,7 +98,8 @@ class ArticleHandler(BaseHandler):
         #post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
         #post['desc'] = post_desc
         post = await self.get_post_desc(post)
-        #处理author.user_name为空的情况
+        post = await self.article_img_add_class(post)
+    #处理author.user_name为空的情况
         if not author.user_name:
             author.user_name = 'None'
         data={}

@@ -83,7 +83,7 @@ input {
     box-sizing: border-box;
 }
 
-a {
+a,a:hover {
     text-decoration: none;
 }
 /* ==== Common ==== */
@@ -132,11 +132,14 @@ h4 { font-size: 1rem; margin-bottom: 0.375rem; font-weight: bold;}
 h5 { font-size: 0.875rem; margin-bottom: 0.3rem; font-weight: bold;}
 h6 { font-size: 0.75rem; margin-bottom: 0.3rem; font-weight: bold;}
 
-a, a:hover, a:focus {
+a  {
     cursor: pointer;
     color: #3d3d3d;
 }
 
+a:hover, a:focus {
+    color: #fd484d;
+}
 a.question-noanswer-share  {
     cursor: pointer;
     text-decoration: none;
@@ -844,7 +847,12 @@ footer {
 .loading.ball-pulse>div:nth-child(3) {
     animation: scale .75s 0s infinite cubic-bezier(.2,.68,.18,1.08);
 }
-
+/* ads */
+@media (min-width: 1228px) {
+    .ads-article-bottom-match {
+        max-width:876px;
+    }
+}
 /* ==== Responsive ==== */
 /** max-width breakpoint **/
 @media (max-width: 1228px) {

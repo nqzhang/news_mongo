@@ -47,14 +47,16 @@
                     <div class="article-content">
                         {% raw post['content'] %}
                     </div>
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-format="autorelaxed"
-                         data-ad-client="ca-pub-2073744953016040"
-                         data-ad-slot="3534050590"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
+                    <div class="ads-article-bottom-match">
+                        <ins class="adsbygoogle"
+                             style="display:block;"
+                             data-ad-format="autorelaxed"
+                             data-ad-client="ca-pub-2073744953016040"
+                             data-ad-slot="3534050590"></ins>
+                        <script>
+                            (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
                     <ul class="tag-list">
                         {% for tag in post['tags'] %}
                         <li>
@@ -69,6 +71,15 @@
             <div class="secondary-content feed">
                 {% block right_sidebar %}
                 {% end %}
+            </div>
+        </div>
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="//placehold.it/1000x600" class="img-responsive">
+                    </div>
+                </div>
             </div>
         </div>
         {% block footer %}
@@ -95,6 +106,73 @@ $(document).ready(function() {
   });
 });
 </script>
-<script src="{{ static_url('js/article/load_comments.js') }}"></script>
+
+    <script src="{{ static_url('js/article/load_comments.js') }}"></script>
+<script>
+$(".article-content img").click(
+    function() {
+        let width;
+        let img_src = $(this).attr('src');
+        let img_width = this.naturalWidth;
+        // let height = this.naturalHeight;
+         let window_width = $(window).width() * 0.8;
+         console.log(img_width,window_width)
+         if (img_width <= window_width) {
+             $("#myModal").addClass('modal-small')
+             width = img_width;
+         } else {
+             $("#myModal").addClass('modal-big')
+
+             width = window_width;
+         }
+
+        $("#myModal img").attr('src',img_src);
+        $("#myModal .modal-dialog img").css('width',width);
+        $("#myModal .modal-dialog img").css('height','auto');
+
+        $('#myModal').modal('show');
+    }
+)
+
+$(".article-content img").lazyload();
+</script>
+<style>
+
+     .modal-big  .modal-dialog {
+            position: relative;
+            display: table;
+            overflow-y: auto;
+            overflow-x: auto;
+            width: auto;
+        }
+
+     .modal-big   .modal.show .modal-dialog {
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+     .modal-big   .modal-body {
+            text-align: center;
+        }
+
+     .modal-small.modal {
+        text-align: center;
+        padding: 0!important;
+    }
+
+     .modal-small.modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+    }
+
+     .modal-small .modal-dialog {
+        display: inline-block;
+        text-align: left;
+        vertical-align: middle;
+    }
+    </style>
 </body>
 </html>

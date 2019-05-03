@@ -13,6 +13,7 @@ import asyncio
 from models import sidebar
 from config import session_ttl
 import config
+from pyquery import PyQuery as pq
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -54,6 +55,16 @@ class BlockingHandler(BlockingBaseHandler):
             post =  await self.get_post_desc(post)
             new_posts.append(post)
         return new_posts
+    @run_on_executor
+    def article_img_add_class(self,post):
+        content_pq = pq(post['content'])
+        for i in content_pq('img').items():
+            i.add_class('lazyload')
+            i.attr('data-src',i.attr.src)
+            i.remove_attr('src')
+        content = content_pq.html(method="html")
+        post['content'] = content
+        return post
 
 
 class BaseHandler(BlockingHandler):
