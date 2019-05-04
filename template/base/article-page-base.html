@@ -132,7 +132,14 @@ $(".article-content img").click(
 
         $('#myModal').modal('show');
     }
-)
+
+
+    )
+    $('#myModal').click(
+        function() {
+            $('#myModal').modal('hide')
+        }
+    )
 
 $(".article-content img").lazyload();
 </script>
@@ -172,7 +179,11 @@ $(".article-content img").lazyload();
         display: inline-block;
         text-align: left;
         vertical-align: middle;
+         max-width: 100%;
     }
+     .modal-content {
+         cursor: zoom-out;
+     }
     </style>
 </body>
 </html>

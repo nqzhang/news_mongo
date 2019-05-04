@@ -5,7 +5,7 @@
             <input name="post_id" value="{{ post['_id'] }}" class='hidden'/>
         {% if not user['is_login'] %}
             <textarea autocomplete="off" rows='2' cols='50' placeholder="登錄以後才評論..." disabled></textarea>
-            <a class='login'>登录</a>
+            <a class='login' href="#">登录</a>
         {% elif user['is_active'] == 0 %}
             <textarea autocomplete="off" rows='2' cols='50' placeholder="若要評論，請先驗證您的郵箱..." disabled></textarea>
             <a class='activate-email' href="/mp/postedit/" target="_blank">驗證郵箱</a>

@@ -419,6 +419,8 @@ a.flexible-btn {
 
 .breadcrumb {
     margin-bottom: 0.3rem;
+    padding: 0;
+    background-color: inherit;
 }
 
 .metadata {
@@ -477,6 +479,7 @@ a.flexible-btn {
     height: auto;
     display: block;
     width: auto;
+    cursor:zoom-in;
 }
 .article-content a {
     color: #4ea1db;
