@@ -15,4 +15,5 @@ class CategoryPageHandler(BaseHandler):
         c_hot_posts = await sidebar.c_hot_posts(self.application.db,c_id)
         posts = await join.post_user(posts, self.application.db)
         #posts = await self.get_thumb_image(posts)
-        self.render('page/category.html',menu_left=menu_left,posts=posts,c_id=c_id,config=config,page=page,hot_posts=c_hot_posts)
+        list_path = 'category&id={}'.format(c_id)
+        self.render('page/category.html',menu_left=menu_left,posts=posts,c_id=c_id,config=config,page=page,hot_posts=c_hot_posts,list_path=list_path)

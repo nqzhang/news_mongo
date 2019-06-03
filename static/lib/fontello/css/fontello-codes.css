@@ -1,3 +1,7 @@
 
 .icon-up-open-1:before { content: '\e800'; } /* '' */
 .icon-forward:before { content: '\e801'; } /* '' */
+.icon-thumbs-up:before { content: '\e802'; } /* '' */
+.icon-thumbs-down:before { content: '\e803'; } /* '' */
+.icon-thumbs-up-alt:before { content: '\f164'; } /* '' */
+.icon-thumbs-down-alt:before { content: '\f165'; } /* '' */

@@ -2,7 +2,11 @@
 						<section class="list-item">
 							<div>
 								<h4 class="list-item-title">
-									<a href="/a/{{ post['_id'] }}" target="_blank" class="" data-post-id="{{ post['_id'] }}">{{ post['title'] }}</a>
+									{% if list_path == 'recommend' %}
+										<a href="/a/{{ post['_id'] }}" target="_blank" class="" data-post-id="{{ post['score'] }}">{{ post['title'] }}</a>
+									{% else %}
+										<a href="/a/{{ post['_id'] }}" target="_blank" class="" data-post-id="{{ post['_id'] }}">{{ post['title'] }}</a>
+									{% end %}
 								</h4>
 								<div class="post-meta">
 									<a href="/u/{{post['user']['_id']}}" target="_blank" >

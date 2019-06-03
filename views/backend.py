@@ -7,6 +7,7 @@ from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
 import tornado
+from utils.hot import hot
 class NewPostHandler(RequestHandler):
     def check_xsrf_cookie(self):
         pass
@@ -89,6 +90,8 @@ class NewPostHandler(RequestHandler):
             traceback.print_exc()
         else:
             self.write(str(post_id))
+        if post_id != 0:
+            post_score = await hot(self.application.db,str(post_id))
 
 class ViewsHandler(RequestHandler):
     async def post(self):
@@ -96,4 +99,5 @@ class ViewsHandler(RequestHandler):
             raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")
         post_id = self.get_body_argument('post_id')
         await self.application.db.posts.update_one({'_id': ObjectId(post_id)}, {'$inc': {'views': 1}})
-        current_views = await self.application.db.posts.find_one({'_id': ObjectId(post_id)})
+        post = await self.application.db.posts.find_one({'_id': ObjectId(post_id)})
+        current_views = post['views']

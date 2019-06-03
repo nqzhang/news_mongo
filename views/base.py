@@ -14,6 +14,7 @@ from models import sidebar
 from config import session_ttl
 import config
 from pyquery import PyQuery as pq
+import logging
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -107,6 +108,8 @@ class BaseHandler(BlockingHandler):
         if not user_salt:
             uid_str = uid.decode()
             user = await self.application.db.users.find_one({'_id':ObjectId(uid_str)})
+            if not user:
+                return False
             user_salt_str = user['password']['salt']
             user_salt = user_salt_str.encode()
             user_id = str(user['_id'])

@@ -36,6 +36,7 @@ class Application(tornado.web.Application):
             (r'/account/password_forgot/.*?', account.PasswordForgotHandler),
             (r'/account/password_reset/.*?', account.PasswordResetHandler),
             (r'/api/account/password_reset/.*?', account.ApiPasswordResetHandler),
+            (r'/api/article', api.ApiArticleHandler),
             (r'/api/comments/get_all/', api.ApiCommentsGetAllHandler),
             (r'/api/comments/add/', article.ApiCommentsAddHandler),
             (r'/api/list/.*', api.ApiListHandler),

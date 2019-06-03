@@ -1,5 +1,3 @@
-
-
 $(document).ready(function(){
     window.replyTo = undefined;
 
@@ -15,7 +13,7 @@ function ApiCommentsGetAll() {
         data: {post_id: post_id},
         type: "POST",
         success: function (res, textStatus, jqXHR) {
-            var data = JSON.parse(res);
+            var data = JSON.parse(res).comments;
             if(data.length > 0) {
                 $('#comment-list').text('');
                 $('#comment-list').append("<ul class='top'></ul>")
@@ -26,6 +24,15 @@ function ApiCommentsGetAll() {
                 // 2. 先列出所有评论，无论他们是在第几层
                 data.forEach(function(comment){
                     //console.log(comment);
+                    let comment_vote_up;
+                    if (checkNested(comment,'like','comment_like')) {
+                        comment_vote_up = comment.like.comment_like;
+                        if (comment_vote_up===0) {
+                            comment_vote_up = '';
+                        }
+                    } else {
+                        comment_vote_up = '';
+                    }
                     var comment_element = "<li class='comment-item' data-comment-id='" + comment._id.$oid  + "' data-reply-to='" + comment.reply_to  + "'>" +
                             "<div class='comment-meta'>" +
                                 "<div class='comment-author user-icon'>" + comment.comment_author_name.charAt(0) + "</div>" +
@@ -38,9 +45,16 @@ function ApiCommentsGetAll() {
                                     "<div class='comment-content'>" +
                                         "<div>" + comment.comment_content + "</div>" +
                                     "</div>" +
-                                     "<div class='reply-comment' data-reply-to='" + comment._id.$oid + "' data-author-name='" + comment.comment_author_name + "'>" +
-                                        "<span class='reply'>回复</span>" +
-                                    "</div>" +
+                                        "<div class='comment-vote comment-voteup'>" +
+                                        '<button class="icon-thumbs-up-alt" title=""></button>' +
+                                        "<span class='vote-number'>" + comment_vote_up + "</span>" +
+                                        "</div>" +
+                                        "<div class='comment-vote comment-votedown'>" +
+                                        '<button class="icon-thumbs-down-alt" title=""></button>' +
+                                        "</div>" +
+                                         "<div class='reply-comment' data-reply-to='" + comment._id.$oid + "' data-author-name='" + comment.comment_author_name + "'>" +
+                                            "<span class='reply'>回復</span>" +
+                                        "</div>" +
                                 "</div>" +
                             "</div>" +
 
@@ -83,7 +97,21 @@ function ApiCommentsGetAll() {
                     }
 
                 });
-
+                //4.渲染当前用户点赞
+                if (checkNested(JSON.parse(res),'article_user_comment_vote')) {
+                    let data_article_user_comment_vote = JSON.parse(res).article_user_comment_vote;
+                    if (data_article_user_comment_vote.length > 0) {
+                        data_article_user_comment_vote.forEach(function (liked_comment) {
+                                if (liked_comment.value === 1) {
+                                    comment_element = $('#comment-list').find("[data-comment-id=" + liked_comment.comment_id + "] .comment-voteup button:first");
+                                } else if (liked_comment.value === 0) {
+                                    comment_element = $('#comment-list').find("[data-comment-id=" + liked_comment.comment_id + "] .comment-votedown button:first");
+                                }
+                                comment_element.addClass('active');
+                            }
+                        )
+                    }
+                }
                 //5. 生成DOM完成以后，才能监听“回复评论”按钮
                 $('.reply-comment').click(function() {
                     comment_form = $(this).parent('.comment-body').children('.comment-form');
@@ -101,11 +129,13 @@ function ApiCommentsGetAll() {
                     reply_form.find('textarea').attr("placeholder",'');
                     reply_form.removeAttr('id');
                     reply_form.attr('data-reply-to',$(this).attr("data-reply-to"));
+                    reply_form.css('margin-top','0.5rem');
+
                     $(this).parent('.comment-body').append(reply_form);
                     $(this).children('span').addClass('reply-open');
                     $(this).parent().children('.comment-form').submit(comment_submit);
                     reply_form.find('a.login').click(function(){
-                        $(".header-top a.login").click()
+                        toggleLoginLayer();
                         }
                     );
 
@@ -118,11 +148,55 @@ function ApiCommentsGetAll() {
                     */
                 });
 
+                //6. 监听评论点赞、踩
+                $(".comment-vote").click(function() {
+                        if (is_login()) {
+                            comment_vote($(this));
+                        } else {
+                            toggleLoginLayer();
+                        }
+                    }
+                );
+
+
             }
         }
     });
 }
+function comment_vote(e){
+    let action;
+    let comment_id = e.closest('.comment-item').attr('data-comment-id');
+    let comment_vote_button = e.find("button");
+    let comment_vote_other_button = e.siblings(".comment-vote").find("button");
+    if (comment_vote_other_button.hasClass("active")){
+        comment_vote_other_button.removeClass("active");
+    }
+    if(!comment_vote_button.hasClass("active")){
+        comment_vote_button.addClass("active");
+        if(comment_vote_button.parent().hasClass("comment-voteup")){
+            action = 'comment_like';
+        } else {
+            action = 'comment_unlike';
+        }
+    } else {
+        if(comment_vote_button.parent().hasClass("comment-voteup")){
+            action = "undo_comment_like";
+        } else {
+            action = "undo_comment_unlike";
+        }
+        comment_vote_button.removeClass("active");
+    }
 
+    $.ajax({
+        url: '/api/article',
+        headers: {'X-XSRFToken' : token },
+        data: {post_id: post_id ,user_id:user_id,comment_id:comment_id,action:action},
+        type: "POST",
+        success: function (res, textStatus, jqXHR) {
+            ApiCommentsGetAll();
+        },
+    });
+}
 function toLocalTimestamp(utcTimestamp){
     localTimestamp = utcTimestamp + new Date().getTimezoneOffset()*60*1000;
     return localTimestamp;

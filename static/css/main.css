@@ -222,6 +222,7 @@ input[type=submit]:hover {
 
 #content-wrapper {
     margin-bottom: 1.8rem;
+    position: relative;
 }
 
 .main-content {
@@ -625,7 +626,7 @@ span.reply  {
     -ms-user-select: none;
     user-select: none;
     font-weight: 500;
-    font-size:110%;
+    font-size:90%;
 }
 
 span.reply-open {
@@ -649,6 +650,7 @@ span.reply-open {
 
 .comment-content {
     margin-bottom: 0.21rem;
+    line-height: normal;
 }
 
 .comment-meta {
@@ -679,6 +681,28 @@ span.reply-open {
 #comment-list ul.top ul {
     margin-left: 2.4rem;
 }
+.comment-vote {
+    display: inline-block;
+    margin: 0rem 0.5rem 0rem 0;
+}
+
+.comment-vote button {
+    color:#8a93a0;
+    border: none;
+    background-color: transparent;
+    border-radius: 0;
+    padding: 0;
+    outline: 0;
+    cursor:pointer;
+}
+.comment-voteup  button.active {
+    color:#74ca46
+}
+.comment-votedown  button.active {
+    color:rgb(141, 168, 255)
+}
+
+
 
 #backTop:hover {
     background: #d43d3d;
@@ -689,7 +713,7 @@ span.reply-open {
     display: none;
     position: fixed;
     bottom: 45px;
-    padding: 8px 13px 11px;
+    padding: 0.4rem 0.5rem 0.5rem 0.5rem;
     background: #ccc;
     color: #fff;
     text-align: center;
@@ -732,6 +756,66 @@ p.post-excerpt {
 .post-excerpt a {
     word-break: break-all;
 }
+/* ==== article toolbox ==== */
+#toolbox {
+    width: 2rem;
+    height: 6rem;
+    position: absolute;
+    top: 3rem;
+    left: -2.5rem;
+}
+
+#toolbox i {
+    font-size: 1rem;
+    color: #B2BAC2;
+    border: 1px solid #fff;
+    border-radius: 2rem;
+    padding: 0.2rem;
+    background-color: #fff;
+    cursor:pointer;
+}
+
+#toolbox i:hover:not(.active) {
+    color:#8A93A0;
+}
+#toolbox i.active {
+    color:#74ca46
+}
+
+#toolbox i.icon-thumbs-down-alt.active {
+    color:rgb(141, 168, 255)
+}
+
+i.icon-thumbs-up-alt:before{
+    position:relative;
+    left: 1px;
+    top: -1px;
+}
+i.icon-thumbs-down-alt:before{
+    position:relative;
+    left: 1px;
+    top: -1px;
+}
+.vote-up  {
+    margin-bottom: 1.1rem;
+}
+
+.vote-up i[vote_up_number]:after {
+    content: attr(vote_up_number);
+    position: absolute;
+    top: -15%;
+    left: 70%;
+    font-size: 0.9rem;
+    /* line-height: 0.5; */
+    color: #fff;
+    background-color: #b2bac2;
+    padding: 0.05rem 0.5rem;
+    border-radius: 0.6rem;
+    font-style: normal;
+    /* word-spacing: 3px; */
+    transform: scale(0.6,0.6);
+}
+
 /* ==== other ==== */
 .err-info {
     color: #fd484d;
@@ -809,7 +893,6 @@ p.post-excerpt {
     -moz-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
     -webkit-box-shadow: 0 2px 2px -2px rgba(0,0,0,.15);
 }
-
 /* ==== Sidebar ==== */
 .right_sidebar:hover .section-head:after,
 .sidebar:hover .section-head:after {

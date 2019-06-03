@@ -14,6 +14,7 @@ from utils.qetag import get_io_qetag
 import os
 from tornado.concurrent import run_on_executor
 from io import BytesIO
+from utils.hot import hot
 
 class PostEditHandler(UserHander):
     @tornado.web.authenticated
@@ -96,6 +97,8 @@ class PostAjaxHandler(UserHander):
         publish_success['post_id'] = post_id
         publish_success['title'] = title
         self.write(publish_success)
+        #print(post_id)
+        post_score = await hot(self.application.db,str(post_id))
 
 class PostListHandler(UserHander):
     @authenticated

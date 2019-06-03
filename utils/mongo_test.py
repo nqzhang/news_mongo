@@ -27,8 +27,17 @@ async def related():
     {"$sort": {"matches": -1}}])
     async for i in x:
         print(i)
+async def index_sort():
+    x = db.posts.aggregate([
+        {"$match":{"type":0,"is_recommend":{"$ne":False},"score" : { "$exists" : True }}},
+        {"$sort": {"score": -1}},
+        {"$match":{"_id":{'$gte': ObjectId('5cf1cdf07a2ed53bf087b258')}}},
+        {"$limit": 15 },
+    ])
+    async for i in x:
+        print(i)
 async def main():
-    await qqq()
+    await index_sort()
     #await ttt()
     #await related()
 

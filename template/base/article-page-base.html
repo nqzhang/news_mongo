@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 		<meta charset="UTF-8">
 		{% raw config.custom_meta %}
@@ -26,8 +25,33 @@
         {% include ../component/header.html %}
     {% end %}
     {% include ../component/totop.html %}
-
     <div class="container" id="content-wrapper">
+        <div id="toolbox">
+            <ul style="position:fixed;">
+                {% if 'like' in post and 'article_like' in post['like'] and post['like']['article_like'] > 0 %}
+                    {%  set  vote_up_number = 'vote_up_number="{}"'.format(post['like']['article_like']) %}
+
+                {% else %}
+                    {% set  vote_up_number = '' %}
+
+                {% end %}
+                {%  if data['liked'] %}
+                    {%  if data['liked'][0]['value'] == 1  %}
+                    <li class="vote vote-up"><i class="icon-thumbs-up-alt active" title="" {% raw vote_up_number %}></i></li>
+                    <li class="vote vote-down"><i class="icon-thumbs-down-alt" title=""></i></li>
+                    {%  elif data['liked'][0]['value'] == 0  %}
+                    <li class="vote vote-up"><i class="icon-thumbs-up-alt" title="" {% raw vote_up_number %}></i></li>
+                    <li class="vote vote-down"><i class="icon-thumbs-down-alt active" title="" ></i></li>
+                    {% else %}
+                        <li class="vote vote-up"><i class="icon-thumbs-up-alt" title="" {% raw vote_up_number %}></i></li>
+                        <li class="vote vote-down"><i class="icon-thumbs-down-alt" title="" ></i></li>
+                    {% end %}
+                {% else %}
+                    <li class="vote vote-up"><i class="icon-thumbs-up-alt" title="" {% raw vote_up_number %}></i></li>
+                    <li class="vote vote-down"><i class="icon-thumbs-down-alt" title=""></i></li>
+                {% end %}
+            </ul>
+        </div>
         <div class="content">
             {% block menu %}
             {% end %}
@@ -77,7 +101,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <img src="//placehold.it/1000x600" class="img-responsive">
+                        <img src="" class="img-responsive">
                     </div>
                 </div>
             </div>
@@ -88,6 +112,9 @@
     </div>
 <script>
     var post_id = "{{ post['_id'] }}";
+    {% if user['is_login'] %}
+    var user_id = "{{ user['_id'] }}";
+    {% end %}
     var token = getCookie('_xsrf');
 </script>
 <script>

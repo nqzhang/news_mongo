@@ -12,4 +12,5 @@ class TagPageHandler(BaseHandler):
         posts =  await self.application.db.posts.find({"tags":ObjectId(t_id),"type":0}).sort([("post_date",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
         posts = await join.post_user(posts, self.application.db)
         #posts = await self.get_thumb_image(posts)
-        self.render('page/tag.html',menu_left=menu_left,posts=posts,t_id=t_id,config=config,page=page)
+        list_path = 'tag&id={}'.format(t_id)
+        self.render('page/tag.html',menu_left=menu_left,posts=posts,t_id=t_id,config=config,page=page,list_path=list_path)

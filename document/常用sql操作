@@ -10,4 +10,3 @@ db.posts.remove({ user: ObjectId("5b797d0f2b71770aa543a541")})
 删除用户
 db.users.remove({ _id: ObjectId("5cc5ccd7bd9eee1ac30b52d5")})
 
-

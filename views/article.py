@@ -14,6 +14,7 @@ import datetime
 from utils.tools import *
 from .account import EmailHandler
 from email.header import Header
+from utils.hot import hot
 
 comment_notify_text = '''
             有人在{}回复了您<br/>
@@ -104,8 +105,17 @@ class ArticleHandler(BaseHandler):
             author.user_name = 'None'
         data={}
         data['author'] = author
+        #当前用户是否关注了该文章
+        if await self.is_login():
+            liked = await self.application.db.like.find({"type":"article_like","user_id":str(self.user['_id']),"post_id":post_id}).to_list(length=None)
+            data['liked'] = liked
+        else:
+            data['liked'] = False
+        #print(post)
+
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=data)
+        post_score = await hot(self.application.db,post_id)
 
 class ApiCommentsAddHandler(UserHander,EmailHandler):
     @authenticated
@@ -127,7 +137,9 @@ class ApiCommentsAddHandler(UserHander,EmailHandler):
         comment['comment_content'] = comment_content
         comment_id = await self.application.db.comments.insert_one(comment)
         comment_id_str = str(comment_id.inserted_id)
+        #print(post_id)
         self.write(comment_id_str)
+        post_score = await hot(self.application.db,str(post_id))
         if reply_to:
             self.comment = comment
             self.comment_id = comment_id_str
@@ -135,24 +147,24 @@ class ApiCommentsAddHandler(UserHander,EmailHandler):
         io_loop = tornado.ioloop.IOLoop.current()
         io_loop.add_callback(self.sending_notify)
 
-    async def sending_notify(self):
-        if hasattr(self,"comment"):
-            #print(self.comment['reply_to'])
-            reply_to_comment = await self.application.db.comments.find_one({"_id":ObjectId(self.comment['reply_to'])})
-            print(reply_to_comment)
-            reply_post = await self.application.db.posts.find_one({"_id":ObjectId(reply_to_comment['post_id'])})
-            if reply_post['type'] == 0:
-                print(self.comment_id)
-                post_link = '{}/a/{}?commentScrool={}'.format(config.site_domain,str(reply_post['_id']),self.comment_id)
-            print(post_link)
-            reply_to_user_id = reply_to_comment['comment_author_id']
-            reply_to_user = await self.application.db.users.find_one({"_id":ObjectId(reply_to_user_id)})
-            email = reply_to_user['email']
-            subject = Header('[{}]評論回復'.format(config.site_name), 'utf-8')
-            email_text = comment_notify_text.format(config.site_name, post_link)
-            await self.send_mail(reply_to_user['email'],subject,email_text)
-            print(reply_to_user)
-            #else:
-                #print('数据库已存在此图片')
 
+    async def sending_notify(self):
+            if hasattr(self,"comment"):
+                #print(self.comment['reply_to'])
+                reply_to_comment = await self.application.db.comments.find_one({"_id":ObjectId(self.comment['reply_to'])})
+                print(reply_to_comment)
+                reply_post = await self.application.db.posts.find_one({"_id":ObjectId(reply_to_comment['post_id'])})
+                if reply_post['type'] == 0:
+                    print(self.comment_id)
+                    post_link = '{}/a/{}?commentScrool={}'.format(config.site_domain,str(reply_post['_id']),self.comment_id)
+                print(post_link)
+                reply_to_user_id = reply_to_comment['comment_author_id']
+                reply_to_user = await self.application.db.users.find_one({"_id":ObjectId(reply_to_user_id)})
+                email = reply_to_user['email']
+                subject = Header('[{}]評論回復'.format(config.site_name), 'utf-8')
+                email_text = comment_notify_text.format(config.site_name, post_link)
+                await self.send_mail(reply_to_user['email'],subject,email_text)
+                print(reply_to_user)
+                #else:
+                    #print('数据库已存在此图片')
 

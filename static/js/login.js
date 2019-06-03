@@ -6,7 +6,8 @@ $(document).ready(function(){
     form.attr('action',login_action);
 
     // handle login layer toggling
-    $('.login, #login-layer-wrapper.overlay, .login-layer-close-button').click(function(){
+    $('.login, #login-layer-wrapper.overlay, .login-layer-close-button').click(function(e){
+        e.preventDefault()
         toggleLoginLayer();
     });
 
@@ -27,7 +28,7 @@ $(document).ready(function(){
     });
 
 if ( getUrlParam('login') == 1 ) {
-    $('a.login').click();
+    toggleLoginLayer();
     }
 });
 

@@ -70,3 +70,31 @@ function load_js_before_close_body(src) {
 	script.src = 'static/js/list/list_scroll.js';
 	document.body.appendChild(script);
 }
+
+function is_login(){
+	var temp = location.hostname.split('.').reverse();
+	var root_domain = '.' + temp[1] + '.' + temp[0];
+	sessionid = Cookies.get('sessionid', { domain: root_domain });
+	sig = Cookies.get('sig', { domain: root_domain });
+	uid = Cookies.get('uid', { domain: root_domain });
+	if (sessionid && sig && uid ) {
+		return true;
+	}
+	 else {
+	 	return false;
+	}
+
+
+}
+
+function checkNested(obj /*, level1, level2, ... levelN*/) {
+	var args = Array.prototype.slice.call(arguments, 1);
+
+	for (var i = 0; i < args.length; i++) {
+		if (!obj || !obj.hasOwnProperty(args[i])) {
+			return false;
+		}
+		obj = obj[args[i]];
+	}
+	return true;
+}

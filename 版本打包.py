@@ -12,5 +12,5 @@ def zip_dirs(dest,dirs):
                 f.write(os.path.join(dirpath, filename))
     f.close()
 
-dirs = "document,models,static,template,utils,views,app.py,server.py"
+dirs = "document,models,script,static,template,utils,views,app.py,server.py"
 zip_dirs('news_mongo.zip',dirs)

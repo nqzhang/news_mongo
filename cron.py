@@ -2,6 +2,7 @@ import pymongo
 import tornado
 import config
 import asyncio
+
 class cron(object):
     def __init__(self,db):
         self.db = db
@@ -20,3 +21,8 @@ class cron(object):
         async for doc in cursor:
             print(doc)
         print("统计结束")
+
+
+
+
+
