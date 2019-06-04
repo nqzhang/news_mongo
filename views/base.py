@@ -5,8 +5,7 @@ from opencc import OpenCC
 from tornado.concurrent import run_on_executor
 from concurrent.futures import ThreadPoolExecutor
 from tornado import gen
-import urllib.parse as urlparse
-from urllib.parse import urlencode
+from urllib.parse import urlparse,urlencode
 from lxml import etree
 from bson import ObjectId
 import asyncio
@@ -15,6 +14,7 @@ from config import session_ttl
 import config
 from pyquery import PyQuery as pq
 import logging
+import w3lib.url
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -61,6 +61,11 @@ class BlockingHandler(BlockingBaseHandler):
         content_pq = pq(post['content'])
         for i in content_pq('img').items():
             i.add_class('lazyload')
+            parsed_uri = urlparse(i.attr.src)
+            domain = parsed_uri.netloc
+            if domain.endswith('51cto.com'):
+                i.attr.src = w3lib.url.url_query_cleaner(i.attr.src, ['x-oss-process'], remove=True)
+            i.attr('referrerpolicy', 'no-referrer');
             i.attr('data-src',i.attr.src)
             i.remove_attr('src')
         content = content_pq.html(method="html")

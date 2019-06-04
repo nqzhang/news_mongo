@@ -8,3 +8,4 @@ aiocache==0.10.0
 ujson
 msgpack==0.5.6
 git+https://github.com/yichen0831/opencc-python.git
+w3lib
