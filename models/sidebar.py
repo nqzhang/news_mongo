@@ -1,6 +1,7 @@
 from config import hot_news_num,redis_cache,redis_cache_ttl
 from aiocache import cached, RedisCache
 from .cache import MsgPackSerializer
+from aiocache.serializers import PickleSerializer
 import datetime
 from bson import ObjectId
 from .tools import get_tname_by_tid
@@ -17,7 +18,7 @@ async def hot_posts(db,post_type=0):
     return hot_posts
 
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key="new_comment_posts", endpoint=redis_cache['host'],
-        serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
+        serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def new_comment_posts(db,post_type=0):
     new_comment_posts_ids = await db.comments.aggregate([
         {
