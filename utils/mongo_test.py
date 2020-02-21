@@ -36,8 +36,26 @@ async def index_sort():
     ])
     async for i in x:
         print(i)
+async def new_comment_posts():
+    x = db.comments.aggregate([
+
+        {
+            "$group":
+                {
+                    "_id": "$post_id",
+                    "lastCommentDate": { "$last": "$comment_date" }
+                }
+        },
+        { "$sort": { "lastCommentDate": -1} },
+
+
+        {"$limit": 15 },
+
+    ])
+    async for i in x:
+            print(i)
 async def main():
-    await index_sort()
+    await new_comment_posts()
     #await ttt()
     #await related()
 

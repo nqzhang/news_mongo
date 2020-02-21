@@ -13,6 +13,7 @@ class Application(tornado.web.Application):
             (r'/?',recommend.recommendPageHandler),
             (r'/newest', index.IndexPageHandler),
             (r'/page/(\d*)/?', index.IndexPageHandler),
+            (r'/a/(.*?)/(.*?)/?', article.ArticleHandler),
             (r'/a/(.*?)/?', article.ArticleHandler),
             (r'/q/(.*?)/?', question.QuestionHandler),
             (r'/c/(.*?)/page/(\d*)/?', category.CategoryPageHandler),

@@ -1,0 +1,101 @@
+{% extends "user_base.html" %}
+
+{% block title %}
+    <title>寫博客 - {{ config.site_name}}</title>
+{% end %}
+
+{% block content-body %}
+        <div class="col-12 col-md-10" id="content-body">
+            <div class="title-box">
+                <input type="text" id="txtTitle" maxlength="100" placeholder="輸入文章標題" value="">
+            </div>
+            <div class="section">
+                <textarea id="editor" name="editor" rows="30"
+                          style="width: 99.4%; display: none; visibility: hidden;"></textarea>
+            </div>
+            <div id="moreDiv">
+                <div class="pos-box">
+                    <div class="form-group row form-control-sm">
+                        <label class="labTitle col-form-label">文章標籤：</label>
+                        <div class="txt-box">
+                            <div class="tag-box d-flex flex-row" id="articleTagBox">
+                                <input id="tags" type="text" data-role="tagsinput" value="" placeholder="輸入最多5個文章標籤">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row form-control-sm">
+                        <label class="labTitle col-form-label">個人分類：</label>
+                        <div class="txt-box">
+                            <div class="tag-box d-flex flex-row" id="articleCatgoryBox">
+                                <input id="categorys" type="text" data-role="tagsinput" value="" placeholder="輸入文章分類">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row form-control-sm d-flex">
+                        <label class="labTitle col-form-label">文章類型：</label>
+
+                        <label class="labTitle col-form-label ml-24">博客分類：</label>
+                        <div class="txt-box">
+                            <select class="droBlogType" id="radChl" name="radChl">
+                                <option value="0">選擇分類</option>
+                                <option value="28">人工智能</option>
+                                <option value="1">移动开发</option>
+                                <option value="29">物联网</option>
+                                <option value="15">架构</option>
+                                <option value="2">云计算/大数据</option>
+                                <option value="17">互联网</option>
+                                <option value="30">游戏开发</option>
+                                <option value="12">运维</option>
+                                <option value="6">数据库</option>
+                                <option value="14">前端</option>
+                                <option value="31">后端</option>
+                                <option value="16">编程语言</option>
+                                <option value="3">研发管理</option>
+                                <option value="32">安全</option>
+                                <option value="33">程序人生</option>
+                                <option value="34">区块链</option>
+                                <option value="35">音视频开发</option>
+                                <option value="36">资讯</option>
+                                <option value="37">计算机理论与基础</option>
+                            </select>
+                            <span class="required">*</span>
+                        </div>
+                    </div>
+                    <div class="opt-box row unfull">
+                        <label class="labTitle col-form-label"></label>
+                        <div class="txt-box">
+                            <input id="btnPublish" type="button" class="btn btn-outline-danger" value="發佈博客"
+                                   title="發佈博客">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="alert-container finished-box" id="alertSuccess">
+                <div class="pos-box">
+                    <div class="text-center title">标题</div>
+                    <div class="text-center status-box">
+                        <i class="icon-success-font c-green"></i>文章发布成功
+                    </div>
+                    <p class="text-center zhaiyao">文章摘要由系统生成</p>
+                    <div class="opt-box text-center">
+                        <a class="btn  btn-outline-danger btn-new mr24" href="/u/postedit/">写新文章</a>
+                        <a class="btn  btn-outline-danger tolist mr24" href="/u/postlist/">管理博文</a>
+                        <a class="btn  btn-outline-danger toarticle">查看文章</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% end %}
+
+
+{% block postedit %}
+    {% if post['post_id'] !=0 %}
+    <script>
+        var text = '{% raw post_json %}';
+        jsonData =  JSON.parse(text);
+    </script>
+    {% end %}
+    <script>
+        CKEDITOR.replace('editor')
+    </script>
+{% end %}

@@ -111,7 +111,8 @@ class ArticleHandler(BaseHandler):
             data['liked'] = liked
         else:
             data['liked'] = False
-        #print(post)
+        print(post)
+        data['new_comment_posts'] = await sidebar.new_comment_posts(self.application.db)
 
         self.render('page/article.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=data)

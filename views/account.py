@@ -15,6 +15,7 @@ from email.utils import parseaddr,formataddr
 import datetime
 from .user import UserHander
 from bson import ObjectId
+import w3lib
 
 reg_text = '''
             感謝您註冊{}!<br/>
@@ -83,6 +84,7 @@ class LoginHandler(RequestHandler):
             self.set_secure_cookie('sessionid',sessionid,domain=config.cookie_domain)
             self.set_secure_cookie('sig', sig,domain=config.cookie_domain)
             self.set_secure_cookie('uid', user_id,domain=config.cookie_domain)
+            next = w3lib.url.url_query_cleaner(next, ['login'], remove=True)
             self.redirect(next)
         else:
             self.write('密码错误')

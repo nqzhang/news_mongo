@@ -16,6 +16,25 @@ async def hot_posts(db,post_type=0):
     print(hot_posts)
     return hot_posts
 
+@cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key="new_comment_posts", endpoint=redis_cache['host'],
+        serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
+async def new_comment_posts(db,post_type=0):
+    new_comment_posts_ids = await db.comments.aggregate([
+        {
+            "$group":
+                {
+                    "_id": "$post_id",
+                    "lastCommentDate": { "$last": "$comment_date" }
+                }
+        },
+        { "$sort": { "lastCommentDate": -1} },
+        {"$limit": hot_news_num },
+    ]).to_list(length=None)
+    new_comment_posts_ids = [ObjectId(i['_id']) for i in new_comment_posts_ids]
+    new_comment_posts =  await db.posts.find({'_id': {'$in': new_comment_posts_ids}}).to_list(length=None)
+    new_comment_posts = sorted(new_comment_posts,key=lambda x:new_comment_posts_ids.index(x['_id']))
+    #print(new_comment_posts_ids,new_comment_posts)
+    return new_comment_posts
 def build_key_c_hot_posts(*args):
     return "hot_posts_c_{}".format(args[1])
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key_c_hot_posts, endpoint=redis_cache['host'],
