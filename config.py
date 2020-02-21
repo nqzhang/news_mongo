@@ -7,17 +7,17 @@ is_debug=True
 env = 'dev'
 if env == 'dev':
     mongo = {
-        "url": "mongodb://admin:11QQqqWW@192.168.1.4",
+        "url": "mongodb://admin:11QQqqWW@192.168.11.128",
         "urlbak": "mongodb://95.216.6.102:27016",
         "db_name": "news"
     }
     redis_cache = {
-        "host": "192.168.1.4",
+        "host": "192.168.11.128",
         "port": 6379,
         "db": 1
     }
     redis = {
-        "host": "192.168.1.4",
+        "host": "192.168.11.128",
         "port": 6379,
         "db": 0,
     }
