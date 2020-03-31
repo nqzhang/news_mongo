@@ -1,6 +1,6 @@
 
 {% try %}
-{% if menu_left %}
+{% if menu %}
     <div id="menu-wrapper">
         <ul class="menu" >
              <li>
@@ -11,7 +11,7 @@
                     <span>最新</span>
                 </a>
              </li>
-            {% for menu in menu_left %}
+            {% for menu in menu %}
                 <li>
                     <a href="/c/{{ menu['_id'] }}/" >
                         <span>{{ menu['name'] }}</span>

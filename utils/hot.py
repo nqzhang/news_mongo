@@ -47,7 +47,7 @@ async def hot(db,post_id):
     post_score = hot_calc(post_views,post_comments,post_score,post_comments_score,post_age,post_updated)
 
     await db.posts.update_one({'_id': ObjectId(post_id)}, {"$set": {"score":post_score}})
-    print(post_score)
+    #print(post_score)
     return post_score
     #post_views,post_comments,post_score,post_date
 

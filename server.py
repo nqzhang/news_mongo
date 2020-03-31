@@ -19,6 +19,9 @@ try:
 except:
     pass
 
+#import logging
+#logging.getLogger().setLevel(logging.DEBUG)
+
 MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 
 def sig_handler(app,sig,frame):
@@ -43,20 +46,29 @@ def sig_handler(app,sig,frame):
         stop_loop(time.time() + MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
 
     io_loop.add_callback_from_signal(shutdown)
+async def get_dbs():
+    dbs={}
+    async for x in news_mongo_db.settings.find():
+        db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)[x['db']]
+        x['db_conn'] = db
+        dbs[x['domain']] = x
+    return dbs
 
 if __name__ == "__main__":
     #asyncio.set_event_loop(asyncio.new_event_loop())
     #db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
-    db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)[config.mongo['db_name']]
+    news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)['news_mongo']
+
+    dbs = IOLoop.current().run_sync(get_dbs)
     #cron = cron(db)
     #scheduler = TornadoScheduler()
     #scheduler = AsyncIOScheduler()
     #scheduler.add_job(cron.count_category, 'interval', seconds=300)
     #scheduler.add_job(cron.count_category, 'date', run_date=datetime(2018, 8, 17, 4, 54, 0))
     #scheduler.start()
-    app = Application(db)
+    app = Application(dbs)
     if config.env == 'dev':
-        app.listen(48000)
+        app.listen(80)
     elif config.env == 'test':
         app.listen(sys.argv[1])
     elif config.env == 'production':

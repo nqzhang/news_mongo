@@ -1,4 +1,4 @@
-from .base import UserHander
+from .base import UserHander,DBMixin
 import config
 from utils.base import attrDict
 from utils.tools import post_time_format
@@ -6,7 +6,7 @@ from bson import ObjectId
 from models import join,sidebar
 import math
 
-class AuthorPageHandler(UserHander):
+class AuthorPageHandler(UserHander,DBMixin):
     async def get(self,u_id,u_c_id=None,page=1):
         page = 1 if not page else page
         if u_c_id:
@@ -30,5 +30,5 @@ class AuthorPageHandler(UserHander):
         data['max_page'] = math.ceil(data['post_number'] / config.articles_per_page)
         if data['max_page'] <= 0:
             data['max_page'] = 1
-        u_categorys = list(map(attrDict,await sidebar.u_categorys(self.application.db, ObjectId(u_id))))
+        u_categorys = list(map(attrDict,await sidebar.u_categorys(self, ObjectId(u_id))))
         self.render('page/author.html',posts=posts, config=config, page=page,u_categorys=u_categorys,data=data)

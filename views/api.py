@@ -1,10 +1,10 @@
 from views.index import *
 from bson.json_util import dumps
 from utils.tools import post_time_format
-from .base import UserHander
+from .base import UserHander,DBMixin
 from tornado.web import authenticated
 
-class ApiListHandler(RequestHandler):
+class ApiListHandler(DBMixin):
     async def get(self):
         path = self.get_argument('path')
         postoffset = self.get_argument('postoffset')
@@ -33,7 +33,7 @@ class ApiListHandler(RequestHandler):
             posts = await join.post_user(posts,self.application.db)
             self.render('component/list-page/content-list.html', posts=posts,list_path=list_path)
 
-class ApiCommentsGetAllHandler(UserHander):
+class ApiCommentsGetAllHandler(UserHander,DBMixin):
     def check_xsrf_cookie(self):
         if 'Googlebot' not in self.request.headers["User-Agent"]:
             RequestHandler.check_xsrf_cookie(self)
@@ -46,7 +46,7 @@ class ApiCommentsGetAllHandler(UserHander):
         comments_data['comments'] = await self.application.db.comments.find({"post_id":post_id}).to_list(length=None)
         self.write(dumps(comments_data))
 
-class ApiAuthorHandler(UserHander):
+class ApiAuthorHandler(UserHander,DBMixin):
     async def get(self):
         page = self.get_argument('page')
         author_id = self.get_argument('author')
@@ -60,7 +60,7 @@ class ApiAuthorHandler(UserHander):
         data['page'] = page
         self.render('component/author/author_list.html',posts=posts,data=data)
 
-class ApiArticleHandler(UserHander):
+class ApiArticleHandler(UserHander,DBMixin):
     @authenticated
     async def post(self):
         print(self.request.body.decode('utf-8'))

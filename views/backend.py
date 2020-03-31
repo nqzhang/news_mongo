@@ -8,7 +8,10 @@ import datetime
 from bson import ObjectId
 import tornado
 from utils.hot import hot
-class NewPostHandler(RequestHandler):
+from .base import UserHander,DBMixin
+
+
+class NewPostHandler(DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self):
@@ -76,7 +79,7 @@ class NewPostHandler(RequestHandler):
                     exeists = False
             else:
                 exeists = False
-            print(exeists)
+            #print(exeists)
             if not exeists:
                 post_data = {"title": title, "content": content, "user": u_id, "type": post_type_num,
                              "tags": t_ids, "post_date": datetime.datetime.now()}
@@ -93,7 +96,7 @@ class NewPostHandler(RequestHandler):
         if post_id != 0:
             post_score = await hot(self.application.db,str(post_id))
 
-class ViewsHandler(RequestHandler):
+class ViewsHandler(DBMixin):
     async def post(self):
         if 'Googlebot' in self.request.headers["User-Agent"]:
             raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")

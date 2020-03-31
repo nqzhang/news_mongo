@@ -6,7 +6,7 @@ from config import session_ttl
 import tornado
 from tornado.web import authenticated
 import config
-from .base import BlockingBaseHandler
+from .base import BlockingBaseHandler,DBMixin
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -34,7 +34,7 @@ pass_reset_text = '''
             <a href='{}'>{}</a><br/>
             (請在30分鐘內完成確認，30分鐘後郵件失效，您將需要重新發起密碼重置請求)<br/>'''
 
-class EmailHandler(BlockingBaseHandler):
+class EmailHandler(BlockingBaseHandler,DBMixin):
     def _format_addr(self,s):
         name, addr = parseaddr(s)
         return formataddr((Header(name, 'utf-8').encode(), addr))
@@ -55,7 +55,7 @@ class EmailHandler(BlockingBaseHandler):
         msgRoot = MIMEMultipart()
         msgBody = MIMEText(text, 'html')
         msgRoot.attach(msgBody)
-        msgRoot['From'] = self._format_addr('{} <{}>'.format(config.site_name,config.smtp_login))
+        msgRoot['From'] = self._format_addr('{} <{}>'.format(self.site_name,config.smtp_login))
         msgRoot['to'] = email
         #Header(email, 'utf8')
         msgRoot['Subject'] = subject
@@ -65,7 +65,7 @@ class EmailHandler(BlockingBaseHandler):
         smtp.sendmail(config.smtp_login, [email], msgRoot.as_string())
         smtp.quit()
 
-class LoginHandler(RequestHandler):
+class LoginHandler(DBMixin):
     async def post(self):
         next = self.get_argument('src','/')
         email = self.get_argument('email')
@@ -81,9 +81,9 @@ class LoginHandler(RequestHandler):
             await self.application.redis.set(user_id, user_salt,expire=session_ttl)
             sig = hashlib.sha512(hashstr).hexdigest()
             print(sig)
-            self.set_secure_cookie('sessionid',sessionid,domain=config.cookie_domain)
-            self.set_secure_cookie('sig', sig,domain=config.cookie_domain)
-            self.set_secure_cookie('uid', user_id,domain=config.cookie_domain)
+            self.set_secure_cookie('sessionid',sessionid,domain=self.cookie_domain)
+            self.set_secure_cookie('sig', sig,domain=self.cookie_domain)
+            self.set_secure_cookie('uid', user_id,domain=self.cookie_domain)
             next = w3lib.url.url_query_cleaner(next, ['login'], remove=True)
             self.redirect(next)
         else:
@@ -94,18 +94,18 @@ class LoginHandler(RequestHandler):
         #self.redirect("/")
         #self.write(email + passwd)
 
-class LogoutHandler(UserHander):
+class LogoutHandler(UserHander,DBMixin):
     @authenticated
     async def get(self):
         next = self.get_argument('next', '/')
         user_id = self.current_user.decode()
-        self.clear_cookie('sessionid',domain=config.cookie_domain)
-        self.clear_cookie('sig',domain=config.cookie_domain)
-        self.clear_cookie('uid',domain=config.cookie_domain)
+        self.clear_cookie('sessionid',domain=self.cookie_domain)
+        self.clear_cookie('sig',domain=self.cookie_domain)
+        self.clear_cookie('uid',domain=self.cookie_domain)
         await self.application.redis.delete(user_id)
         self.redirect(next)
 
-class RegisterHandler(EmailHandler):
+class RegisterHandler(EmailHandler,DBMixin):
     async def get(self):
         self.render('page/register.html',config=config)
     async def post(self):
@@ -147,12 +147,12 @@ class RegisterHandler(EmailHandler):
             hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
             await self.application.redis.set(u_id, user_salt, expire=session_ttl)
             sig = hashlib.sha512(hashstr).hexdigest()
-            self.set_secure_cookie('sessionid',sessionid,domain=config.cookie_domain)
-            self.set_secure_cookie('sig', sig,domain=config.cookie_domain)
-            self.set_secure_cookie('uid', u_id,domain=config.cookie_domain)
+            self.set_secure_cookie('sessionid',sessionid,domain=self.cookie_domain)
+            self.set_secure_cookie('sig', sig,domain=self.cookie_domain)
+            self.set_secure_cookie('uid', u_id,domain=self.cookie_domain)
             self.render('page/register_success.html', config=config)
-            email_text = reg_text.format(config.site_name,email,verify_link,verify_link)
-            subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
+            email_text = reg_text.format(self.site_name,email,verify_link,verify_link)
+            subject = Header('[{}]註冊確認'.format(self.site_name), 'utf-8')
             await self.send_mail(email, subject, email_text)
         else:
             self.write('邮箱已存在')
@@ -162,15 +162,15 @@ class RegisterHandler(EmailHandler):
         #self.set_secure_cookie("username", self.get_argument("username"))
         #self.redirect("/")
         #self.write(email + passwd)
-class PasswordForgotHandler(EmailHandler):
+class PasswordForgotHandler(EmailHandler,DBMixin):
     async def get(self):
         self.render('page/password_forgot.html',config=config)
 
-class PasswordResetHandler(EmailHandler):
+class PasswordResetHandler(EmailHandler,DBMixin):
     async def get(self):
         self.render('page/password_reset.html',config=config)
 
-class ApiPasswordResetHandler(EmailHandler):
+class ApiPasswordResetHandler(EmailHandler,DBMixin):
     async def post(self):
         email_hash = self.get_argument('code')
         email_code = await self.application.db.code.find_one({"code": email_hash})
@@ -193,7 +193,7 @@ class ApiPasswordResetHandler(EmailHandler):
         else:
             self.write('验证链接无效')
 
-class IsEmailExistHandler(RequestHandler):
+class IsEmailExistHandler(DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self,email):
@@ -204,7 +204,7 @@ class IsEmailExistHandler(RequestHandler):
             self.write('郵箱可用')
 
 
-class EmailVerifyHandler(EmailHandler):
+class EmailVerifyHandler(EmailHandler,DBMixin):
     async def get(self):
         email_hash = self.get_argument('code')
         email_code = await self.application.db.code.find_one({"code": email_hash})
@@ -221,7 +221,7 @@ class EmailVerifyHandler(EmailHandler):
         else:
             self.write('验证链接无效')
 
-class EmailResendHandler(EmailHandler,UserHander):
+class EmailResendHandler(EmailHandler,UserHander,DBMixin):
     @authenticated
     async def get(self):
         self.finish('郵件已重新發送')
@@ -229,13 +229,13 @@ class EmailResendHandler(EmailHandler,UserHander):
         u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
         email=u['email']
-        email_text = reg_text.format(config.site_name, email, verify_link, verify_link)
+        email_text = reg_text.format(self.site_name, email, verify_link, verify_link)
         email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
                                                                 {"u_id": u['_id'], "type": "email_verify", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
-        subject = Header('[{}]註冊確認'.format(config.site_name), 'utf-8')
+        subject = Header('[{}]註冊確認'.format(self.site_name), 'utf-8')
         await self.send_mail(u['email'], subject, email_text)
 
-class PasswordForgotSendMailHandler(EmailHandler,UserHander):
+class PasswordForgotSendMailHandler(EmailHandler,UserHander,DBMixin):
     async def post(self):
         self.render('page/password_forgot_send_mail_success.html',config=config)
         email = self.get_argument('email')
@@ -247,5 +247,5 @@ class PasswordForgotSendMailHandler(EmailHandler,UserHander):
             {"u_id": ObjectId(u_id), "type": "email_pass_reset", "code": email_hash, "is_used": 0,
              "createTime": datetime.datetime.now()})
         email_text = pass_reset_text.format(email,verify_link, verify_link)
-        subject = Header('[{}]密碼重設確認'.format(config.site_name), 'utf-8')
+        subject = Header('[{}]密碼重設確認'.format(self.site_name), 'utf-8')
         await self.send_mail(email, subject, email_text)

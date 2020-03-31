@@ -7,7 +7,7 @@ import aioredis
 #db = client.test
 
 class Application(tornado.web.Application):
-    def __init__(self,db):
+    def __init__(self,dbs):
         #tornado.ioloop.IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
         handlers = [
             (r'/?',recommend.recommendPageHandler),
@@ -53,7 +53,7 @@ class Application(tornado.web.Application):
             #(r"/admin/", admin.AdminHandler ),
             (r"/ads.txt()", tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
         ]
-        self.db = db
+        self.dbs = dbs
         super(Application, self).__init__(handlers, **config.settings)
 
     def init_with_loop(self, loop):

@@ -1,4 +1,4 @@
-from views.base import UserHander
+from views.base import UserHander,DBMixin
 import tornado.web
 import tornado
 from tornado.web import authenticated
@@ -16,7 +16,8 @@ from tornado.concurrent import run_on_executor
 from io import BytesIO
 from utils.hot import hot
 
-class PostEditHandler(UserHander):
+
+class PostEditHandler(UserHander,DBMixin):
     @tornado.web.authenticated
     async def get(self,post_id=0):
         active = 'edit'
@@ -35,7 +36,7 @@ class PostEditHandler(UserHander):
         self.render('page/postedit.html',config=config,active=active,post=post,post_json=post_json,content=content)
 
 
-class PostAjaxHandler(UserHander):
+class PostAjaxHandler(UserHander,DBMixin):
     @authenticated
     async def post(self):
         date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -100,7 +101,7 @@ class PostAjaxHandler(UserHander):
         #print(post_id)
         post_score = await hot(self.application.db,str(post_id))
 
-class PostListHandler(UserHander):
+class PostListHandler(UserHander,DBMixin):
     @authenticated
     async def get(self):
         #print(self.current_user)
@@ -114,14 +115,14 @@ class PostListHandler(UserHander):
         print(posts)
         self.render('page/postlist.html',config=config,active=active,posts=posts)
 
-class PostDeleteHandler(UserHander):
+class PostDeleteHandler(UserHander,DBMixin):
     @authenticated
     async def post(self):
         post_id = self.get_argument('post_id')
         result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
         self.write(post_id)
 
-class ckuploadHandeler(UserHander):
+class ckuploadHandeler(UserHander,DBMixin):
     @authenticated
     @run_on_executor
     def post(self):

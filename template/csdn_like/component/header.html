@@ -7,7 +7,7 @@
                 </a>
                 <a class="logo" href="/">
                     <img src="/static/images/logo.png" />
-                    <span>{{ config.site_name }}</span>
+                    <span>{{ site_name }}</span>
                 </a>
                 <div class="meta-bar">
                     <div id="google-search-bar">
@@ -79,9 +79,9 @@
     {% end %}
 
     {% try %}
-    {% if menu_left %}
+    {% if menu %}
         <ul>
-            {% for menu in menu_left %}
+            {% for menu in menu %}
                 <li class="mobile-menu-item">
                     <a href="/c/{{ menu['_id'] }}/" >
                         <span>{{ menu['name'] }}</span>

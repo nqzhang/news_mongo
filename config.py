@@ -73,19 +73,15 @@ settings = {
 
 if env == 'dev':
     site_domain = 'http://127.0.0.1:48000'
-    cookie_domain = '127.0.0.1'
 elif env == 'production':
     site_domain = 'https://www.twblogs.net'
-    cookie_domain = 'twblogs.net'
 elif env == 'test':
     site_domain = 'https://test.smwenku.com'
-    cookie_domain = 'smwenku.com'
 
 redis_cache_ttl = 600
 session_ttl = 30 * 24 * 60 * 60
 articles_per_page = 15
 hot_news_num = 10
-site_name = '台部落'
 smtp_hostname = 'mail.smwenku.com'
 smtp_login = 'postmaster@smwenku.com'
 smtp_pass = '11QQqqWW'

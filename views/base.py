@@ -15,6 +15,7 @@ import config
 from pyquery import PyQuery as pq
 import logging
 import w3lib.url
+import os
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -32,9 +33,10 @@ class BlockingHandler(BlockingBaseHandler):
     def get_thumb_image(self,posts):
         for post in posts:
             if 'post_thumb' not in post:
+                post['post_thumb'] = ''
                 post_etree = etree.HTML(post['content'])
                 if post_etree is not None:
-                    img = post_etree.cssselect("img:first-child")
+                    img = post_etree.cssselect("img")
                     if len(img) > 0:
                         post_thumb = img[0].get('src')
                         if post_thumb:
@@ -85,7 +87,7 @@ class BaseHandler(BlockingHandler):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
             user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
-            u_categorys = await sidebar.u_categorys(self.application.db,ObjectId(uid))
+            u_categorys = await sidebar.u_categorys(self,ObjectId(uid))
             need_keys = ['user_name','email','is_active','_id']
             user = {key: user.get(key,0) for key in need_keys}
             user['is_login'] = True
@@ -128,7 +130,6 @@ class BaseHandler(BlockingHandler):
 
 class UserHander(BaseHandler):
     async def prepare(self):
-        self.set_cookie("_xsrf", self.xsrf_token,domain=config.cookie_domain)
         await super(UserHander, self).prepare()
         await self.check_authentication()
     async def check_authentication(self, optional=False):
@@ -155,3 +156,19 @@ class UserHander(BaseHandler):
         if sig == hashlib.sha512(hashstr).hexdigest():
             return uid
         return False
+
+class DBMixin(tornado.web.RequestHandler):
+    def __init__(self,application, request, **kwargs):
+        super(DBMixin, self).__init__(application, request, **kwargs)
+        self.application.db =  self.application.dbs[self.request.host]['db_conn']
+        self.site_name = self.application.dbs[self.request.host]['site_name']
+        self.cookie_domain = self.application.dbs[self.request.host]['domain']
+        self.set_cookie("_xsrf", self.xsrf_token)
+    def get_template_path(self):
+        return os.path.join(self.application.settings.get("template_path"),self.application.dbs[self.request.host]['theme'])
+
+    def get_template_namespace(self):
+        ns = super(DBMixin, self).get_template_namespace()
+
+        ns.update({"site_name": self.site_name})
+        return ns

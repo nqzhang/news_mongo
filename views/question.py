@@ -1,4 +1,4 @@
-from .base import BaseHandler
+from .base import BaseHandler,DBMixin
 from bson import ObjectId
 from utils.base import attrDict
 from models import join,sidebar
@@ -8,7 +8,7 @@ from bson.json_util import dumps
 import config
 from utils.tools import *
 
-class QuestionHandler(BaseHandler):
+class QuestionHandler(BaseHandler,DBMixin):
     async def get(self, question_id,language='zh-tw'):
         post = await self.application.db.posts.find_one({"_id":ObjectId(question_id)})
         u_id = post['user']
@@ -26,9 +26,9 @@ class QuestionHandler(BaseHandler):
         post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
         #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
-        menu_left = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
-        hot_posts = await sidebar.hot_posts(self.application.db,post_type=1)
-        u_new_posts = await sidebar.u_new_posts(self.application.db,u_id,post_type=1)
+        menu = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
+        hot_posts = await sidebar.hot_posts(self,post_type=1)
+        u_new_posts = await sidebar.u_new_posts(self,u_id,post_type=1)
         #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
         if tags_id:
@@ -55,5 +55,5 @@ class QuestionHandler(BaseHandler):
             author.user_name = 'None'
         data={}
         data['author'] = author
-        self.render('page/question.html', menu_left=menu_left, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
+        self.render('page/question.html', menu=menu, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,author=author,data=data)

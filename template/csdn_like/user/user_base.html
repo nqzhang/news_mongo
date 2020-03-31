@@ -4,25 +4,18 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% include common-header.html %}
-    <link rel="stylesheet" href="{{ static_url('css/user.css') }}">
-    <link rel="stylesheet" href="{{ static_url('css/tagsinput.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ static_url('css/header.css') }}"/>
+    <link rel="stylesheet" href="/static/css/lib/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/user.css">
+    <link rel="stylesheet" href="/static/css/tagsinput.css">
+    <link rel="shortcut icon" type="image/png" href="/static/images/favicon.png"/>
     {% block title %}
-    <title>{{ config.site_name}}</title>
+    <title>{{ site_name}}</title>
     {% end %}
-
-    {% raw config.analytics_code %}
-    <script>
-            let main_css = "{{ static_url('css/main.css') }}";
-        </script>
-<script src="/static/ckeditor/ckeditor.js"></script>
-<script src="/static/js/common.js"></script>
-    {% block postedit_highlight %}
-{% end %}
 </head>
+<script src="/static/js/lib/jquery-2.0.3.min.js"></script>
+<script src="/static/js/lib/bootstrap.bundle.min.js"></script>
+<script src="/static/ckeditor/ckeditor.js"></script>
 
-<!--
 <body>
 <header class="bg-white">
     <nav class="navbar navbar-expand-md navbar-light container">
@@ -39,17 +32,15 @@
         </div>
     </nav>
 </header>
--->
-{% include ../component/header.html %}
 
 <main role="main" class="container">
     <div class="row row-offcanvas row-offcanvas-right main-wrapper">
         <div class="col-6 col-md-2 sidebar-offcanvas" id="sidebar">
             <div class="list-group has-bdb edit-btn-box">
                 {% if active== 'edit' %}
-                    <a href="/mp/postedit/" class="list-group-item editArticle active">
+                    <a href="/u/postedit/" class="list-group-item editArticle active">
                 {% else %}
-                    <a href="/mp/postedit/" class="list-group-item editArticle">
+                    <a href="/u/postedit/" class="list-group-item editArticle">
                  {% end %}<svg class="icon icon-pencil">
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="icon"
                              viewBox="0 0 1262 1024" id="pencil" width="100%" height="100%">
@@ -62,9 +53,9 @@
             <div class="list-group-item list-group-title">内容</div>
             <div class="list-group">
                 {% if active== 'list' %}
-                    <a href="/mp/postlist/" class="list-group-item active" data-title="article" target="">文章管理</a>
+                    <a href="/u/postlist/" class="list-group-item active" data-title="article" target="">文章管理</a>
                 {% else %}
-                    <a href="/mp/postlist/" class="list-group-item" data-title="article" target="">文章管理</a>
+                    <a href="/u/postlist/" class="list-group-item" data-title="article" target="">文章管理</a>
                 {% end %}
             </div>
 
@@ -75,7 +66,7 @@
 </main>
 <div class="notice-box" style="display: none; bottom: 56px;">
     <i class="mr8 notice-icon type-error" style="display: block;"></i>
-    <span class="notice">請輸入文章標題。</span></div>
+    <span class="notice">请输入文章标题。</span></div>
 {% block postedit %}
 {% end %}
 <script src="/static/js/tagsinput.js"></script>
