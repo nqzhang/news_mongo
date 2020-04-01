@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="focusbox"><div class="container"><h1 class="focusbox-title">{{ data['category']['name'] }}</h1></div></div>
+<section class="container">
+    <div class="excerpts-wrapper">
+        <div class="excerpts">
+            {% for post in posts %}
+            <article class="excerpt excerpt-c5"><a class="thumbnail" href="/a/{{ post['_id'] }}" target="_blank"><img
+                    referrerpolicy="no-referrer"
+                    src="{{ post['post_thumb'] }}"
+                    class="thumb" alt="{{ post['title'] }}"></a>
+                <h2><a href="/a/{{ post['_id'] }}" target="_blank">{{ post['title'] }}</a></h2>
+            </article>
+            {% end %}
+        </div>
+    </div>
+    <div class="pagination">
+        <ul>
+            {% if int(data['page']) != 1 %}
+                <li><a href="/c/{{ data['category']['_id'] }}/1/">首页</a></li>
+                <li><a href="/c/{{ data['category']['_id'] }}/{{ int(data['page'])-1 }}/">上一页</a></li>
+            {% end %}
+
+            {% if int(data['page']) <= 4 %}
+                {% set p_range = range(int(data['page'])-4,10) %}
+            {% elif int(data['page']) <=  data['max_page'] -4 %}
+                {% set p_range = range(int(data['page'])-4,int(data['page'])  +5) %}
+            {% elif int(data['page']) >=  data['max_page'] -4 %}
+                {% set p_range = range(int(data['page'])- (8 - (data['max_page'] - int(data['page']))),data['max_page'] + 1) %}
+            {% end %}
+            {% for i in p_range %}
+                {% if 1 <= i <= data ['max_page'] %}
+                        {% if i == int(page) %}
+            <li class="active"><span>{{ i }}</span></li>
+
+                        {% else %}
+                            <li><a href="/c/{{ data['category']['_id'] }}/{{ i }}/">{{ i }}</a></li>
+                        {% end %}
+                {% end %}
+            {% end %}
+            {% if int(data['page']) < data ['max_page'] %}
+                <li><a href="/c/{{ data['category']['_id'] }}/{{ int(data['page'])+1 }}/">下一页</a></li>
+            {% end %}
+
+            {% if int(data['page']) != data['max_page'] %}
+                {% if data['max_page'] > 1 %}
+                    <li><a href="/c/{{ data['category']['_id'] }}/{{data['max_page']}}">尾頁</a></li>
+                {% end %}
+            {% end %}
+        </ul>
+    </div>
+</section>
+{% end %}

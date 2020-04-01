@@ -1,61 +1,19 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
-    <meta content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"
-          name="viewport">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="black" name="apple-mobile-web-app-status-bar-style">
-    <meta content="no-siteapp" http-equiv="cache-control">
-    <title>{{ post['title'] }}</title>
-    <link href="{{static_url('theme1/theme1.css')}}" id="main-css" media="all" rel="stylesheet" type="text/css"/>
-    <link href="{{static_url('lib/layui/css/layui.css')}}" media="all" rel="stylesheet" type="text/css"/>
-    <script src="{{static_url('lib/layui/layui.all.js')}}" type="text/javascript"></script>
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ post['title'] }}</title>
+{% end %}
+
+{% block article_header %}
     <meta content="{{ ','.join(x['name'] for x in post['tags']) }}" name="keywords">
     <meta content="{{ post['desc'] }}" name="description">
     <meta content="article" property="og:type"/>
-    <meta content="大暴雨浇出“前”汛期！华南官宣入汛今明暴雨倾盆" property="og:title"/>
-    <meta content="中国天气网讯 3月以来，我国南方降水逐渐增多，江南、华南一带经历了多轮降水过程，不少地方累计雨量达到100毫米以上。其中广西降水“表现”十分抢眼，于昨天（25日）官宣入汛，这就意味着华南前汛期正式开启。广西官宣入汛 成为华南开启前汛期的“领头羊”3月25日，广西官宣入汛，这也就意味着广西凭借强劲的降水“实力”，带领华南地区正式进入了汛期。根据广西入汛标准监测，截至3月25日20时，广西累计有52个"
-          property="og:description"/>
-    <meta content="https://p9.pstatp.com/list/300x196/pgc-image/RuJCk9DBM5blaL.jpg" property="og:image"/>
-    <script>
-        var  $ = layui.jquery;
-        var jQuery = layui.jquery;
+    <meta content="{{ post['title'] }}" property="og:title"/>
+    <meta content="{{ post['desc'] }}" property="og:description"/>
+    <meta content="{{post['post_thumb']}}" property="og:image"/>
+{% end %}
 
-    </script>
-</head>
-<body class="single-post comment-open info">
-<header class="header">
-    <div class="container">
-        <div class="logo"><a href="/" title="{{site_name}}"><img src="{{ static_url("theme1/logo.png") }}"><span>{{site_name}}</span></a>
-        </div>
-        <div class="sitenav">
-            <ul>
-                <li><a href="/">首页</a></li>
-                {% for menu in menus[0:8] %}
-                <li><a href="/c/{{ menu['_id'] }}/">{{ menu['name'] }}</a></li>
-                {% end %}
-                {% if len(menus) > 8 %}
-                <li class="menu-item-has-children"><a>更多</a>
-                    <ul class="sub-menu">
-                        {% for menu in menus[8:] %}
-                        <li><a href="/c/{{ menu['_id'] }}/">{{ menu['name'] }}</a></li>
-                        {% end %}
-                    </ul>
-                </li>
-                {% end %}
-            </ul>
-        </div>
-        <span class="sitenav-on"><i class="fa">&#xe605;</i></span><span class="sitenav-mask"></span><span
-            class="searchstart-on"><i class="fa">&#xe600;</i></span><span class="searchstart-off"><i
-            class="fa">&#xe606;</i></span>
-        <form action="" class="searchform" method="post" target="_blank">
-            <button class="sbtn" onclick="so()" tabindex="3" type="submit"><i class="fa">&#xe600;</i></button>
-            <input class="sinput" id="bdcsMain" placeholder="输入关键字" tabindex="2" type="text" value=""></form>
-    </div>
-</header>
-<div class="widget_links"></div>
+{% block container %}
 <section class="container">
     <div class="content-wrap">
         <div class="content">
@@ -141,12 +99,9 @@
         {% end %}
     </div>
 </section>
+{% end %}
 
-<footer class="footer">&copy; 2015-2020 <a href="/">{{ site_name }}</a> 看你所看,想你所想</footer>
-<script type="text/javascript" src="{{ static_url('lib/lazyload.min.js') }}"></script>
-
-<script src="{{static_url('lib/jquery.qrcode.min.js')}}" type="text/javascript"></script>
-<script src="{{static_url('theme1/theme1.js') }} }" type="text/javascript"></script>
+{% block script %}
 <script type="text/javascript" src="{{ static_url('js/js.cookie.min.js') }}"></script>
 <script>$(".article-content img").lazyload();</script>
 <script>
@@ -165,5 +120,4 @@ console.log(token);
         type: "POST",
     });
 </script>
-</body>
-</html>
+{% end %}

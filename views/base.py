@@ -162,6 +162,7 @@ class DBMixin(tornado.web.RequestHandler):
         super(DBMixin, self).__init__(application, request, **kwargs)
         self.application.db =  self.application.dbs[self.request.host]['db_conn']
         self.site_name = self.application.dbs[self.request.host]['site_name']
+        self.articles_per_page = self.application.dbs[self.request.host]['articles_per_page']
         self.cookie_domain = self.application.dbs[self.request.host]['domain']
         self.set_cookie("_xsrf", self.xsrf_token)
     def get_template_path(self):

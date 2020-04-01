@@ -242,11 +242,12 @@ body{font-size: 14px;line-height: 1.4;color: #555;overflow-x: hidden;background-
 .excerpts-wrapper{overflow: hidden;margin-top: 24px}
 .excerpts{margin-bottom: 15px;margin-right: -2%;min-height: 600px}
 .excerpts-none{text-align: center;font-size: 18px;font-weight: 400;color: #999;padding: 200px 0}
-.excerpt{position: relative;display: inline-block;margin-right: 2%;margin-bottom: 2.5%;vertical-align: top}
+.excerpt{position: relative;display: inline-block;margin-right: 1.7%;margin-bottom: 1.7%;vertical-align: top}
 .excerpt:hover .thumb{-webkit-transform: scale(1.03);transform: scale(1.03)}
 .excerpt h2{font-size: 15px;margin: 0 0 10px;height: 42px;overflow: hidden}
 .excerpt .thumbnail{margin-bottom: 10px;display: block;overflow: hidden}
 .excerpt .thumb{width: 100%}
+.excerpt .thumbnail img {max-height: 150px}
 .excerpt footer{font-size: 9pt;color: #bbb}
 .excerpt time{display: inline-block;margin-right: 10px}
 .excerpt time.hot{color: #45b6f7;font-weight: 700}

@@ -17,6 +17,7 @@ class Application(tornado.web.Application):
             (r'/a/(.*?)/?', article.ArticleHandler),
             (r'/q/(.*?)/?', question.QuestionHandler),
             (r'/c/(.*?)/page/(\d*)/?', category.CategoryPageHandler),
+            (r'/c/(?P<c_id>.*?)/(?P<page>\d*)/?', category.CategoryPageHandler),
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
             (r'/t/(.*?)/?', tag.TagPageHandler),
