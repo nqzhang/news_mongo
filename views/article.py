@@ -6,7 +6,6 @@ import config
 from lxml import etree
 from models import join,sidebar
 from .base import BlockingHandler,BaseHandler,DBMixin
-from config import articles_per_page
 from utils.base import attrDict
 from bson.json_util import dumps
 from views.base import UserHander

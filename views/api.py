@@ -10,25 +10,25 @@ class ApiListHandler(DBMixin):
         postoffset = self.get_argument('postoffset')
         if path == 'index':
             list_path = 'index'
-            posts =  await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0}).sort([("post_date",-1)]).limit(articles_per_page).to_list(length=articles_per_page)
+            posts =  await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0}).sort([("post_date",-1)]).limit(self.articles_per_page).to_list(length=self.articles_per_page)
             posts = await join.post_user(posts,self.application.db)
             self.render('component/list-page/content-list.html',posts=posts,list_path=list_path)
             #self.write('')
         if path=='category':
             c_id = self.get_argument('id')
             list_path = 'category&id={}'.format(c_id)
-            posts = await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0,"category": ObjectId(c_id)}).sort([("post_date", -1)]).limit(articles_per_page).to_list(length=articles_per_page)
+            posts = await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0,"category": ObjectId(c_id)}).sort([("post_date", -1)]).limit(self.articles_per_page).to_list(length=self.articles_per_page)
             posts = await join.post_user(posts,self.application.db)
             self.render('component/list-page/content-list.html', posts=posts,list_path=list_path)
         if path=="tag":
             t_id = self.get_argument('id')
             list_path = 'tag&id={}'.format(t_id)
-            posts = await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0,"tags": ObjectId(t_id)}).sort([("post_date", -1)]).limit(articles_per_page).to_list(length=articles_per_page)
+            posts = await self.application.db.posts.find({"_id":{"$lt":ObjectId(postoffset)},"type":0,"tags": ObjectId(t_id)}).sort([("post_date", -1)]).limit(self.articles_per_page).to_list(length=self.articles_per_page)
             posts = await join.post_user(posts,self.application.db)
             self.render('component/list-page/content-list.html', posts=posts,list_path=list_path)
         if path=="recommend":
             list_path = 'recommend'
-            posts = await self.application.db.posts.find({"score":{"$lt": float(postoffset)},"type":0}).sort([("score", -1)]).limit(articles_per_page).to_list(length=articles_per_page)
+            posts = await self.application.db.posts.find({"score":{"$lt": float(postoffset)},"type":0}).sort([("score", -1)]).limit(self.articles_per_page).to_list(length=self.articles_per_page)
 
             posts = await join.post_user(posts,self.application.db)
             self.render('component/list-page/content-list.html', posts=posts,list_path=list_path)
@@ -52,8 +52,8 @@ class ApiAuthorHandler(UserHander,DBMixin):
         author_id = self.get_argument('author')
         posts = await self.application.db.posts.find({"user": ObjectId(author_id), "type": 0}).sort(
             [("post_date", -1)]).skip(
-            config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(
-            length=config.articles_per_page)
+            self.articles_per_page * (int(page) - 1)).limit(self.articles_per_page).to_list(
+            length=self.articles_per_page)
         posts = await self.get_posts_desc(posts)
         posts = map(post_time_format, posts)
         data={}

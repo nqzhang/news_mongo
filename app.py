@@ -10,7 +10,7 @@ class Application(tornado.web.Application):
     def __init__(self,dbs):
         #tornado.ioloop.IOLoop.configure('tornado.platform.asyncio.AsyncIOLoop')
         handlers = [
-            (r'/?',recommend.recommendPageHandler),
+            (r'/?',index.IndexPageHandler),
             (r'/newest', index.IndexPageHandler),
             (r'/page/(\d*)/?', index.IndexPageHandler),
             (r'/a/(.*?)/(.*?)/?', article.ArticleHandler),
@@ -56,6 +56,12 @@ class Application(tornado.web.Application):
         ]
         self.dbs = dbs
         super(Application, self).__init__(handlers, **config.settings)
+
+        for k,v in dbs.items():
+            if v['index_page'] == "recommend":
+                self.add_handlers(k, [
+                (r"/?", recommend.recommendPageHandler),
+                ])
 
     def init_with_loop(self, loop):
        self.redis = loop.run_until_complete(aioredis.create_redis_pool((config.redis['host'], config.redis['port']),maxsize=20, loop=loop))

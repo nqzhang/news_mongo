@@ -68,3 +68,15 @@ function getCookie(name) {
     var r = document.cookie.match("\\b" + name + "=([^;]*)\\b");
     return r ? r[1] : undefined;
 }
+
+function toggleMobileMenu() {
+    if($('body').hasClass("sitenav-active")) {
+        $('body').removeClass("sitenav-active");
+    } else {
+        $('body').addClass("sitenav-active");
+    }
+}
+
+$('.sitenav-on').click(
+toggleMobileMenu
+)

@@ -1,10 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block container %}
+<div class="focusbox"><div class="container"><h1 class="focusbox-title">{{ site_name }}</h1></div></div>
+<section class="container">
+    <div class="excerpts-wrapper">
+        <div class="excerpts">
+            {% for post in posts %}
+            <article class="excerpt excerpt-c5"><a class="thumbnail" href="/a/{{ post['_id'] }}" target="_blank"><img
+                    referrerpolicy="no-referrer"
+                    src="
+                    {% if post['post_thumb'] %}
+                    {{ post['post_thumb'] }}
+                    {% else %}
+                    {{ static_url('theme1/default_thumb.png') }}
+                    {% end %}
+                    "
+                    class="lazyload thumb" alt="{{ post['title'] }}"></a>
+                <h2><a href="/a/{{ post['_id'] }}" target="_blank">{{ post['title'] }}</a></h2>
+            </article>
+            {% end %}
+        </div>
+    </div>
+</section>
+{% end %}
+
+{% block script %}
+<script>$("img.lazyload").lazyload();</script>
+{% end %}

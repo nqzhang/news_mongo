@@ -12,10 +12,10 @@ class AuthorPageHandler(UserHander,DBMixin):
         if u_c_id:
             print(u_c_id)
             posts = await self.application.db.posts.find({"user": ObjectId(u_id),"category":ObjectId(u_c_id)}).sort([("post_date", -1)]).skip(
-            config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
+            self.articles_per_page * (int(page) - 1)).limit(self.articles_per_page).to_list(length=self.articles_per_page)
         else:
             posts = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).sort([("post_date", -1)]).skip(
-                config.articles_per_page * (int(page) - 1)).limit(config.articles_per_page).to_list(length=config.articles_per_page)
+                self.articles_per_page * (int(page) - 1)).limit(self.articles_per_page).to_list(length=self.articles_per_page)
         posts = await self.get_posts_desc(posts)
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
@@ -27,7 +27,7 @@ class AuthorPageHandler(UserHander,DBMixin):
         data['post_number'] = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).count()
         data['author'] = author
         data['page'] = page
-        data['max_page'] = math.ceil(data['post_number'] / config.articles_per_page)
+        data['max_page'] = math.ceil(data['post_number'] / self.articles_per_page)
         if data['max_page'] <= 0:
             data['max_page'] = 1
         u_categorys = list(map(attrDict,await sidebar.u_categorys(self, ObjectId(u_id))))

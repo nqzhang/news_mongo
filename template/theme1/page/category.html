@@ -8,8 +8,14 @@
             {% for post in posts %}
             <article class="excerpt excerpt-c5"><a class="thumbnail" href="/a/{{ post['_id'] }}" target="_blank"><img
                     referrerpolicy="no-referrer"
-                    src="{{ post['post_thumb'] }}"
-                    class="thumb" alt="{{ post['title'] }}"></a>
+                    src="
+                    {% if post['post_thumb'] %}
+                    {{ post['post_thumb'] }}
+                    {% else %}
+                    {{ static_url('theme1/default_thumb.png') }}
+                    {% end %}
+                    "
+                    class="lazyload thumb" alt="{{ post['title'] }}"></a>
                 <h2><a href="/a/{{ post['_id'] }}" target="_blank">{{ post['title'] }}</a></h2>
             </article>
             {% end %}
@@ -51,4 +57,8 @@
         </ul>
     </div>
 </section>
+{% end %}
+
+{% block script %}
+<script>$("img.lazyload").lazyload();</script>
 {% end %}
