@@ -15,6 +15,7 @@ from .account import EmailHandler
 from email.header import Header
 from utils.hot import hot
 from pyquery import PyQuery as pq
+from elasticsearch_dsl import Search
 
 
 comment_notify_text = '''
@@ -23,13 +24,18 @@ comment_notify_text = '''
 
 class ArticleHandler(BaseHandler,DBMixin):
     async def get_post_category_info(self,post):
-        category_id = [i for i in post['category'] if i]
-        category = []
-        for c_id in post['category']:
-            c = await self.application.db.terms.find_one({"_id":ObjectId(c_id)})
-            category.append(c)
-        post['category'] = category
-        return post,category_id
+        if post.get('category',None):
+            category_id = [i for i in post.get('category')  if i]
+            category = []
+            for c_id in post['category']:
+                c = await self.application.db.terms.find_one({"_id":ObjectId(c_id)})
+                category.append(c)
+            post['category'] = category
+
+        else:
+            post['category'] = None
+            category_id = None
+        return post, category_id
     async def get_posts_category_info(self, posts):
         for post in posts:
             post = await self.get_post_category_info(post)
@@ -38,8 +44,8 @@ class ArticleHandler(BaseHandler,DBMixin):
         post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
         prev_post=  await self.application.db.posts.find({"_id": {"$lt":ObjectId(post_id)}}).sort([("_id", -1)]).limit(1).to_list(length=None)
         next_post = await self.application.db.posts.find({"_id": {"$gt": ObjectId(post_id)}}).sort([("_id", 1)]).limit(1).to_list(length=None)
-        post['prev_post'] = prev_post[0] if len(prev_post) > 0 else None
-        post['next_post'] = next_post[0] if len(next_post) > 0 else None
+        post['prev_post'] = prev_post[0] if prev_post else None
+        post['next_post'] = next_post[0] if next_post else None
         #cursor = await db.posts.find({"type": 0, "is_recommend": {"$ne": False}}, {"_id": 1}).sort(
         #    [("score", -1)]).limit(10000).to_list(length=None)
         u_id = post['user']
@@ -64,42 +70,52 @@ class ArticleHandler(BaseHandler,DBMixin):
         u_categorys =  await sidebar.u_categorys(self,u_id)
         #related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
-        if tags_id:
-            related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
-                .limit(8).to_list(length=8)
-            related_posts = await related_sort(tags_id,related_posts,related_type='tags')
-            '''通过mongodb aggregate 实现的tags排序
-            related_posts=[]
-            replated_posts_cursor =  self.application.db.posts.aggregate([
-                {"$match": {"tags": {"$in": tags_id},'_id': {'$ne': post['_id']}}},
-                {"$unwind": "$tags"},
-                {"$match": {"tags": {"$in": tags_id}}},
-                {"$group": {
-                    "_id": "$_id",
-                    "title": {"$first": "$title"},
-                    "user": {"$first": "$user"},
-                    "post_date": {"$first": "$post_date"},
-                    "content": {"$first": "$content"},
-                    "matches": {"$sum": 1},
-                }},
-                {"$sort": {"matches": -1}},
-                {"$limit": articles_per_page},
-            ],allowDiskUse=True)
-            async for replated_post in replated_posts_cursor:
-                related_posts.append(replated_post)
-            print(related_posts)
-        '''
+        if self.es:
+            s = Search(index=self.db_name) \
+                .query("match", title=post['title'])
+            s = s.exclude('term', post_id=str(post_id))
+            response = await self.es.search(s[0:8].to_dict())
+            related_posts_id = [ObjectId(i['_source']['post_id']) for i in response['hits']['hits']]
+            related_posts = await self.application.db.posts.find({'_id': {'$in': related_posts_id}}).to_list(
+                length=None)
+            index_map = {v: i for i, v in enumerate(related_posts_id)}
+            related_posts = sorted(related_posts, key=lambda related_post: index_map[related_post['_id']])
         else:
-            related_posts = []
-        related_fill_num = 8 - len(related_posts)
-        if related_fill_num > 0:
-            if category_id:
-                #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
-                related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
-                .limit(related_fill_num).to_list(length=related_fill_num)
-                related_posts_category = await related_sort(category_id, related_posts_category,related_type='category')
-                related_posts += related_posts_category
-
+            if tags_id:
+                related_posts =  await self.application.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
+                    .limit(8).to_list(length=8)
+                related_posts = await related_sort(tags_id,related_posts,related_type='tags')
+                '''通过mongodb aggregate 实现的tags排序
+                related_posts=[]
+                replated_posts_cursor =  self.application.db.posts.aggregate([
+                    {"$match": {"tags": {"$in": tags_id},'_id': {'$ne': post['_id']}}},
+                    {"$unwind": "$tags"},
+                    {"$match": {"tags": {"$in": tags_id}}},
+                    {"$group": {
+                        "_id": "$_id",
+                        "title": {"$first": "$title"},
+                        "user": {"$first": "$user"},
+                        "post_date": {"$first": "$post_date"},
+                        "content": {"$first": "$content"},
+                        "matches": {"$sum": 1},
+                    }},
+                    {"$sort": {"matches": -1}},
+                    {"$limit": articles_per_page},
+                ],allowDiskUse=True)
+                async for replated_post in replated_posts_cursor:
+                    related_posts.append(replated_post)
+                print(related_posts)
+            '''
+            else:
+                related_posts = []
+            related_fill_num = 8 - len(related_posts)
+            if related_fill_num > 0:
+                if category_id:
+                    #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
+                    related_posts_category = await self.application.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
+                    .limit(related_fill_num).to_list(length=related_fill_num)
+                    related_posts_category = await related_sort(category_id, related_posts_category,related_type='category')
+                    related_posts += related_posts_category
         related_posts = await join.post_user(related_posts, self.application.db)
         related_posts = await self.get_posts_desc(related_posts)
         related_posts = await self.get_thumb_image(related_posts)
@@ -132,7 +148,6 @@ class ArticleHandler(BaseHandler,DBMixin):
             data['liked'] = False
         #print(post)
         data['new_comment_posts'] = await sidebar.new_comment_posts(self)
-
         self.render('page/article.html', menus=menus, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=data)
         post_score = await hot(self.application.db,post_id)

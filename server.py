@@ -12,6 +12,8 @@ from cron import cron
 import asyncio,time,logging,signal
 from functools import partial
 from tornado.platform.asyncio import AsyncIOMainLoop
+from aioelasticsearch import Elasticsearch
+
 try:
     import uvloop
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -51,6 +53,8 @@ async def get_dbs():
     async for x in news_mongo_db.settings.find():
         db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)[x['db']]
         x['db_conn'] = db
+        if x['es_db'] != "no":
+            x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
         dbs[x['domain']] = x
     return dbs
 
@@ -58,7 +62,7 @@ if __name__ == "__main__":
     #asyncio.set_event_loop(asyncio.new_event_loop())
     #db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
     news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)['news_mongo']
-
+    loop = asyncio.get_event_loop()
     dbs = IOLoop.current().run_sync(get_dbs)
     #cron = cron(db)
     #scheduler = TornadoScheduler()
@@ -75,7 +79,6 @@ if __name__ == "__main__":
         app.listen(sys.argv[1])
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
     signal.signal(signal.SIGINT, partial(sig_handler, app))
-    loop = asyncio.get_event_loop()
     app.init_with_loop(loop)
     #loop.set_blocking_log_threshold(0.5)
     loop.run_forever()

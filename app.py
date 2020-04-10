@@ -5,6 +5,7 @@ from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
 #client = motor_tornado.MotorClient('mongodb://192.168.1.103:27017')
 #db = client.test
+from opencc import OpenCC
 
 class Application(tornado.web.Application):
     def __init__(self,dbs):
@@ -55,7 +56,9 @@ class Application(tornado.web.Application):
             (r"/ads.txt()", tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
         ]
         self.dbs = dbs
+        self.cc = OpenCC('t2s')
         super(Application, self).__init__(handlers, **config.settings)
+
 
         for k,v in dbs.items():
             if v['index_page'] == "recommend":

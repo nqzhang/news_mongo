@@ -16,6 +16,7 @@ from pyquery import PyQuery as pq
 import logging
 import w3lib.url
 import os
+import tornado.web
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -25,8 +26,7 @@ class BlockingBaseHandler(tornado.web.RequestHandler):
 class BlockingHandler(BlockingBaseHandler):
     @run_on_executor
     def cc_async(self,text):
-        cc = OpenCC('t2s')
-        text = cc.convert(text)
+        text = self.application.cc.convert(text)
         return text
 
     @run_on_executor
@@ -161,10 +161,12 @@ class DBMixin(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
         super(DBMixin, self).__init__(application, request, **kwargs)
         self.application.db =  self.application.dbs[self.request.host]['db_conn']
+        self.db_name = self.application.dbs[self.request.host]['db']
         self.site_name = self.application.dbs[self.request.host]['site_name']
         self.articles_per_page = self.application.dbs[self.request.host]['articles_per_page']
         self.cookie_domain = self.application.dbs[self.request.host]['domain']
         self.set_cookie("_xsrf", self.xsrf_token)
+        self.es = self.application.dbs[self.request.host].get('es_conn',None)
     def get_template_path(self):
         return os.path.join(self.application.settings.get("template_path"),self.application.dbs[self.request.host]['theme'])
 

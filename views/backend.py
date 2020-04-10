@@ -20,13 +20,15 @@ class NewPostHandler(DBMixin):
         code = body['code']
         if code != 'qtRjhwcGLHnXPQlC':
             raise tornado.web.HTTPError(500,reason='wrong password')
+        category = body.get('category',None)
         tags = body['tags']
         title = body['title']
         content = body['content']
         user = body['user']
         post_type = body['post_type'] if 'post_type' in body else 'article'
         if post_type=='article':
-            category = [i.lower() for i in body['category']]
+            if category:
+                category = [i.lower() for i in body['category'] if i]
             tag_type_num = 1
             post_type_num = 0
         else:
@@ -72,11 +74,7 @@ class NewPostHandler(DBMixin):
             #插入文章
             post = await self.application.db.posts.find_one({"title": title,"type":post_type_num})
             if post:
-                exeists_u = post['user']
-                if exeists_u == u_id:
-                    exeists = True
-                else:
-                    exeists = False
+                exeists = True
             else:
                 exeists = False
             #print(exeists)
@@ -95,6 +93,10 @@ class NewPostHandler(DBMixin):
             self.write(str(post_id))
         if post_id != 0:
             post_score = await hot(self.application.db,str(post_id))
+            if self.es:
+                post_es_data = {"post_id":str(post_id),"title": title}
+                res = await self.es.index(index=self.db_name, body=post_es_data,request_timeout=30)
+                print(res)
 
 class ViewsHandler(DBMixin):
     async def post(self):

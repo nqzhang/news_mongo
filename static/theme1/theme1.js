@@ -80,3 +80,50 @@ function toggleMobileMenu() {
 $('.sitenav-on').click(
 toggleMobileMenu
 )
+
+function newWin(url) {
+
+      var a = document.createElement('a');
+
+      a.setAttribute('href', url);
+
+      a.setAttribute('style', 'display:none');
+
+      a.setAttribute('target', '_blank');
+
+      a.setAttribute('rel', 'noreferrer noopener');
+
+      document.body.appendChild(a);
+
+      a.click();
+
+      a.parentNode.removeChild(a);
+
+}
+$(document).ready(function(){
+    // initialize login form
+    var form = $('.searchform');
+    var login_base_action = form.attr('action');
+    var login_action = login_base_action + '?src=' + encodeURI(window.location.href);
+    form.attr('action',login_action);
+
+    form.submit(function(e) {
+        e.preventDefault();
+
+        var keyword = $('#bdcsMain').val();
+        if (keyword === '') {
+            layer.msg('请输入搜索词');
+        } else {
+        	var temp = location.hostname.split('.').reverse();
+	        var root_domain = '.' + temp[1] + '.' + temp[0];
+            search_link="https://www.google.com/search?sitesearch=" + "xuehua.us" + "&q=" + keyword
+            newWin(search_link);
+        }
+    });
+
+if ( getUrlParam('login') == 1 ) {
+    toggleLoginLayer();
+    }
+});
+
+

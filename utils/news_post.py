@@ -9,7 +9,7 @@ async def news_post():
     #tornado.httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
     http_client = tornado.httpclient.AsyncHTTPClient()
     body = {}
-    for n in range(1,100):
+    for n in range(100100,100200):
         #n = str(n) +   uuid.uuid4().hex
         #body['category'] = ['财经{}'.format(n)]
         body['code'] = 'qtRjhwcGLHnXPQlC'

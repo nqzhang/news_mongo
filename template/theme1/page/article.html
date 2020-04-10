@@ -18,17 +18,23 @@
     <div class="content-wrap">
         <div class="content">
             <header class="article-header"><h1 class="article-title">{{ post['title'] }}</h1>
-                <div class="article-meta"><span class="item">{{ post['post_date'] }}</span><span class="item">分类：<a
-                        href="/c/{{ post['category'][0]['_id'] }}/">{{ post['category'][0]['name'] }}</a></span></div>
+                <div class="article-meta"><span class="item">{{ post['post_date'] }}</span><span class="item">分类：
+                    {% if post['category'] %}
+                    <a href="/c/{{ post['category'][0]['_id'] }}/">{{ post['category'][0]['name'] }}</a>
+                    {% end %}
+                </span></div>
             </header>
             <article class="article-content"><p>{% raw post['content'] %}</article>
-            <div class="article-copyright">未经允许不得转载：<a href="/c/{{ post['category'][0]['_id'] }}/">{{
-                post['category'][0]['name'] }}</a> &raquo; <a
-                    href="/a/{{post['_id']}}">{{ post['title'] }}</a></div>
+            <div class="article-copyright">未经允许不得转载：
+                {% if post['category'] %}
+                <a href="/c/{{ post['category'][0]['_id'] }}/">{{
+                post['category'][0]['name'] }}</a> &raquo;
+                {% end %}
+                 <a href="/a/{{post['_id']}}">{{ post['title'] }}</a></div>
             <div class="article-actions clearfix">
 
                 <div class="shares"><strong>分享到：</strong><a class="share-weixin"
-                                                            data-url="https://www.twoeggz.com/info/454550.html"
+                                                            data-url=""
                                                             href="javascript:;" title="分享到微信"><i class="fa">&#xe60e;</i></a><a
                         class="share-qzone" data-share="qzone" etap="share" title="分享到QQ空间"><i
                         class="fa">&#xe607;</i></a><a class="share-tsina" data-share="weibo" etap="share"
@@ -70,8 +76,11 @@
                         {% else %}
                         {{ static_url('theme1/default_thumb_204_133.png')}}
                                                 {% end %}
-                        "></span><span
-                            class="classname">{{ related_post['category'][0]['name'] }}</span>{{ related_post['title'] }}</a></li>
+                        "></span>
+                        {% if related_post['category'] %}
+                        <span class="classname">{{ related_post['category'][0].get('name','') }}</span>
+                        {% end %}
+                        {{ related_post['title'] }}</a></li>
                     {% end %}
                 </ul>
             </div>
