@@ -12,5 +12,3 @@ pyquery
 elasticsearch==7.6.0
 aioelasticsearch==0.6.0
 elasticsearch-dsl==7.1.0
-paddlepaddle==1.7.1
-paddlehub==1.6.1
