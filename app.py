@@ -1,7 +1,8 @@
 import tornado
+import tornado.web
 from views import index,recommend,backend,article,category,tag,static,account,user,author,api,question
+import  views.wp as views_wp
 import config
-from tornado.ioloop import IOLoop, PeriodicCallback
 import aioredis
 #client = motor_tornado.MotorClient('mongodb://192.168.1.103:27017')
 #db = client.test
@@ -57,6 +58,7 @@ class Application(tornado.web.Application):
         ]
         self.dbs = dbs
         self.cc = OpenCC('t2s')
+
         super(Application, self).__init__(handlers, **config.settings)
 
 
@@ -65,7 +67,11 @@ class Application(tornado.web.Application):
                 self.add_handlers(k, [
                 (r"/?", recommend.recommendPageHandler),
                 ])
-
+            views_theme = v.get("views_theme", None)
+            if views_theme == "wp":
+                self.add_handlers(k, [
+                (r"/(\d{4})/(\d\d)/(\d\d)/(.*?)/?", views_wp.article.ArticleHandler),
+                ])
     def init_with_loop(self, loop):
        self.redis = loop.run_until_complete(aioredis.create_redis_pool((config.redis['host'], config.redis['port']),maxsize=20, loop=loop))
 

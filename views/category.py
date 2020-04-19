@@ -1,5 +1,3 @@
-from tornado.web import RequestHandler
-import timeago, datetime
 from bson import ObjectId
 import config
 from models import join

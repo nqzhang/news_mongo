@@ -13,6 +13,8 @@ import asyncio,time,logging,signal
 from functools import partial
 from tornado.platform.asyncio import AsyncIOMainLoop
 from aioelasticsearch import Elasticsearch
+from urllib.parse import urlparse
+import aiomysql
 
 try:
     import uvloop
@@ -48,14 +50,25 @@ def sig_handler(app,sig,frame):
         stop_loop(time.time() + MAX_WAIT_SECONDS_BEFORE_SHUTDOWN)
 
     io_loop.add_callback_from_signal(shutdown)
+
+async def connect_from_uri(uri):
+    p = urlparse(uri)
+    connection = await aiomysql.create_pool(host=p.hostname, port=p.port,user=p.username,password=p.password,db=p.path[1:])
+    return connection
 async def get_dbs():
     dbs={}
     async for x in news_mongo_db.settings.find():
-        db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)[x['db']]
+        db_uri = x['db']
+        x['db_name'] =  urlparse(db_uri).path[1:]
+        if db_uri.startswith("mongodb"):
+            db = motor.motor_tornado.MotorClient(db_uri,maxPoolSize=200)[x['db_name']]
+        elif db_uri.startswith("mysql"):
+            db = await connect_from_uri(db_uri)
         x['db_conn'] = db
         if x['es_db'] != "no":
             x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
         dbs[x['domain']] = x
+    print(dbs)
     return dbs
 
 if __name__ == "__main__":

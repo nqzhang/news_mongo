@@ -2,14 +2,11 @@ from views.base import UserHander,DBMixin
 import tornado.web
 import tornado
 from tornado.web import authenticated
-from pymongo import ReturnDocument
 import datetime
 from bson import ObjectId
 import config
-from models import join,sidebar
+from models import join
 from bson.json_util import dumps
-from utils.base import attrDict
-from utils.tools import post_time_format
 from utils.qetag import get_io_qetag
 import os
 from tornado.concurrent import run_on_executor

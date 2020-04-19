@@ -1,20 +1,16 @@
-from tornado.web import RequestHandler
 import tornado
 from tornado.web import authenticated
 from bson import ObjectId
 import config
-from lxml import etree
 from models import join,sidebar
-from .base import BlockingHandler,BaseHandler,DBMixin
+from .base import BaseHandler,DBMixin
 from utils.base import attrDict
-from bson.json_util import dumps
 from views.base import UserHander
 import datetime
 from utils.tools import *
 from .account import EmailHandler
 from email.header import Header
 from utils.hot import hot
-from pyquery import PyQuery as pq
 from elasticsearch_dsl import Search
 
 
