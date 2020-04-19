@@ -74,6 +74,31 @@ class BlockingHandler(BlockingBaseHandler):
         post['content'] = content
         return post
 
+    @run_on_executor
+    def amp_process(self, post):
+        content_pq = pq(post['content'])
+        for i in content_pq('img').items():
+            d = pq('<amp-img></amp-img>')
+            d.attr["src"] = i.attr["src"]
+            d.attr["layout"] = "responsive"
+            img_width = i.attr['width'] if i.attr['width'] else "350"
+            img_height = i.attr['height'] if i.attr['height'] else "250"
+            d.attr["width"] =  img_width
+            d.attr["height"] = img_height
+            pq.replace_with(i,d)
+        for i in content_pq('video').items():
+            d = pq('<amp-video></amp-video>')
+            d.attr["src"] = i.attr["src"]
+            d.attr["controls"] = ''
+            d.attr["layout"] = "responsive"
+            img_width = i.attr['width'] if i.attr['width'] else "350"
+            img_height = i.attr['height'] if i.attr['height'] else "250"
+            d.attr["width"] =  img_width
+            d.attr["height"] = img_height
+            pq.replace_with(i,d)
+        content = content_pq.html(method="html")
+        post['content'] = content
+        return post
 
 class BaseHandler(BlockingHandler):
     async def prepare(self):
