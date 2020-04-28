@@ -1,0 +1,440 @@
+
+	<!doctype html>
+	<html class="has-zcm no-touch opacity csstransforms3d csstransitions svg cssfilters is-not-mobile-device full-urls has-footer" itemscope="" itemtype="http://schema.org/SearchResultsPage" lang="zh-cn">
+	<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<title>{{ data['key'] }} - 雪花搜索</title>
+	<link rel="stylesheet" href="{{ static_url('search/s1764.css')}}" type="text/css">
+	<link rel="stylesheet" href="{{ static_url('search/r1763.css')}}" type="text/css">
+	<meta name="referrer" content="origin">
+	<meta name="apple-mobile-web-app-title" content="weather">
+	<link rel="shortcut icon" href="/assets/doge_ico.png" type="image/png">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="HandheldFriendly" content="true">
+	<meta name="apple-mobile-web-app-capable" content="no">
+	<link title="DogeDoge" type="application/opensearchdescription+xml" rel="search" href="/opensearch.xml">
+	<link href="{{ static_url('search/lato-open-sans.css')}}" rel="stylesheet">
+	<script src="{{static_url('js/lib/jquery-3.3.1.min.js')}}"></script>
+	<script src="{{static_url('lib/lazyload.min.js')}}"></script>
+	</head>
+	<body class="body--serp">
+	<div class="site-wrapper js-site-wrapper" style="min-height: 756px;">
+		<div id="header_wrapper" class="header-wrap b_class">
+			<div class="welcome-wrap js-welcome-wrap">
+			</div>
+			<div id="header" class="header cw">
+				<div class="header__search-wrap">
+					<a tabindex="-1" href="/" class="header__logo-wrap js-header-logo"><span class="header__logo js-logo-ddg">{{data['self'].site_name}}</span></a>
+					<div class="header__content header__search">
+						<form id="search_form" class="search--adv search--header js-search-form has-text" name="x" action="/search" method="GET">
+							<input type="text" name="q" tabindex="1" autocomplete="off" id="search_form_input" class="search__input--adv js-search-input" value="{{ data['key'] }}" autocapitalize="off" autocorrect="off">
+														<input id="search_button" class="search__button js-search-button" type="submit" tabindex="2" value="S">
+							<input id="search_form_input_clear" class="search__clear js-search-clear" type="button" tabindex="3" value="X">
+							<div id="search__autocomplete" class="search__autocomplete" style="position: absolute; display: none;"></div>
+						</form>
+					</div>
+				</div>
+				<div id="duckbar" class="zcm-wrap zcm-wrap--header is-noscript-hidden">
+					<div class="zcm">
+						<ul class="zcm__menu zcm__constant has-zci" id="duckbar_static">
+							<!--
+							<li class="zcm__item"><a data-zci-link="web" class="zcm__link js-zci-link js-zci-link--web is-active" href="javascript:;">Web</a></li>
+							<li class="zcm__item"><a data-zci-link="images" class="zcm__link js-zci-link js-zci-link--imagesis-hidden" href="javascript:javascript:alert('coming soon.');">图片</a></li>
+							<li class="zcm__item"><a data-zci-link="videos" class="zcm__link js-zci-link js-zci-link--videosis-hidden" href="javascript:javascript:alert('coming soon.');">视频</a></li>
+							-->
+							<li class="zcm__item"><a data-zci-link="news" class="zcm__link js-zci-link js-zci-link--newsis-hidden" href="javascript:javascript:alert('coming soon.');">新闻</a></li>
+	                    </ul>
+						<ul class="zcm__menu zcm__dynamic has-zci is-hidden diy" id="duckbar_new">
+							<span id="duckbar_dynamic_sep" class="zcm__sep--h sep--before"></span>
+							<li class="zcm__item"><a data-zci-link="meanings" class="zcm__link js-zci-link js-zci-link--meanings" href="javascript:;">联想</a></li>
+	                    </ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="header_spaces"></div>
+				<div id="vertical_wrapper" class="verticals">
+		</div>
+		<div id="web_content_wrapper" class="content-wrap">
+			<div class="serp__top-right js-serp-top-right">
+			</div>
+			<!--
+			<div class="serp__bottom-right js-serp-bottom-right">
+				<div class="js-feedback-btn-wrap">
+					<div class="btn feedback-btn">
+						<a href="https://www.baidu.com/s?wd=111111" target="_blank" class="feedback-btn__send js-feedback-start">百度搜索</a>
+						<div class="feedback-btn__icon-wrap is-hidden js-feedback-icon-wrap">
+							<a href="javascript:;" class="feedback-btn__icon ddgsi feedback-btn__icon--love js-feedback-love"></a><a href="javascript:;" class="feedback-btn__icon ddgsi feedback-btn__icon--nolove js-feedback-nolove"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			-->
+			<div class="cw">
+				<div id="links_wrapper" class="serp__results js-serp-results">
+					<div class="results--main">
+					<div class="search-filters-wrap">
+						<div class="js-search-filters search-filters">
+							<div id="chinese-only" class="dropdown dropdown--region is-active has-inactive-region">
+								<div class="dropdown__switch switch js-region-filter-switch">
+									<span class="switch__knob"></span>
+								</div>
+								<a class="dropdown__button dropdown__button js-dropdown-button">中文</a>
+							</div>
+
+							<div class="resultCounter">约 {{data["result_count"]}} 条结果<nobr>（0.21 秒）&nbsp;</nobr></div>
+						</div>
+
+                    </div>
+<style>
+	.in_result_banner {
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+		width: 106px;
+		height: 65px;
+		margin: 2px 6px 2px 0px;
+		float: left;
+		border-radius: 4px;
+		line-height: 36px;
+		overflow: hidden;
+		text-align: center;
+	}
+	.in_result_banner img{
+		border-radius: 4px;
+		display: inline;
+	}
+	.resultCounter{
+		color: #999;
+		float: right;
+		padding: 5px 0px 15px 10px;
+	}
+	.userback-button-container .userback-button[wstyle="circle"]{
+		bottom: 50px !important;
+	}
+	#header_wrapper{
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+	}
+	#1web_content_wrapper{
+		margin-top: 101px;
+	}
+	#header_spaces {
+		height: 101px;
+	}
+	.blur_class {
+		background-position: 50%;
+		background-repeat: no-repeat;
+		background-size: cover;
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		z-index: 0;
+		-webkit-filter: blur(50px);
+		filter: blur(50px);
+		-webkit-transform: scale(1.25);
+		transform: scale(1.25);
+		opacity: .5;
+	}
+	.b_class {
+/*		-webkit-backdrop-filter: saturate(180%) blur(20px);*/
+/*		backdrop-filter: saturate(180%) blur(20px);*/
+/*		background: rgba(250,250,250,0.8);*/
+		background: rgba(250,250,250,0.95);
+	}
+</style>
+
+						<div id="links" class="results js-results">
+							{% for result in data['results'] %}
+                        						<div id="r-110.52" class="result results_links_deep highlight_d result--url-above-snippet" data-domain="encycolorpedia.cn" data-hostname="encycolorpedia.cn" data-nir="1">
+							<div class="result__body links_main links_deep">
+								<h2 class="result__title"><a class="result__a" rel="noopener" href="{{ result['post_link'] }}"  target="_blank">{{ result['title'] }}</a></h2>
+								<!--
+								<div class="result__extras js-result-extras">
+									<div class="result__extras__url">
+
+										<span class="result__icon "><a href="?q=111111+site:encycolorpedia.cn" title="只看 encycolorpedia.cn" class="js-result-extras-site_search"><img class="result__icon__img lazyload-icons lazyload " data-src="/favicon/encycolorpedia.cn.ico" height="16" width="16" title="只看 encycolorpedia.cn" src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="></a></span><a href="/rd/5HMsl44SH9Zvo6jxHxaBFGgKO4MUwuKijl4FTvbN9yDHccpv5VJWtYbK15e%2Bh1PT" rel="noopener" target="_blank" class="result__url js-result-extras-url"><span class="result__url__domain">https://encycolorpedia.cn/<b>111111</b></span><span class="result__url__full"></span></a>
+
+									</div>
+								</div>
+								-->
+								<div class="result__snippet js-result-snippet">
+																<div class="in_result_banner">
+									<img class="lazyload" data-original="{{ result['post_thumb'] }}">
+								</div>
+								{{ result['desc'] }}						</div>
+
+							</div>
+						</div>
+						{% end %}
+						{% if  data['prev_p'] %}
+						<div class="result result--more" style="float:left; width:150px; display:inline-block;" id="rld-1">
+							<a href="?q={{ data['key'] }}&amp;p={{ data['prev_p'] }}&amp;site_id={% if data['site_id'] %}{{ data['site_id'] }}{% end %}" class="result--more__btn btn btn--full">&lt;&lt; 上一页</a>
+						</div>
+						{% end %}
+						{% if  data['next_p'] %}
+						<div class="result result--more" style="float:right; width:150px; display:inline-block;" id="rld-2">
+							<a href="?q={{ data['key'] }}&amp;p={{ data['next_p'] }}&amp;site_id={% if data['site_id'] %}{{ data['site_id'] }}{% end %}" class="result--more__btn btn btn--full">下一页 &gt;&gt;</a>
+						</div>
+						{% end %}
+											</div>
+				</div>
+				<div class="results--sidebar js-results-sidebar">
+					<div class="sidebar-modules js-sidebar-modules">
+					</div>
+					<div class="js-sidebar-ads">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	site_id = {% if data['site_id'] == '' %}  null  {% else %} {{ data['site_id'] }} {% end %}
+	$(document).ready(function(){
+		$('#search_form').submit(function(e) {
+			e.preventDefault();
+			$('<input />').attr('type', 'hidden')
+					.attr('name', "site_id")
+					.attr('value', site_id)
+					.appendTo('#search_form');
+			$('#search_form')[0].submit();
+		})
+			$('#search_form_input').on('input propertychange', function() {
+				do_sugg(this);
+			});
+			$('#search_form_input').focus(function () {
+				$('#search_form').addClass("search--focus");
+				$('html').addClass("has-search-focus");
+				do_sugg(this);
+			});
+			$('#search_form_input_clear').click(function () {
+				$('#search_form_input').val('').focus();
+				$('#search_form').removeClass("has-text");
+				$("#search__autocomplete").hide();
+			});
+			$(document).mouseup(function(e){
+				var _con = $('#search_form_input,#search__autocomplete,#chinese-only');   // 设置目标区域
+				if(!_con.is(e.target) && _con.has(e.target).length === 0){ // Mark 1
+					$("#search__autocomplete").hide();
+				}
+			});
+			$("#search_form").hover(function(){
+				$(this).addClass("search--hover");
+			},function(){
+				$(this).removeClass("search--hover");
+			});
+			$('#chinese-only').click(function () {
+				if ($(this).children(".dropdown__switch").hasClass("is-on")) {
+					$(this).addClass('has-inactive-region');
+					$(this).children(".dropdown__switch").removeClass('is-on');
+					setTimeout(function(){
+						$('#input_lang').remove();
+						var lang_input=$('<input/>', {
+							id: 'input_lang',
+							type: 'hidden',
+							name: 'lang',
+							value: 'auto'
+						});
+						$("#search_form_input").after(lang_input);
+						document.getElementById('search_form').submit();
+					},200);
+//					window.location.href = window.location.href+'&lang=cn';
+				} else {
+					$(this).removeClass('has-inactive-region');
+					$(this).children(".dropdown__switch").addClass('is-on');
+					setTimeout(function(){
+						var lang_input=$('<input/>', {
+							id: 'input_lang',
+							type: 'hidden',
+							name: 'lang',
+							value: 'cn'
+						});
+						$("#search_form_input").after(lang_input);
+						document.getElementById('search_form').submit();
+					},200);
+				}
+			});
+			$(document).keydown(function (event) {
+				if($('#search__autocomplete').is(':visible')){
+					keyDown(event);
+				}
+			});
+			if ($("span#user_ip").length>0) {
+				$.ajax({cache:true,url:"https://myip.ipip.net",async:true,success:function(result){
+					$('span#user_ip').html(result.replace('当前 IP：','').replace(' 来自于：', ' ( ')+')');
+				}});
+			}
+			if ($("span#check_ip").length>0) {
+				var ip_for_check = $('span#check_ip').attr('data-ip');
+				$.ajax({cache:true,url:"/ir/ip/"+ip_for_check,async:true,success:function(result){
+					$('span#check_ip').html(ip_for_check+' '+result);
+				}});
+			}
+			if ($(".forecast-wrapper").length>0) {
+				$('.forecast-wrapper').on("click", "div.module__items-item", function() {
+					var selecteddate = $(this).attr("day");
+					$(".module__items-item").each(function(){
+						$(this).removeClass("module__items-item--selected");
+					});
+					$(this).addClass("module__items-item--selected");
+					$(".forecast-wrapper").find("[ir=weather]").each(function() {
+						var this_date = $(this).attr("date");
+						if(this_date==selecteddate) {
+							$(this).removeClass("is-hidden");
+						} else {
+							$(this).addClass("is-hidden");
+						}
+					});
+					var ctx = $("canvas#chart."+selecteddate).get(0).getContext("2d");
+					var tmps = $(this).attr("tmps");
+					getCharts(ctx, tmps.split(', '));
+				});
+			}
+			if ($(".forecast-wrapper").length>0) {
+				//var ip_for_check = $('span#check_ip').attr('data-ip');
+				var tq_point = '';
+				$.ajax({cache:true,url:"/weather/"+tq_point,async:true,success:function(result){
+					$('.forecast-wrapper').html(result);
+					var ctx = $("canvas#chart").get(0).getContext("2d");
+					var tmps = $(".module__items-item--selected").attr("tmps");
+					getCharts(ctx, tmps.split(', '));
+				}});
+			}
+			$("img").lazyload({effect : "fadeIn",threshold: 400});
+	});
+	var header_spaces_css = {
+		height: $('#header_wrapper').outerHeight(true)
+	};
+	$("#header_spaces").css(header_spaces_css);
+	function do_sugg(obj){
+		var count = $(obj).val().length;
+		var auto_div = $("#search__autocomplete");
+		if (count>0) {
+			$('#search_form').addClass("has-text");
+			$.ajax({cache:true,url:"/sugg/"+$(obj).val(),async:true,success:function(result){
+				var tempDiv = document.createElement("DIV");
+				var newDIV = $(tempDiv).addClass('acp-wrap').html(result);
+				var fake_acp = document.createElement("DIV");
+				var fake_acp = $(fake_acp).addClass('acp').attr('tabindex','0').text($(obj).val());
+				fake_acp.hide();
+				auto_div.html(newDIV);
+				newDIV.prepend(fake_acp);
+				auto_div.show();
+				auto_div.find('.acp').on({
+					mouseenter: function () {
+						$("div.acp").removeClass('acp--highlight');
+						$(this).addClass("acp--highlight");
+						$(this).click(function () {
+							$('#search_form_input').val($(this).text());
+							auto_div.hide();
+							document.getElementById('search_form').submit();
+						})
+					},
+					mouseleave: function () {
+						$("div.acp").removeClass('acp--highlight');
+					}
+				});
+			}});
+			//$('#error_homepage').html("已输入 "+ count +" 个字。").show();
+		} else {
+			$('#search_form').removeClass("has-text");
+			auto_div.hide();
+			//$('#error_homepage').html("").hide();
+		}
+	}
+	function getCharts(ctx, datas) {
+		var data = {
+			labels: [65, 59, 80, 81, 56, 55, 40, 45],
+			datasets: [
+				{
+					backgroundColor: '#f3f3f3',
+					borderColor: '#666',
+					borderWidth: 2,
+					data: datas
+				}
+			]
+		};
+		var stackedLine = new Chart(ctx, {
+			type: 'line',
+			data: data,
+			options: {
+				layout: {
+					padding: {
+						top: 8,
+						bottom: 2
+					}
+				},
+				maintainAspectRatio: false,
+				devicePixelRatio: 3,
+				elements: {point: {radius: 0}
+				},
+				tooltips: {enabled: false},
+				legend: {display: false},
+				scales: {
+					xAxes: [{display: false}],
+					yAxes: [{stacked: false,display: false}]
+				},
+			}
+		});
+	}
+	//方向键控制页面控件焦点移动
+	function keyDown(event) {
+			var suggs = $("div.acp");                  //通过class属性值获取控件组合
+			var this_sugg = $(".acp.acp--highlight");                  //通过class属性值获取控件组合
+			var focus = document.activeElement;                 //得到处于激活状态的控件
+			var event = window.event || event;                              //获取事件
+			var key = event.keyCode;                                     //得到按下的键盘Ascii码
+			var target_input = $('#search_form_input');                                     //得到按下的键盘Ascii码
+			var this_tabindex = $(this_sugg).attr('tabindex');
+			var this_flag = 0;var last_flag = 0;
+			if (typeof this_tabindex == typeof undefined || this_tabindex == false) {
+				this_flag = 0;
+			} else {
+				this_flag = parseInt(this_tabindex);
+			}
+			var last_tabindex = $(suggs).last().attr('tabindex');
+			if (typeof last_tabindex == typeof undefined || last_tabindex == false) {
+				last_flag = 0;
+			} else {
+				last_flag = parseInt(last_tabindex);
+			}
+			switch (key) {
+				case 38:                //向上键
+					$(suggs).removeClass('acp--highlight');
+					if (this_flag>0 && this_flag<=last_flag) {
+						$(suggs[this_flag-1]).addClass('acp--highlight');
+						if (this_flag>0) {
+							target_input.val($(suggs[this_flag-1]).text());
+						}
+					} else if(this_flag==0) {
+						$(suggs[last_flag]).addClass('acp--highlight');
+						target_input.val($(suggs[last_flag]).text());
+					} else {
+						//hi
+					}
+					event.returnValue=false;
+					break;
+				case 40:                //向下键
+					$(suggs).removeClass('acp--highlight');
+					if (this_flag>=0 && this_flag<last_flag) {
+						$(suggs[this_flag+1]).addClass('acp--highlight');
+						target_input.val($(suggs[this_flag+1]).text());
+					} else {
+						$(suggs[0]).addClass('acp--highlight');
+						target_input.val($(suggs[0]).text());
+					}
+					break;
+				case 13:                //回车键
+				if (this_flag>0) {
+					target_input.val($(suggs[this_flag]).text());
+				}
+					break;
+			}
+		}
+</script>
+</body>
+</html>

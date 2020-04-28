@@ -16,6 +16,7 @@ from aioelasticsearch import Elasticsearch
 from urllib.parse import urlparse
 import aiomysql
 
+from bson import json_util
 try:
     import uvloop
     asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
@@ -53,23 +54,38 @@ def sig_handler(app,sig,frame):
 
 async def connect_from_uri(uri):
     p = urlparse(uri)
-    connection = await aiomysql.create_pool(host=p.hostname, port=p.port,user=p.username,password=p.password,db=p.path[1:])
+    connection = await aiomysql.create_pool(host=p.hostname, port=p.port,user=p.username,password=p.password,db=p.path[1:],loop=loop,maxsize=200,autocommit=True)
     return connection
 async def get_dbs():
     dbs={}
-    async for x in news_mongo_db.settings.find():
-        db_uri = x['db']
-        x['db_name'] =  urlparse(db_uri).path[1:]
-        if db_uri.startswith("mongodb"):
-            db = motor.motor_tornado.MotorClient(db_uri,maxPoolSize=200)[x['db_name']]
-        elif db_uri.startswith("mysql"):
-            db = await connect_from_uri(db_uri)
-        x['db_conn'] = db
-        if x['es_db'] != "no":
+    async for x in news_mongo_db.settings.find({"site_id":{"$ne":"all"}}):
+        if x.get('db',None):
+            db_uri = x['db']
+            x['db_name'] =  urlparse(db_uri).path[1:]
+            if db_uri.startswith("mongodb"):
+                db = motor.motor_tornado.MotorClient(db_uri,maxPoolSize=200)[x['db_name']]
+            elif db_uri.startswith("mysql"):
+                db = await connect_from_uri(db_uri)
+            x['db_conn'] = db
+        if x.get('es_db',None):
             x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
         dbs[x['domain']] = x
+    async for x in news_mongo_db.settings.find({"site_id":  "all"}):
+        dbs['all'] = {}
+        if x.get('es_db',None):
+            x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
+            dbs['all'] = x
+    dbs['by_site_id'] = {}
+    for k,v in dbs.items():
+        if k != "by_site_id":
+            dbs['by_site_id'][v['site_id']] = v
+    import json
     print(dbs)
+
     return dbs
+
+
+
 
 if __name__ == "__main__":
     #asyncio.set_event_loop(asyncio.new_event_loop())

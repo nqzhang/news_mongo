@@ -1,4 +1,3 @@
-
 layui.use('util', function(){
   var util = layui.util;
 
@@ -116,7 +115,7 @@ $(document).ready(function(){
         } else {
         	var temp = location.hostname.split('.').reverse();
 	        var root_domain = '.' + temp[1] + '.' + temp[0];
-            search_link="https://www.google.com/search?sitesearch=" + "xuehua.us" + "&q=" + keyword
+            search_link="//search.xuehua.us/search?q=" + keyword + "&site_id=2"
             newWin(search_link);
         }
     });
@@ -126,4 +125,5 @@ if ( getUrlParam('login') == 1 ) {
     }
 });
 
+$("img").lazyload();
 

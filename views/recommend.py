@@ -7,10 +7,10 @@ import config
 class recommendPageHandler(BaseHandler,DBMixin):
     async def get(self,page=1):
         user = await self.get_user()
-        menus = await self.application.db.menu.find({"type": "left"}).to_list(length=10)
-        #posts =  await self.application.db.posts.find({"is_real_user": 1,"type":0,"is_recommend":{"$ne":False}}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
-        posts =  await self.application.db.posts.find({"type":0,"is_recommend":{"$ne":False},"score" : { "$exists" : True }}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
-        posts = await join.post_user(posts,self.application.db)
+        menus = await self.db.menu.find({"type": "left"}).to_list(length=10)
+        #posts =  await self.db.posts.find({"is_real_user": 1,"type":0,"is_recommend":{"$ne":False}}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
+        posts =  await self.db.posts.find({"type":0,"is_recommend":{"$ne":False},"score" : { "$exists" : True }}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
+        posts = await join.post_user(posts,self.db)
         #posts = await self.get_thumb_image(posts)
         hot_posts = await sidebar.hot_posts(self)
         #self.write('ok')

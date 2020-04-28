@@ -9,7 +9,7 @@ async def news_post():
     #tornado.httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
     http_client = tornado.httpclient.AsyncHTTPClient()
     body = {}
-    for n in range(100100,100200):
+    for n in range(100330,100340):
         #n = str(n) +   uuid.uuid4().hex
         #body['category'] = ['财经{}'.format(n)]
         body['code'] = 'qtRjhwcGLHnXPQlC'
@@ -21,7 +21,7 @@ async def news_post():
         body['thumb'] = ''
         #body['content'] = 10 * body['content']
         #response = await http_client.fetch('http://127.0.0.1:48000/backend/newpost',method='POST',proxy_host='127.0.0.1', proxy_port=1080,request_timeout=3,connect_timeout=3,body=json.dumps(body, ensure_ascii=False))
-        response =  await http_client.fetch('http://127.0.0.2/backend/newpost',method='POST',request_timeout=300,connect_timeout=300,body=json.dumps(body).encode("utf-8"))
+        response =  await http_client.fetch('http://127.0.0.1/backend/newpost',method='POST',request_timeout=300,connect_timeout=300,body=json.dumps(body).encode("utf-8"))
         print(response.body)
         #if response.code == 200:
         #print(proxy_host + ':' + str(proxy_port))

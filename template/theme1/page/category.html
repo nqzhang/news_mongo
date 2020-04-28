@@ -8,7 +8,7 @@
             {% for post in posts %}
             <article class="excerpt excerpt-c5"><a class="thumbnail" href="/a/{{ post['_id'] }}" target="_blank"><img
                     referrerpolicy="no-referrer"
-                    src="
+                    data-original="
                     {% if post['post_thumb'] %}
                     {{ post['post_thumb'] }}
                     {% else %}
@@ -60,5 +60,4 @@
 {% end %}
 
 {% block script %}
-<script>$("img.lazyload").lazyload();</script>
 {% end %}

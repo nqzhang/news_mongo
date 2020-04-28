@@ -20,9 +20,9 @@ class PostEditHandler(UserHander,DBMixin):
         active = 'edit'
         post={}
         if post_id != 0:
-            post = await self.application.db.posts.find_one({"_id": ObjectId(post_id),"user":ObjectId(self.current_user.decode())})
-            post = await join.post_tags(post, self.application.db)
-            post = await join.post_category(post, self.application.db)
+            post = await self.db.posts.find_one({"_id": ObjectId(post_id),"user":ObjectId(self.current_user.decode())})
+            post = await join.post_tags(post, self.db)
+            post = await join.post_category(post, self.db)
             content = post.pop('content')
         else:
             content=''
@@ -53,20 +53,20 @@ class PostAjaxHandler(UserHander,DBMixin):
         # 如果不存在category_site,创建
         category_site_ids = []
         for c_name in category_site:
-            c = await self.application.db.terms.find_one({"name": c_name, "type": "0"})
+            c = await self.db.terms.find_one({"name": c_name, "type": "0"})
             if c:
                 c_id = c['_id']
             else:
-                c = await self.application.db.terms.insert_one({"name": c_name, "type": "0"})
+                c = await self.db.terms.insert_one({"name": c_name, "type": "0"})
                 c_id = c.inserted_id
             category_site_ids.append(c_id)
         category_person_ids = []
         for c_name in category_person:
-            c = await self.application.db.terms.find_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
+            c = await self.db.terms.find_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
             if c:
                 c_id = c['_id']
             else:
-                c = await self.application.db.terms.insert_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
+                c = await self.db.terms.insert_one({"name": c_name, "type": "2","user":ObjectId(u_id)})
                 c_id = c.inserted_id
             category_person_ids.append(c_id)
         category_ids = category_site_ids + category_person_ids
@@ -74,20 +74,20 @@ class PostAjaxHandler(UserHander,DBMixin):
         # 无论是否存在,都返回tag_id
         t_ids = []
         for t_name in tags:
-            t = await self.application.db.terms.find_one({"name": t_name, "type": "1"})
+            t = await self.db.terms.find_one({"name": t_name, "type": "1"})
             if t:
                 t_id = t['_id']
             else:
-                t = await self.application.db.terms.insert_one({"name": t_name, "type": "1"})
+                t = await self.db.terms.insert_one({"name": t_name, "type": "1"})
                 t_id = t.inserted_id
             t_ids.append(t_id)
         if post_id == '0':
-            post_id = await self.application.db.posts.insert_one(
+            post_id = await self.db.posts.insert_one(
                 {"title": title, "content": content, "user": ObjectId(u_id),"type":0,"category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id.inserted_id)
         else:
-            await self.application.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
+            await self.db.posts.replace_one({'_id': ObjectId(post_id),"user": ObjectId(u_id)},
                 {"title": title, "content": content, "user": ObjectId(u_id),"type":0,"category": category_ids, "tags": t_ids,
                  "post_date": datetime.datetime.now(),"is_real_user":1})
             post_id = str(post_id)
@@ -96,14 +96,14 @@ class PostAjaxHandler(UserHander,DBMixin):
         publish_success['title'] = title
         self.write(publish_success)
         #print(post_id)
-        post_score = await hot(self.application.db,str(post_id))
+        post_score = await hot(self.db,str(post_id))
 
 class PostListHandler(UserHander,DBMixin):
     @authenticated
     async def get(self):
         #print(self.current_user)
         active = 'list'
-        posts = await self.application.db.posts.find({'user':ObjectId(self.current_user.decode()),"type":0}).sort([("post_date", -1)]).to_list(length=None)
+        posts = await self.db.posts.find({'user':ObjectId(self.current_user.decode()),"type":0}).sort([("post_date", -1)]).to_list(length=None)
         for post in posts:
             post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M:%S")
             views = post.get('views',0)
@@ -116,7 +116,7 @@ class PostDeleteHandler(UserHander,DBMixin):
     @authenticated
     async def post(self):
         post_id = self.get_argument('post_id')
-        result = await self.application.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
+        result = await self.db.posts.delete_one({'_id': ObjectId(post_id),'user': ObjectId(self.current_user.decode())})
         self.write(post_id)
 
 class ckuploadHandeler(UserHander,DBMixin):
@@ -167,8 +167,8 @@ class ckuploadHandeler(UserHander,DBMixin):
 
     async def insert_img_data(self):
         if self.img_data:
-            exists = await self.application.db.images.find_one({ "fname": self.img_data['fname']})
+            exists = await self.db.images.find_one({ "fname": self.img_data['fname']})
             if not exists:
-                await self.application.db.images.insert_one(self.img_data)
+                await self.db.images.insert_one(self.img_data)
             #else:
                 #print('数据库已存在此图片')

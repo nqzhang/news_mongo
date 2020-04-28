@@ -21,6 +21,8 @@ class NewPostHandler(DBMixin):
         if code != 'qtRjhwcGLHnXPQlC':
             raise tornado.web.HTTPError(500,reason='wrong password')
         category = body.get('category',None)
+        if category == "None":
+            category = None
         tags = body['tags']
         title = body['title']
         content = body['content']
@@ -40,22 +42,22 @@ class NewPostHandler(DBMixin):
         #guid = uuid.uuid3(uuid.NAMESPACE_DNS, title).hex
         try:
             #插入用户
-            u = await self.application.db.users.find_one({"user_name":user})
+            u = await self.db.users.find_one({"user_name":user})
             if u:
                 u_id = u['_id']
             else:
-                u = await self.application.db.users.insert_one({"user_name":user})
+                u = await self.db.users.insert_one({"user_name":user})
                 u_id = u.inserted_id
             # 只有当文章类型为article时，才有分类
             # 并且如果不存在category,创建
             if category:
                 c_ids = []
                 for c_name in category:
-                    c = await self.application.db.terms.find_one({"name":c_name,"type":"0"})
+                    c = await self.db.terms.find_one({"name":c_name,"type":"0"})
                     if c:
                         c_id = c['_id']
                     else:
-                        c = await self.application.db.terms.insert_one({"name":c_name,"type":"0"})
+                        c = await self.db.terms.insert_one({"name":c_name,"type":"0"})
                         c_id = c.inserted_id
 
                     c_ids.append(c_id)
@@ -63,16 +65,16 @@ class NewPostHandler(DBMixin):
             # 无论是否存在,都返回tag_id
             t_ids = []
             for t_name in tags:
-                t = await self.application.db.terms.find_one({"name": t_name, "type": tag_type_num})
+                t = await self.db.terms.find_one({"name": t_name, "type": tag_type_num})
                 if t:
                     t_id = t['_id']
                 else:
-                    t = await self.application.db.terms.insert_one({"name":t_name,"type":tag_type_num})
+                    t = await self.db.terms.insert_one({"name":t_name,"type":tag_type_num})
                     t_id = t.inserted_id
                 t_ids.append(t_id)
 
             #插入文章
-            post = await self.application.db.posts.find_one({"title": title,"type":post_type_num})
+            post = await self.db.posts.find_one({"title": title,"type":post_type_num})
             if post:
                 exeists = True
             else:
@@ -83,7 +85,7 @@ class NewPostHandler(DBMixin):
                              "tags": t_ids, "post_date": datetime.datetime.now()}
                 if category:
                     post_data['category'] = c_ids
-                post_id = await self.application.db.posts.insert_one(post_data)
+                post_id = await self.db.posts.insert_one(post_data)
                 post_id = post_id.inserted_id
             else:
                 post_id = 0
@@ -92,10 +94,10 @@ class NewPostHandler(DBMixin):
         else:
             self.write(str(post_id))
         if post_id != 0:
-            post_score = await hot(self.application.db,str(post_id))
+            post_score = await hot(self.db,str(post_id))
             if self.es:
-                post_es_data = {"post_id":str(post_id),"title": title}
-                res = await self.es.index(index=self.db_name, body=post_es_data,request_timeout=30)
+                post_es_data = {"site_id":self.site_id,"post_id":str(post_id),"title": title}
+                res = await self.es.index(index=self.es_index,body=post_es_data,request_timeout=30)
                 print(res)
 
 class ViewsHandler(DBMixin):
@@ -103,6 +105,6 @@ class ViewsHandler(DBMixin):
         if 'Googlebot' in self.request.headers["User-Agent"]:
             raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")
         post_id = self.get_body_argument('post_id')
-        await self.application.db.posts.update_one({'_id': ObjectId(post_id)}, {'$inc': {'views': 1}})
-        post = await self.application.db.posts.find_one({'_id': ObjectId(post_id)})
+        await self.db.posts.update_one({'_id': ObjectId(post_id)}, {'$inc': {'views': 1}})
+        post = await self.db.posts.find_one({'_id': ObjectId(post_id)})
         current_views = post['views']

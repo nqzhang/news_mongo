@@ -2,11 +2,13 @@ import tornado
 import tornado.web
 from views import index,recommend,backend,article,category,tag,static,account,user,author,api,question
 import  views.wp as views_wp
+import  views.search as views_search
 import config
 import aioredis
 #client = motor_tornado.MotorClient('mongodb://192.168.1.103:27017')
 #db = client.test
 from opencc import OpenCC
+#from lxml.html.clean import Cleaner
 
 class Application(tornado.web.Application):
     def __init__(self,dbs):
@@ -58,19 +60,28 @@ class Application(tornado.web.Application):
         ]
         self.dbs = dbs
         self.cc = OpenCC('t2s')
-
+        self.cc_s2t = OpenCC('s2t')
+        # self.cleaner = Cleaner(page_structure=True, links=True, javascript=True, style=True, comments=True,
+        #                       inline_style=True)
+        # self.cleaner.remove_tags = ['a', 'font']
         super(Application, self).__init__(handlers, **config.settings)
 
 
         for k,v in dbs.items():
-            if v['index_page'] == "recommend":
+            if v.get('index_page',None) == "recommend":
                 self.add_handlers(k, [
                 (r"/?", recommend.recommendPageHandler),
                 ])
             views_theme = v.get("views_theme", None)
             if views_theme == "wp":
                 self.add_handlers(k, [
-                (r"/(\d{4})/(\d\d)/(\d\d)/(.*?)/amp/", views_wp.article.ArticleHandler),
+                (r"/amp/(.*?)/(.*?)/?", views_wp.article.AmpArticleHandler),
+                (r"/([0-9]{4})/([0-9]{2})/([0-9]{2})/(.*?)/(.*?)/?", views_wp.article.ArticleHandler),
+                ])
+            if views_theme == "search":
+                self.add_handlers(k, [
+                (r"/?", views_search.index.IndexHandler),
+                (r"^/search", views_search.index.SearchHandler)
                 ])
     def init_with_loop(self, loop):
        self.redis = loop.run_until_complete(aioredis.create_redis_pool((config.redis['host'], config.redis['port']),maxsize=20, loop=loop))

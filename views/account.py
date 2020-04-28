@@ -70,7 +70,7 @@ class LoginHandler(DBMixin):
         next = self.get_argument('src','/')
         email = self.get_argument('email')
         passwd = self.get_argument('passwd')
-        user = await self.application.db.users.find_one({'email':email,"is_real":1})
+        user = await self.db.users.find_one({'email':email,"is_real":1})
         user_salt = user['password']['salt']
         user_hash = user['password']['hash']
         user_id = str(user['_id'])
@@ -132,16 +132,16 @@ class RegisterHandler(EmailHandler,DBMixin):
             self.write('请输入密码<br/>')
         if not email or not passwd:
             return
-        user = await self.application.db.users.find_one({'email':email,"is_real":1})
+        user = await self.db.users.find_one({'email':email,"is_real":1})
         if not user:
             user_salt = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(passwd + user_salt)
             user_hash = hashlib.sha512(hashstr).hexdigest()
             user_name = email.split('@')[0]
-            u = await self.application.db.users.insert_one({"user_name": user_name,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
+            u = await self.db.users.insert_one({"user_name": user_name,"email":email,"password":{"salt":user_salt,"hash":user_hash},"is_real":1,"is_active":0,"createTime":datetime.datetime.now()})
             email_hash,verify_link = self.generate_verify_link(user_salt)
             u_id = str(u.inserted_id)
-            email_code = await self.application.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_verify", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
+            email_code = await self.db.code.insert_one({"u_id": ObjectId(u_id), "type": "email_verify", "code": email_hash,"is_used":0,"createTime": datetime.datetime.now()})
             #註冊后登陸
             sessionid = uuid.uuid4().hex
             hashstr = tornado.escape.utf8(sessionid + user_salt + u_id)
@@ -173,7 +173,7 @@ class PasswordResetHandler(EmailHandler,DBMixin):
 class ApiPasswordResetHandler(EmailHandler,DBMixin):
     async def post(self):
         email_hash = self.get_argument('code')
-        email_code = await self.application.db.code.find_one({"code": email_hash})
+        email_code = await self.db.code.find_one({"code": email_hash})
         passwd = self.get_argument('passwd')
         if email_code:
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
@@ -183,12 +183,12 @@ class ApiPasswordResetHandler(EmailHandler,DBMixin):
             else:
                 if email_code['type'] == 'email_pass_reset':
                     u_id = email_code['u_id']
-                    u = await self.application.db.users.find_one({'_id': u_id})
+                    u = await self.db.users.find_one({'_id': u_id})
                     user_salt = u['password']['salt']
                     hashstr = tornado.escape.utf8(passwd + user_salt)
                     user_hash = hashlib.sha512(hashstr).hexdigest()
-                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"password.hash":user_hash}})
-                    #await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
+                    await self.db.users.update_one({"_id":email_code['u_id']},{"$set": {"password.hash":user_hash}})
+                    #await self.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
                     self.write('密码重置成功')
         else:
             self.write('验证链接无效')
@@ -197,7 +197,7 @@ class IsEmailExistHandler(DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self,email):
-        user = await self.application.db.users.find_one({'email': email})
+        user = await self.db.users.find_one({'email': email})
         if user:
             self.write('郵箱已經註冊')
         else:
@@ -207,7 +207,7 @@ class IsEmailExistHandler(DBMixin):
 class EmailVerifyHandler(EmailHandler,DBMixin):
     async def get(self):
         email_hash = self.get_argument('code')
-        email_code = await self.application.db.code.find_one({"code": email_hash})
+        email_code = await self.db.code.find_one({"code": email_hash})
         if email_code:
             if email_code['createTime'] - datetime.datetime.now() > datetime.timedelta(seconds=1800):
                 self.write('链接已失效')
@@ -215,8 +215,8 @@ class EmailVerifyHandler(EmailHandler,DBMixin):
                 self.write('链接已失效')
             else:
                 if email_code['type'] == 'email_verify':
-                    await self.application.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
-                    await self.application.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
+                    await self.db.users.update_one({"_id":email_code['u_id']},{"$set": {"is_active":1}})
+                    await self.db.code.update_one({"code": email_hash}, {"$set": {"is_used": 1}})
                     self.write('激活成功')
         else:
             self.write('验证链接无效')
@@ -226,11 +226,11 @@ class EmailResendHandler(EmailHandler,UserHander,DBMixin):
     async def get(self):
         self.finish('郵件已重新發送')
         u_id = self.current_user.decode()
-        u = await self.application.db.users.find_one({'_id':ObjectId(u_id)})
+        u = await self.db.users.find_one({'_id':ObjectId(u_id)})
         email_hash, verify_link = self.generate_verify_link(u['password']['salt'])
         email=u['email']
         email_text = reg_text.format(self.site_name, email, verify_link, verify_link)
-        email_code = await self.application.db.code.replace_one({'u_id': u['_id']},
+        email_code = await self.db.code.replace_one({'u_id': u['_id']},
                                                                 {"u_id": u['_id'], "type": "email_verify", "code": email_hash,"is_used":0, "createTime": datetime.datetime.now()},upsert=True)
         subject = Header('[{}]註冊確認'.format(self.site_name), 'utf-8')
         await self.send_mail(u['email'], subject, email_text)
@@ -239,11 +239,11 @@ class PasswordForgotSendMailHandler(EmailHandler,UserHander,DBMixin):
     async def post(self):
         self.render('page/password_forgot_send_mail_success.html',config=config)
         email = self.get_argument('email')
-        u = await self.application.db.users.find_one({'email':email})
+        u = await self.db.users.find_one({'email':email})
         u_id = u['_id']
         user_salt = uuid.uuid4().hex
         email_hash, verify_link = self.generate_pass_reset_link(user_salt)
-        email_code = await self.application.db.code.insert_one(
+        email_code = await self.db.code.insert_one(
             {"u_id": ObjectId(u_id), "type": "email_pass_reset", "code": email_hash, "is_used": 0,
              "createTime": datetime.datetime.now()})
         email_text = pass_reset_text.format(email,verify_link, verify_link)

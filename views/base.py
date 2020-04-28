@@ -1,4 +1,3 @@
-import tornado
 import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from opencc import OpenCC
@@ -28,7 +27,10 @@ class BlockingHandler(BlockingBaseHandler):
     def cc_async(self,text):
         text = self.application.cc.convert(text)
         return text
-
+    @run_on_executor
+    def cc_async_s2t(self,text):
+        text = self.application.cc_s2t.convert(text)
+        return text
     @run_on_executor
     def get_thumb_image(self,posts):
         for post in posts:
@@ -42,13 +44,26 @@ class BlockingHandler(BlockingBaseHandler):
                         if post_thumb:
                             post['post_thumb'] = post_thumb
         return posts
+
+    async def generate_post_link(self,posts,site_id=None):
+        if not site_id:
+            domain = self.domain
+        else:
+            domain = self.application.dbs['by_site_id'][site_id]['domain']
+        for post in posts:
+            if self.views_theme == "wp":
+                post['post_link']  = "//{}{}{}/".format(domain,post['post_date'].strftime("/%Y/%m/%d/"),post['post_name'])
+            else:
+                post['post_link'] = '//{}/a/{}'.format(domain,str(post['_id']))
+        return posts
+
     @run_on_executor
     def get_post_desc(self,post):
         if not post['content']:
             post_desc=''
         else:
             post_etree = etree.HTML(post['content'])
-            post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
+            post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:120]
             # post_desc = post_etree.cssselect('p')[0].text
         post['desc'] = post_desc
         return post
@@ -68,7 +83,7 @@ class BlockingHandler(BlockingBaseHandler):
             if domain.endswith('51cto.com'):
                 i.attr.src = w3lib.url.url_query_cleaner(i.attr.src, ['x-oss-process'], remove=True)
             i.attr('referrerpolicy', 'no-referrer');
-            i.attr('data-src',i.attr.src)
+            i.attr('data-original',i.attr.src)
             i.remove_attr('src')
         content = content_pq.html(method="html")
         post['content'] = content
@@ -81,18 +96,34 @@ class BlockingHandler(BlockingBaseHandler):
             d = pq('<amp-img></amp-img>')
             d.attr["src"] = i.attr["src"]
             d.attr["layout"] = "responsive"
-            img_width = i.attr['width'] if i.attr['width'] else "350"
-            img_height = i.attr['height'] if i.attr['height'] else "250"
+            if i.attr['width'] and '%' not in i.attr['width'] and i.attr['width'] != "auto":
+                img_width = i.attr['width']
+            else:
+                img_width ="350"
+            if i.attr['height'] and '%' not in i.attr['height'] and i.attr['width'] != "auto":
+                img_height = i.attr['height']
+            else:
+                img_height ="250"
             d.attr["width"] =  img_width
             d.attr["height"] = img_height
             pq.replace_with(i,d)
+        for i in content_pq('script').items():
+            i.remove()
+        for i in content_pq('style').items():
+            i.remove()
         for i in content_pq('video').items():
             d = pq('<amp-video></amp-video>')
             d.attr["src"] = i.attr["src"]
             d.attr["controls"] = ''
             d.attr["layout"] = "responsive"
-            img_width = i.attr['width'] if i.attr['width'] else "350"
-            img_height = i.attr['height'] if i.attr['height'] else "250"
+            if i.attr['width'] and '%' not in i.attr['width']:
+                img_width = i.attr['width']
+            else:
+                img_width ="350"
+            if i.attr['height'] and '%' not in i.attr['height']:
+                img_height = i.attr['height']
+            else:
+                img_height ="250"
             d.attr["width"] =  img_width
             d.attr["height"] = img_height
             pq.replace_with(i,d)
@@ -111,7 +142,7 @@ class BaseHandler(BlockingHandler):
     async def get_user(self):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
-            user = await self.application.db.users.find_one({'_id':ObjectId(uid)})
+            user = await self.db.users.find_one({'_id':ObjectId(uid)})
             u_categorys = await sidebar.u_categorys(self,ObjectId(uid))
             need_keys = ['user_name','email','is_active','_id']
             user = {key: user.get(key,0) for key in need_keys}
@@ -124,7 +155,7 @@ class BaseHandler(BlockingHandler):
     async def get_uid_name(self):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
-            user = await self.application.db.users.find_one({'_id': ObjectId(uid)})
+            user = await self.db.users.find_one({'_id': ObjectId(uid)})
             need_keys = ['_id','user_name']
             user = {key: user.get(key, 0) for key in need_keys}
         else:
@@ -139,7 +170,7 @@ class BaseHandler(BlockingHandler):
         user_salt = await self.application.redis.get(uid)
         if not user_salt:
             uid_str = uid.decode()
-            user = await self.application.db.users.find_one({'_id':ObjectId(uid_str)})
+            user = await self.db.users.find_one({'_id':ObjectId(uid_str)})
             if not user:
                 return False
             user_salt_str = user['password']['salt']
@@ -185,14 +216,18 @@ class UserHander(BaseHandler):
 class DBMixin(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
         super(DBMixin, self).__init__(application, request, **kwargs)
-        self.application.db =  self.application.dbs[self.request.host]['db_conn']
-
-        self.db_name = self.application.dbs[self.request.host]['db_name']
+        self.db =  self.application.dbs[self.request.host].get('db_conn',None)
+        self.db_name = self.application.dbs[self.request.host].get('db_name',None)
         self.site_name = self.application.dbs[self.request.host]['site_name']
         self.articles_per_page = self.application.dbs[self.request.host]['articles_per_page']
         self.cookie_domain = self.application.dbs[self.request.host]['domain']
+        self.domain = self.application.dbs[self.request.host]['domain']
+        self.views_theme = self.application.dbs[self.request.host].get('views_theme',None)
         self.set_cookie("_xsrf", self.xsrf_token)
-        self.es = self.application.dbs[self.request.host].get('es_conn',None)
+        #self.es = self.application.dbs[self.request.host].get('es_conn',None)
+        self.es = self.application.dbs['all'].get('es_conn',None)
+        self.es_index = self.application.dbs['all'].get('es_index', None)
+        self.site_id = self.application.dbs[self.request.host]['site_id']
     def get_template_path(self):
         return os.path.join(self.application.settings.get("template_path"),self.application.dbs[self.request.host]['theme'])
 

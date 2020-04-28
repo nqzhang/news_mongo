@@ -11,20 +11,20 @@ class AuthorPageHandler(UserHander,DBMixin):
         page = 1 if not page else page
         if u_c_id:
             print(u_c_id)
-            posts = await self.application.db.posts.find({"user": ObjectId(u_id),"category":ObjectId(u_c_id)}).sort([("post_date", -1)]).skip(
+            posts = await self.db.posts.find({"user": ObjectId(u_id),"category":ObjectId(u_c_id)}).sort([("post_date", -1)]).skip(
             self.articles_per_page * (int(page) - 1)).limit(self.articles_per_page).to_list(length=self.articles_per_page)
         else:
-            posts = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).sort([("post_date", -1)]).skip(
+            posts = await self.db.posts.find({"user": ObjectId(u_id),"type":0}).sort([("post_date", -1)]).skip(
                 self.articles_per_page * (int(page) - 1)).limit(self.articles_per_page).to_list(length=self.articles_per_page)
         posts = await self.get_posts_desc(posts)
         posts = [attrDict(post) for post in posts]
         posts = map(post_time_format,posts)
-        author = await self.application.db.users.find_one({"_id": ObjectId(u_id)})
+        author = await self.db.users.find_one({"_id": ObjectId(u_id)})
         #处理author.user_name为空的情况
         if not author['user_name']:
             author['user_name'] = 'None'
         data={}
-        data['post_number'] = await self.application.db.posts.find({"user": ObjectId(u_id),"type":0}).count()
+        data['post_number'] = await self.db.posts.find({"user": ObjectId(u_id),"type":0}).count()
         data['author'] = author
         data['page'] = page
         data['max_page'] = math.ceil(data['post_number'] / self.articles_per_page)

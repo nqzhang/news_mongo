@@ -3,7 +3,7 @@ from bson import ObjectId
 
 class ArticleHandler(RequestHandler):
     async def get(self, post_id):
-        cursor = self.application.db.posts.aggregate([
+        cursor = self.db.posts.aggregate([
             {"$lookup":
                 {"from": "users",
                 "localField": "user",
@@ -51,7 +51,7 @@ class ArticleHandler(RequestHandler):
         ])
         async for doc in cursor:
             print(doc)
-        #post = await self.application.db.posts.find_one({"_id":ObjectId(post_id)})
+        #post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
-        categorys = await self.application.db.terms.find({"type": "0"}).to_list(length=100)
+        categorys = await self.db.terms.find({"type": "0"}).to_list(length=100)
         self.render('page/article.html',categorys=categorys,post=post)

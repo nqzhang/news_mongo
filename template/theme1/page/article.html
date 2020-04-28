@@ -70,7 +70,7 @@
                 <ul>
                     {% for related_post in related_posts %}
                     <li><a href="/a/{{ related_post['_id'] }}" target="_blank"><span>
-                        <img alt="{{ related_post['title'] }}" class="thumb" referrerpolicy="no-referrer" src="
+                        <img alt="{{ related_post['title'] }}" class="thumb" referrerpolicy="no-referrer" data-original="
                         {% if related_post['post_thumb'] %}
                         {{related_post['post_thumb']}}
                         {% else %}
@@ -94,7 +94,7 @@
                 {% for hot_post in hot_posts %}
                 <li><a href="/a/{{ hot_post['_id'] }}" target="_blank"><span><img alt="{{ hot_post['title'] }}"
                                                                            class="thumb" referrerpolicy="no-referrer"
-                                                                           src="
+                                                                           data-original="
                     {% if hot_post['post_thumb'] %}
                     {{ hot_post['post_thumb'] }}
                     {% else %}
@@ -112,7 +112,6 @@
 
 {% block script %}
 <script type="text/javascript" src="{{ static_url('js/js.cookie.min.js') }}"></script>
-<script>$(".article-content img").lazyload();</script>
 <script>
     var post_id = "{{ post['_id'] }}";
     {% if user['is_login'] %}
