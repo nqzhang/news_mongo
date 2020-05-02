@@ -13,3 +13,4 @@ elasticsearch==7.6.0
 aioelasticsearch==0.6.0
 elasticsearch-dsl==7.1.0
 aiomysql==0.0.20
+ujson==2.0.3

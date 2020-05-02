@@ -75,8 +75,10 @@ class Application(tornado.web.Application):
             views_theme = v.get("views_theme", None)
             if views_theme == "wp":
                 self.add_handlers(k, [
-                (r"/amp/(.*?)/(.*?)/?", views_wp.article.AmpArticleHandler),
-                (r"/([0-9]{4})/([0-9]{2})/([0-9]{2})/(.*?)/(.*?)/?", views_wp.article.ArticleHandler),
+                (r"/amp/(?P<post_id>.*?)/(?P<language>.*?)/?", views_wp.article.AmpArticleHandler),
+                (r"/(?P<y>[0-9]{4})/(?P<m>[0-9]{2})/(?P<d>[0-9]{2})/(?P<post_name>.*?)/(?P<language>.*?)/?", views_wp.article.ArticleHandler),
+                (r"/category/(?P<category>.*?)/(?P<page>\d*)/?(?P<language>zh-hk|zh-cn|zh-tw)?/?", views_wp.category.CategoryHandler),
+                (r"/author/(?P<user_nicename>.*?)/(?P<page>\d*)/?(?P<language>zh-hk|zh-cn|zh-tw)?/?", views_wp.author.AuthorHandler),
                 ])
             if views_theme == "search":
                 self.add_handlers(k, [

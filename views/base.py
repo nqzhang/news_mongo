@@ -52,10 +52,23 @@ class BlockingHandler(BlockingBaseHandler):
             domain = self.application.dbs['by_site_id'][site_id]['domain']
         for post in posts:
             if self.views_theme == "wp":
-                post['post_link']  = "//{}{}{}/".format(domain,post['post_date'].strftime("/%Y/%m/%d/"),post['post_name'])
+                post['post_link'] = "//{}{}{}/".format(domain, post['post_date'].strftime("/%Y/%m/%d/"),
+                                                       post['post_name'])
+                if self.data['language']:
+                    post['post_link'] = '{}{}/'.format(post['post_link'],self.data['language'])
             else:
                 post['post_link'] = '//{}/a/{}'.format(domain,str(post['_id']))
         return posts
+    async def generate_author_link_by_author(self,author,site_id=None):
+        if not site_id:
+            domain = self.domain
+        else:
+            domain = self.application.dbs['by_site_id'][site_id]['domain']
+        if self.views_theme == "wp":
+            author_link = "//{}/author/{}/".format(domain,author['user_nicename'])
+        if self.data['language']:
+            author_link = author_link + self.data['language'] + '/'
+        return author_link
 
     @run_on_executor
     def get_post_desc(self,post):
@@ -77,14 +90,15 @@ class BlockingHandler(BlockingBaseHandler):
     def article_img_add_class(self,post):
         content_pq = pq(post['content'])
         for i in content_pq('img').items():
-            i.add_class('lazyload')
-            parsed_uri = urlparse(i.attr.src)
-            domain = parsed_uri.netloc
-            if domain.endswith('51cto.com'):
-                i.attr.src = w3lib.url.url_query_cleaner(i.attr.src, ['x-oss-process'], remove=True)
-            i.attr('referrerpolicy', 'no-referrer');
-            i.attr('data-original',i.attr.src)
-            i.remove_attr('src')
+            if i.attr.src:
+                i.add_class('lazyload')
+                parsed_uri = urlparse(i.attr.src)
+                domain = parsed_uri.netloc
+                if domain.endswith('51cto.com'):
+                    i.attr.src = w3lib.url.url_query_cleaner(i.attr.src, ['x-oss-process'], remove=True)
+                i.attr('referrerpolicy', 'no-referrer');
+                i.attr('data-original',i.attr.src)
+                i.remove_attr('src')
         content = content_pq.html(method="html")
         post['content'] = content
         return post
@@ -214,8 +228,8 @@ class UserHander(BaseHandler):
         return False
 
 class DBMixin(tornado.web.RequestHandler):
-    def __init__(self,application, request, **kwargs):
-        super(DBMixin, self).__init__(application, request, **kwargs)
+    def initialize(self):
+        #super(DBMixin, self).initialize(application, request, **kwargs)
         self.db =  self.application.dbs[self.request.host].get('db_conn',None)
         self.db_name = self.application.dbs[self.request.host].get('db_name',None)
         self.site_name = self.application.dbs[self.request.host]['site_name']
@@ -233,6 +247,5 @@ class DBMixin(tornado.web.RequestHandler):
 
     def get_template_namespace(self):
         ns = super(DBMixin, self).get_template_namespace()
-
-        ns.update({"site_name": self.site_name})
+        ns.update({"site_name": self.site_name,"t_self":self})
         return ns

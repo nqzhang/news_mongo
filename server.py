@@ -24,8 +24,8 @@ try:
 except:
     pass
 
-#import logging
-#logging.getLogger().setLevel(logging.DEBUG)
+import logging
+logging.getLogger().setLevel(logging.ERROR)
 
 MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 

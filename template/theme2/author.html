@@ -1,0 +1,73 @@
+{% extends base.html %}
+
+{% block main %}
+<div id="main">
+    <div class="wrap"><a href="https://www.xuehua.us/">首页</a> <small>&gt;</small> <span class="current">{{ t_self.data['author']['display_name'] }}</span>
+        <div class="mt10"></div>
+        <div class="author-post-info"><a class="author-avatar"> <img alt="{{ t_self.data['author']['display_name'] }}"
+                                                                     data-original="https://www.xuehua.us/wp-content/themes/Vnews._V1.2.4/avatar/.png"
+                                                                     class="lazy avatar avatar-65 photo avatar-default"
+                                                                     height="65" width="65"> </a>
+
+            <div class="author-post-right"><h1 class="name mr10">{{ t_self.data['author']['display_name'] }}</h1>
+               <!--
+                <span class="weibo mr10"> <a href="" title=""
+                                                                                                        target="_blank"
+                                                                                                        rel="external nofollow"
+                                                                                                        data-original-title="中新经纬的微博"><i
+                    class="icon-weibo" style="color:#f66"></i></a> </span> <span class="mail mr10"><a
+                    href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&amp;email=" title="" target="_blank"
+                    rel="external nofollow" data-original-title=""><i class=" icon-mail" style="color:#32a5e7"></i></a></span>
+                <p class="description"></p>
+                <p></p>
+                -->
+            </div>
+
+        </div>
+        <div class="article-title"><h3>作者文章</h3></div>
+        <div class="posts">
+            {% for post in t_self.data['posts'] %}
+            <div class="content">
+                <div class="content-header">
+                    <div class="content-info"></div>
+                </div>
+                <div class="content-img"><a
+                        href="{{ post['post_link'] }}"
+                        title="{{ post['post_title'] }}" target="_blank"> <img
+                        data-original="{{ post['post_thumb'] }}"
+                        alt="{{ post['post_title'] }}" class="lazy thumbnail"> </a></div>
+                <div class="content-note">
+                    <div class="content-header"><a
+                            href="{{ post['post_link'] }}"
+                            title="{{ post['post_title'] }}" target="_blank"><h2>{{ post['post_title'] }}</h2>
+                    </a></div>
+                    <span class="mr10 postuser">{{ t_self.data['author']['display_name'] }}</span>
+                    <span class="mr10 postclock">{{ post['friendly_time'] }}</span>
+                    {#
+                    <span
+                        class="category-color "><a
+                        href="https://www.xuehua.us/category/{{ post['terms']['category'][0]['slug'] }}"
+                        style="color:">{{ post['terms']['category'][0]['name'] }}</a> </span>#}
+                </div>
+            </div>
+            {% end %}
+        </div>
+        <div class="clearfix"></div>
+        {% if len(t_self.data['posts']) >= 15 %}
+        <div class="post-read-more clearfix mb30"><a
+                href="{{ t_self.data['next_page'] }}">加载更多</a></div>
+        {% end %}
+    </div>
+</div>
+{% end %}
+
+
+{% block script %}
+<script type="text/javascript"
+        src="{{ static_url('theme2/readmore.js')}}"></script>
+{% end %}
+
+
+{% block title %}
+<title>{{ t_self.data["author"]["display_name"]}} - {{ t_self.site_name }}</title>
+{% end %}
