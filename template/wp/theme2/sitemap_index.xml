@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <sitemapindex  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    {% for k,v in lastmod_cache.items() %}
+        <sitemap>
+            <loc>{{ "{}?type=sitemap&amp;start_id={}".format(t_self.reverse_full_url("sitemap_wp"),k) }}</loc>
+            <lastmod>{{ v + "+08:00" }}</lastmod>
+        </sitemap>
+   {% end %}
+    </sitemapindex>

@@ -16,13 +16,7 @@ jQuery(document).ready(function($) {
                     jQuery("body").removeClass('is-loadingApp');
                     var $res = $(data).find(".content");
                     $('.posts').append($res);
-                    jQuery(function() {
-                        $("img").lazyload({
-                            effect: "fadeIn",
-                            failure_limit: 10,
-                            threshold: 1000,
-                        });
-                    });
+                    observer.observe();
                     var newhref = $(data).find(".post-read-more a").attr("href");
                     if (newhref != undefined) {
                         $(".post-read-more a").attr("href", newhref);

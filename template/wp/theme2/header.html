@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="referrer" content="never">
+    <link rel="Shortcut Icon" href="{{static_url('theme2/favicon.ico')}}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{static_url('js/lib/jquery-3.3.1.min.js')}}"></script>
+     <!--<script src="https://www.xuehua.us/wp-content/themes/Vnews._V1.2.4/js/jquery/1.8.3/jquery.min.js"></script>-->
+    <script async src="{{static_url('theme2/custom_fix.js')}}"></script>
+    {% block title %}
+    {% end %}
+    <meta name="robots" content="max-snippet:-1, max-image-preview:large, max-video-preview:-1"/>
+    <link rel='stylesheet' id='fontello-css'
+          href="{{static_url('theme2/font/fontello.css')}}"
+          type='text/css' media='all'/>
+    <link rel='stylesheet' id='main-css' href="{{static_url('theme2/style.css')}}"
+          type='text/css' media='all'/>
+    <script data-ad-client="ca-pub-7536255340317474" async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script data-cfasync="false">!function () {
+        var e = document.createElement("script");
+        e.type = "text/javascript", e.async = !0, e.src = "https://cse.google.com/cse.js?cx=012659607576223787520:m9-uh9i1g6w";
+        var t = document.getElementsByTagName("script")[0];
+        t.parentNode.insertBefore(e, t)
+    }()</script>
+</head>
+<body>
+<header id="head">
+    <div class="container">
+        <section id="hd_usernav"><a href="https://www.xuehua.tw">台湾</a> ||&nbsp;语言: <a
+                href="{{t_self.data['cn_url']}}"
+                title="大陆简体">大陆简体</a>&nbsp;<a
+                href="{{t_self.data['hk_url']}}"
+                title="港澳繁體">港澳繁體</a>&nbsp;<a
+                href="{{t_self.data['tw_url']}}"
+                title="台灣正體">台灣正體</a>&nbsp;
+        </section>
+    </div>
+</header>
+<style>header {
+    background-color: #333;
+    height: 35px;
+    line-height: 35px
+}
+
+.hd-items {
+    float: right;
+    font-size: 0
+}
+
+#hd_usernav {
+    color: #fff;
+    float: right;
+    font-size: 12px;
+    line-height: 35px;
+    margin-right: 14px
+}
+
+#hd_usernav a {
+    color: #fff
+}</style>
+<div id="wrapper">
+    <div id="sitetopbar">
+        <div class="site-logo"><h1><a href="/" title="{{t_self.site_name }}"> <img
+                src="{{static_url('theme2/logo.jpg')}}" alt="{{ t_self.site_name }}"/></a></h1></div>
+        <div role="navigation" class="site-nav left-menu"><h1 class="minimenu-text"><i class="icon-align-justify"></i>
+        </h1>
+            <ul id="menu-navigation" class="menu">
+                {% for _,x in t_self.data['category_dict'].items() %}
+                <li {% if t_self.data.get('category_url') == x[0] %}class="current-menu-item" {% end %}><a href="{{x[0]}}">{{x[1]}}</a></li>
+               {% end %}
+                <li class=" submenu"><a href="https://www.xuehua.us/category/%e6%9b%b4%e5%a4%9a/{% if t_self.data['lang'] %}{{ t_self.data['lang']  + '/' }}{% end %}">更多 <span
+                        class="sign "></span></a>
+                    <ul class="sub-menu">
+                        {% for _,x in t_self.data['category_more_dict'].items() %}
+                        <li><a href="{{x[0]}}">{{x[1]}}</a></li>
+                        {% end %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>

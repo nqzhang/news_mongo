@@ -15,7 +15,6 @@ class NewPostHandler(DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self):
-        date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         body=json.loads(self.request.body.decode('utf-8'))
         code = body['code']
         if code != 'qtRjhwcGLHnXPQlC':
@@ -37,6 +36,15 @@ class NewPostHandler(DBMixin):
             category = None
             tag_type_num = 3
             post_type_num = 1
+        # 插入文章
+        post = await self.db.posts.find_one({"title": title, "type": post_type_num})
+        if post:
+            exeists = True
+            post_id = 0
+            self.write(str(post_id))
+            return
+        else:
+            exeists = False
         #thumb = body['thumb']
         #guid = uuid.uuid4().hex
         #guid = uuid.uuid3(uuid.NAMESPACE_DNS, title).hex
@@ -72,23 +80,19 @@ class NewPostHandler(DBMixin):
                     t = await self.db.terms.insert_one({"name":t_name,"type":tag_type_num})
                     t_id = t.inserted_id
                 t_ids.append(t_id)
-
-            #插入文章
-            post = await self.db.posts.find_one({"title": title,"type":post_type_num})
-            if post:
-                exeists = True
-            else:
-                exeists = False
             #print(exeists)
             if not exeists:
+                post_date = body.get('post_date', None)
+                if  post_date:
+                    post_date = datetime.datetime.strptime(post_date,"%Y-%m-%d %H:%M:%S")
+                else:
+                    post_date = datetime.datetime.now()
                 post_data = {"title": title, "content": content, "user": u_id, "type": post_type_num,
-                             "tags": t_ids, "post_date": datetime.datetime.now()}
+                             "tags": t_ids, "post_date": post_date}
                 if category:
                     post_data['category'] = c_ids
                 post_id = await self.db.posts.insert_one(post_data)
                 post_id = post_id.inserted_id
-            else:
-                post_id = 0
         except:
             traceback.print_exc()
         else:

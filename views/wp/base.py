@@ -22,10 +22,10 @@ class WpBaseHandler(BlockingHandler,DBMixin):
         return category_dict
 
     async def prepare(self):
-        language = self.path_kwargs['language']
+        lang = self.path_kwargs.get('language',None)
         categorys = ['推荐', "热点", "科技", "娱乐", "游戏", "体育", "军事", "汽车", "财经", "搞笑", "视频"]
         categorys_more = ['成长', "文化", "婚恋", "两性", "科普"]
         self.data= {}
-        self.data['category_dict'] = await self.generate_category_link(categorys, language)
-        self.data['category_more_dict'] = await self.generate_category_link(categorys_more, language, True)
-        self.data['language'] = language
+        self.data['category_dict'] = await self.generate_category_link(categorys, lang)
+        self.data['category_more_dict'] = await self.generate_category_link(categorys_more, lang, True)
+        self.data['lang'] = lang

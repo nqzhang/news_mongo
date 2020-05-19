@@ -5,11 +5,11 @@ from app import Application
 import motor.motor_tornado
 import config
 from tornado.httpserver import HTTPServer
-from apscheduler.schedulers.tornado import TornadoScheduler
-from apscheduler.schedulers.asyncio import AsyncIOScheduler
+# from apscheduler.schedulers.tornado import TornadoScheduler
+# from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 from cron import cron
-import asyncio,time,logging,signal
+import asyncio, time, logging, signal
 from functools import partial
 from tornado.platform.asyncio import AsyncIOMainLoop
 from aioelasticsearch import Elasticsearch
@@ -17,26 +17,33 @@ from urllib.parse import urlparse
 import aiomysql
 
 from bson import json_util
-try:
-    import uvloop
-    asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
-    AsyncIOMainLoop().install()
-except:
-    pass
+
+if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+else:
+    try:
+        import uvloop
+
+        asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
+        AsyncIOMainLoop().install()
+    except:
+        pass
 
 import logging
+
 logging.getLogger().setLevel(logging.ERROR)
 
 MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
 
-def sig_handler(app,sig,frame):
+
+def sig_handler(app, sig, frame):
     io_loop = tornado.ioloop.IOLoop.instance()
 
     def stop_loop(deadline):
         now = time.time()
         if now < deadline:
             logging.info('Waiting for next tick')
-            io_loop.call_later(1, stop_loop,deadline)
+            io_loop.call_later(1, stop_loop, deadline)
         else:
             if len(asyncio.Task.all_tasks(io_loop)) == 0:
                 io_loop.stop()
@@ -52,63 +59,66 @@ def sig_handler(app,sig,frame):
 
     io_loop.add_callback_from_signal(shutdown)
 
+
 async def connect_from_uri(uri):
     p = urlparse(uri)
-    connection = await aiomysql.create_pool(host=p.hostname, port=p.port,user=p.username,password=p.password,db=p.path[1:],loop=loop,maxsize=200,autocommit=True)
+    connection = await aiomysql.create_pool(host=p.hostname, port=p.port, user=p.username, password=p.password,
+                                            db=p.path[1:], loop=loop, maxsize=200, autocommit=True)
     return connection
+
+
 async def get_dbs():
-    dbs={}
-    async for x in news_mongo_db.settings.find({"site_id":{"$ne":"all"}}):
-        if x.get('db',None):
+    dbs = {}
+    dbs['by_domain'] = {}
+    async for x in news_mongo_db.settings.find({"site_id": {"$nin": ["all"]}}):
+        if x.get('db', None):
             db_uri = x['db']
-            x['db_name'] =  urlparse(db_uri).path[1:]
+            x['db_name'] = urlparse(db_uri).path[1:]
             if db_uri.startswith("mongodb"):
-                db = motor.motor_tornado.MotorClient(db_uri,maxPoolSize=200)[x['db_name']]
+                db = motor.motor_tornado.MotorClient(db_uri, maxPoolSize=200)[x['db_name']]
             elif db_uri.startswith("mysql"):
                 db = await connect_from_uri(db_uri)
             x['db_conn'] = db
-        if x.get('es_db',None):
-            x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
-        dbs[x['domain']] = x
-    async for x in news_mongo_db.settings.find({"site_id":  "all"}):
+        if x.get('es_db', None):
+            x['es_conn'] = Elasticsearch(host=x['es_db'], retry_on_timeout=True, loop=loop)
+        dbs['by_domain'][x['domain']] = x
+    async for x in news_mongo_db.settings.find({"site_id": "all"}):
         dbs['all'] = {}
-        if x.get('es_db',None):
-            x['es_conn'] =  Elasticsearch(host=x['es_db'],retry_on_timeout=True,loop=loop)
+        if x.get('es_db', None):
+            x['es_conn'] = Elasticsearch(host=x['es_db'], retry_on_timeout=True, loop=loop)
             dbs['all'] = x
     dbs['by_site_id'] = {}
-    for k,v in dbs.items():
+    for k, v in dbs['by_domain'].items():
         if k != "by_site_id":
             dbs['by_site_id'][v['site_id']] = v
+    dbs['all_domain'] = [x for x in dbs['by_domain'].keys()]
     import json
     print(dbs)
 
     return dbs
 
 
-
-
 if __name__ == "__main__":
-    #asyncio.set_event_loop(asyncio.new_event_loop())
-    #db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
-    news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200)['news_mongo']
+    # asyncio.set_event_loop(asyncio.new_event_loop())
+    # db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
+    news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'], maxPoolSize=200)['news_mongo']
     loop = asyncio.get_event_loop()
     dbs = IOLoop.current().run_sync(get_dbs)
-    #cron = cron(db)
-    #scheduler = TornadoScheduler()
-    #scheduler = AsyncIOScheduler()
-    #scheduler.add_job(cron.count_category, 'interval', seconds=300)
-    #scheduler.add_job(cron.count_category, 'date', run_date=datetime(2018, 8, 17, 4, 54, 0))
-    #scheduler.start()
+    # cron = cron(db)
+    # scheduler = TornadoScheduler()
+    # scheduler = AsyncIOScheduler()
+    # scheduler.add_job(cron.count_category, 'interval', seconds=300)
+    # scheduler.add_job(cron.count_category, 'date', run_date=datetime(2018, 8, 17, 4, 54, 0))
+    # scheduler.start()
     app = Application(dbs)
     if config.env == 'dev':
-        app.listen(80)
+        app.listen(80, xheaders=True)
     elif config.env == 'test':
-        app.listen(sys.argv[1])
+        app.listen(sys.argv[1], xheaders=True)
     elif config.env == 'production':
-        app.listen(sys.argv[1])
+        app.listen(sys.argv[1], xheaders=True)
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
     signal.signal(signal.SIGINT, partial(sig_handler, app))
     app.init_with_loop(loop)
-    #loop.set_blocking_log_threshold(0.5)
+    # loop.set_blocking_log_threshold(0.5)
     loop.run_forever()
-

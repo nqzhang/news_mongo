@@ -12,7 +12,10 @@ from .account import EmailHandler
 from email.header import Header
 from utils.hot import hot
 from elasticsearch_dsl import Search
-
+from elasticsearch_dsl.query import MoreLikeThis
+import timeago
+import json
+import time
 
 comment_notify_text = '''
             有人在{}回复了您<br/>
@@ -36,7 +39,30 @@ class ArticleHandler(BaseHandler,DBMixin):
         for post in posts:
             post = await self.get_post_category_info(post)
         return posts
-    async def get(self, post_id,language='zh-tw'):
+    async def get_amp(self,post_id):
+        post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
+        await self.get_thumb_image([post])
+        post = await self.get_posts_desc([post])
+        post = post[0]
+        self.data['html_lang'] = "zh-Hans"
+        if self.data['lang'] in ["zh-tw", "zh-hk"]:
+            self.data['html_lang'] = "zh-Hant"
+            self.data["site_name"] = await self.cc_async_s2t(self.data["site_name"])
+            post['title'] = await self.cc_async_s2t(post['title'])
+            post['content'] = await self.cc_async_s2t(post['content'])
+        elif self.data['lang'] == 'zh-cn':
+            self.data['html_lang'] = "zh-Hans"
+            post['title'] = await self.cc_async(post['title'])
+            post['content'] = await self.cc_async(post['content'])
+            self.data["site_name"] = await self.cc_async(self.data["site_name"])
+        self.data.update(post)
+        self.render('page/article_amp.html')
+    async def get(self, post_id):
+        language = self.get_argument("lang",None)
+        amp = self.get_argument("amp", None)
+        if amp:
+            await self.get_amp(post_id)
+            return
         post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
         prev_post=  await self.db.posts.find({"_id": {"$lt":ObjectId(post_id)}}).sort([("_id", -1)]).limit(1).to_list(length=None)
         next_post = await self.db.posts.find({"_id": {"$gt": ObjectId(post_id)}}).sort([("_id", 1)]).limit(1).to_list(length=None)
@@ -66,12 +92,14 @@ class ArticleHandler(BaseHandler,DBMixin):
         u_categorys =  await sidebar.u_categorys(self,u_id)
         #related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
+        self.es = None
         if self.es:
-            s = Search(index=self.es_index) \
-                .query("match", title=post['title'])
+            s = Search(index=self.es_index)
+            s = s.query("match", title= {"query": post['title']})
+            # s = s.query(MoreLikeThis(like=post['title'], fields=['title'],analyzer="jieba_search"))
             s = s.query("match", site_id=self.site_id)
             s = s.exclude('term', post_id=str(post_id))
-            #print(s.to_dict())
+            #print(json.dumps(s[0:8].to_dict()))
             response = await self.es.search(s[0:8].to_dict())
             related_posts_id = [ObjectId(i['_source']['post_id']) for i in response['hits']['hits']]
             related_posts = await self.db.posts.find({'_id': {'$in': related_posts_id}}).to_list(
@@ -81,29 +109,8 @@ class ArticleHandler(BaseHandler,DBMixin):
         else:
             if tags_id:
                 related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
-                    .limit(8).to_list(length=8)
+                    .limit(self.articles_per_page).to_list(length=self.articles_per_page)
                 related_posts = await related_sort(tags_id,related_posts,related_type='tags')
-                '''通过mongodb aggregate 实现的tags排序
-                related_posts=[]
-                replated_posts_cursor =  self.db.posts.aggregate([
-                    {"$match": {"tags": {"$in": tags_id},'_id': {'$ne': post['_id']}}},
-                    {"$unwind": "$tags"},
-                    {"$match": {"tags": {"$in": tags_id}}},
-                    {"$group": {
-                        "_id": "$_id",
-                        "title": {"$first": "$title"},
-                        "user": {"$first": "$user"},
-                        "post_date": {"$first": "$post_date"},
-                        "content": {"$first": "$content"},
-                        "matches": {"$sum": 1},
-                    }},
-                    {"$sort": {"matches": -1}},
-                    {"$limit": articles_per_page},
-                ],allowDiskUse=True)
-                async for replated_post in replated_posts_cursor:
-                    related_posts.append(replated_post)
-                print(related_posts)
-            '''
             else:
                 related_posts = []
             related_fill_num = 8 - len(related_posts)
@@ -116,16 +123,34 @@ class ArticleHandler(BaseHandler,DBMixin):
                     related_posts += related_posts_category
         related_posts = await join.post_user(related_posts, self.db)
         related_posts = await self.get_posts_desc(related_posts)
-        related_posts = await self.get_thumb_image(related_posts)
         related_posts = await self.get_posts_category_info(related_posts)
+        now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        for x in related_posts:
+            await self.generate_post_link([x])
+            print(x['post_date'])
+            x['time_ago'] = timeago.format(x['post_date'], now, self.timeago_language)
+            await self.get_thumb_image([x])
+            if self.data['lang'] in ["zh-tw", "zh-hk"]:
+                # x['content'] = await self.cc_async_s2t(x['content'])
+                x['title'] = await self.cc_async_s2t(x['title'])
+            elif self.data['lang'] == 'zh-cn':
+                x['title'] = await self.cc_async(x['title'])
+
+        post['user']['user_link'] = await self.generate_author_link_by_author(post['user'])
         #print(related_posts)
         # TODO 用户是否登录等个人数据 可以通过js来实时获取，这样就可以在CDN缓存html页面，当前国内文章页速度响应一般在600ms以内，
         #  因此可先不做
         #self.set_header('cache-control',
         #                'public, stale-while-revalidate=120,stale-if-error=3600,max-age=5,s-maxage=600')
         if language == 'zh-cn':
+            self.data["site_name"] = await self.cc_async(self.data["site_name"])
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
+        if language == "zh-tw" or language == "zh-hk":
+            html_lang = "zh-Hant"
+            self.data["site_name"] = await self.cc_async_s2t(self.data["site_name"])
+            post['title'] = await self.cc_async_s2t(post['title'])
+            post['content'] = await self.cc_async_s2t(post['content'])
         #post_etree = etree.HTML(post['content'])
         #post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
         #post['desc'] = post_desc
@@ -136,18 +161,21 @@ class ArticleHandler(BaseHandler,DBMixin):
     #处理author.user_name为空的情况
         if not author.user_name:
             author.user_name = 'None'
-        data={}
-        data['author'] = author
+        self.data['author'] = author
         #当前用户是否关注了该文章
         if await self.is_login():
             liked = await self.db.like.find({"type":"article_like","user_id":str(self.user['_id']),"post_id":post_id}).to_list(length=None)
-            data['liked'] = liked
+            self.data['liked'] = liked
         else:
-            data['liked'] = False
+            self.data['liked'] = False
         #print(post)
-        data['new_comment_posts'] = await sidebar.new_comment_posts(self)
+        self.data['menus'] = menus
+        self.data['new_comment_posts'] = await sidebar.new_comment_posts(self)
+        self.data.update(post)
+        self.data['related_posts'] = related_posts
+        print(hot_posts)
         self.render('page/article.html', menus=menus, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
-                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=data)
+                        u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=self.data)
         post_score = await hot(self.db,post_id)
 
 class ApiCommentsAddHandler(UserHander,EmailHandler,DBMixin):
@@ -189,7 +217,7 @@ class ApiCommentsAddHandler(UserHander,EmailHandler,DBMixin):
                 reply_post = await self.db.posts.find_one({"_id":ObjectId(reply_to_comment['post_id'])})
                 if reply_post['type'] == 0:
                     print(self.comment_id)
-                    post_link = '{}/a/{}?commentScrool={}'.format(config.site_domain,str(reply_post['_id']),self.comment_id)
+                    post_link = '{}/a/{}?commentScrool={}'.format(self.domain,str(reply_post['_id']),self.comment_id)
                 print(post_link)
                 reply_to_user_id = reply_to_comment['comment_author_id']
                 reply_to_user = await self.db.users.find_one({"_id":ObjectId(reply_to_user_id)})

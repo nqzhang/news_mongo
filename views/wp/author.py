@@ -7,6 +7,7 @@ import json
 
 class AuthorHandler(WpBaseHandler):
     async def get(self,user_nicename,page,language=None):
+        lang=language
         if not page:
             page = 1
         async with self.db.acquire() as conn:
@@ -46,21 +47,21 @@ class AuthorHandler(WpBaseHandler):
                     #print(json.dumps(x,default=str))
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         timeago_language_dict = {"zh-tw": "zh_TW", "zh-cn": "zh_CN", "zh-hk": "zh_TW"}
-        timeago_language = timeago_language_dict[self.data['language']] if self.data['language'] else "zh_CN"
+        timeago_language = timeago_language_dict[self.data['lang']] if self.data['lang'] else "zh_CN"
         for post in posts:
             await self.generate_post_link([post])
             post["content"] = post["post_content"]
             await self.get_thumb_image([post])
             post['friendly_time'] = timeago.format(post['post_date'], now, timeago_language)
-            if self.data['language'] in ["zh-tw", "zh-hk"]:
+            if self.data['lang'] in ["zh-tw", "zh-hk"]:
                 # x['content'] = await self.cc_async_s2t(x['content'])
                 post['post_title'] = await self.cc_async_s2t(post['post_title'])
         data={}
         data['posts'] = posts
         data['author'] = s
         data['next_page'] = '/author/{}/{}/'.format(data['author']['user_nicename'],int(page) + 1)
-        if self.data['language']:
-            data['next_page'] = data['next_page'] + self.data['language'] + '/'
+        if self.data['lang']:
+            data['next_page'] = data['next_page'] + self.data['lang'] + '/'
         data['desc'] = ''
         data["origin_url"] = "/author/{}/".format(user_nicename)
         data["cn_url"] = "{}{}/".format(data["origin_url"], "zh-cn")

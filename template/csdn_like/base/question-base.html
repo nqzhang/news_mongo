@@ -14,8 +14,8 @@
         <script src="{{ static_url('ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js') }}"></script>
         <link rel="stylesheet" href="{{ static_url('ckeditor/plugins/codesnippet/lib/highlight/styles/default.css') }}">
         <link rel="stylesheet" href="{{ static_url('css/ck_htmledit_views.css') }}">
-        <link rel="alternate" hreflang="zh-Hant" href="{{ config.site_domain }}/a/{{post['_id']}}" />
-        <link rel="alternate" hreflang="zh-Hans" href="{{ config.site_domain }}/a/{{post['_id']}}/zh-cn" />
+        <link rel="alternate" hreflang="zh-Hant" href="{{ t_self.domain }}/a/{{post['_id']}}" />
+        <link rel="alternate" hreflang="zh-Hans" href="{{ t_self.domain }}/a/{{post['_id']}}/?lang=zh-cn" />
         {% raw config.analytics_code %}
         {% raw config.adsense_code %}
         <script type="text/javascript" src="{{ static_url('js/ads.js') }}"></script>

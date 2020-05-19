@@ -1,0 +1,51 @@
+</div>
+<div id="footer">
+    <div class="site-footer">
+        <p class="copyright">Copyright © 2017 <a href="https://www.xuehua.us" title="雪花新闻" rel="home">雪花新闻</a> Powered
+            by&nbsp;&nbsp;<a href="http://www.xuehua.us" title="xuehua" rel="home">xuehua</a> <a
+                    href="http://www.miitbeian.gov.cn" rel="external nofollow" target="_blank">
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113511599-1"></script>
+                <script>function gtag() {
+                    dataLayer.push(arguments)
+                }
+
+                window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-113511599-1")</script>
+            </a></p>
+    </div>
+    <div id="totop"><i class="icon-up-open"></i></div>
+</div>
+<script type="text/javascript" src="{{static_url('lib/bootstrap-4.3.1-dist/js/bootstrap.js')}}"></script>
+<script type="text/javascript" src="{{static_url('theme2/traveler.js')}}"></script>
+<script type="text/javascript">$(function () {
+    var win_width = $(window).width();
+    var wrap_width = $('.wrap').width();
+    var totop_width = $('#totop').width();
+    var totop_posi = ([win_width - wrap_width] / 25 - totop_width);
+    $('#totop').css({'right': totop_posi});
+    $(window).scroll(function () {
+        if ($(window).scrollTop() >= 200) {
+            $('#totop').slideDown(200)
+        } else {
+            $('#totop').slideUp(200)
+        }
+    });
+    $('#totop').click(function () {
+        $('body,html').animate({scrollTop: 0}, 200)
+    })
+});</script>
+<script type="text/javascript" src="{{ static_url('lib/lozad.min.js') }}"></script>
+<script>
+const observer = lozad('img', {
+    load: function(el) {
+           const src = el.getAttribute('data-original')
+            if (src) {
+                el.src = src;
+            }
+    }
+});
+observer.observe();
+</script>
+{% block script %}
+{% end %}
+</body>
+</html>

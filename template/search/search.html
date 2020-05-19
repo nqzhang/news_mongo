@@ -16,7 +16,7 @@
 	<link title="DogeDoge" type="application/opensearchdescription+xml" rel="search" href="/opensearch.xml">
 	<link href="{{ static_url('search/lato-open-sans.css')}}" rel="stylesheet">
 	<script src="{{static_url('js/lib/jquery-3.3.1.min.js')}}"></script>
-	<script src="{{static_url('lib/lazyload.min.js')}}"></script>
+	<script type="text/javascript" src="{{ static_url('lib/lozad.min.js') }}"></script>
 	</head>
 	<body class="body--serp">
 	<div class="site-wrapper js-site-wrapper" style="min-height: 756px;">
@@ -304,7 +304,15 @@
 					getCharts(ctx, tmps.split(', '));
 				}});
 			}
-			$("img").lazyload({effect : "fadeIn",threshold: 400});
+			const observer = lozad('img', {
+					load: function(el) {
+						const src = el.getAttribute('data-original')
+							if (src) {
+								el.src = src;
+							}
+						}
+				});
+			observer.observe();
 	});
 	var header_spaces_css = {
 		height: $('#header_wrapper').outerHeight(true)

@@ -67,17 +67,13 @@
         <div role="navigation" class="site-nav left-menu"><h1 class="minimenu-text"><i class="icon-align-justify"></i>
         </h1>
             <ul id="menu-navigation" class="menu">
-                {% for _,x in t_self.data['category_dict'].items() %}
-                <li><a href="{{x[0]}}">{{x[1]}}</a></li>
-               {% end %}
-                <li class=" submenu"><a href="https://www.xuehua.us/category/%e6%9b%b4%e5%a4%9a/{% if t_self.data['language'] %}{{ t_self.data['language']  + '/' }}{% end %}">更多 <span
-                        class="sign "></span></a>
-                    <ul class="sub-menu">
-                        {% for _,x in t_self.data['category_more_dict'].items() %}
-                        <li><a href="{{x[0]}}">{{x[1]}}</a></li>
-                        {% end %}
-                    </ul>
-                </li>
+                {% block menu_left %}
+                    {% for menu in t_self.data['menus'] %}
+
+                    {# <li class="current-menu-item"><a href="{{x[0]}}">{{x[1]}}</a></li> #}
+                    <li ><a href="/c/{{ menu['_id'] }}">{{ menu['name'] }}</a></li>
+                   {% end %}
+                {% end %}
             </ul>
         </div>
     </div>

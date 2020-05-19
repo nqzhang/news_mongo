@@ -1,0 +1,184 @@
+<!doctype html>
+<html ⚡ lang="{{ t_self.data['html_lang'] }}">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1">
+
+    <link rel="canonical" href="{{ t_self.data['origin_url'] }}">
+    <link rel="shortcut icon" href="//www.xuehua.us/wp-content/themes/Vnews._V1.2.4/img/favicon.ico">
+
+    <title>{{t_self.data['title']}} - {{ t_self.data["site_name"]}}</title>
+    <script async src="https://cdn.ampproject.org/v0.js"></script>
+    <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+    <script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"></script>
+    <style amp-boilerplate>
+        body {
+            -webkit-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            -moz-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            -ms-animation: -amp-start 8s steps(1, end) 0s 1 normal both;
+            animation: -amp-start 8s steps(1, end) 0s 1 normal both
+        }
+
+        @-webkit-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-moz-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-ms-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @-o-keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }
+
+        @keyframes -amp-start {
+            from {
+                visibility: hidden
+            }
+            to {
+                visibility: visible
+            }
+        }</style>
+    <noscript>
+        <style amp-boilerplate>body {
+            -webkit-animation: none;
+            -moz-animation: none;
+            -ms-animation: none;
+            animation: none
+        }</style>
+    </noscript>
+    <style amp-custom>
+        body {
+            width: auto;
+            margin: 0;
+            padding: 0;
+        }
+
+        article img, video {
+            max-width: 95%;
+        }
+
+        header {
+            background: tomato;
+            color: white;
+            font-size: 2em;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            padding: 0.5em;
+            background: white;
+            box-shadow: 0px 3px 5px grey;
+        }
+
+        p {
+            padding: 0.5em;
+            margin: 0.5em;
+        }
+    </style>
+    <script type="application/ld+json">
+        {
+            "@context": "http://schema.org",
+            "@type": "NewsArticle",
+            "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "{{ t_self.data['origin_url'] }}"
+            },
+            "headline": "{{ t_self.data['title'] }}",
+        {% if t_self.data['post_thumb'] %}
+        "image": {
+        "@type": "ImageObject",
+        "url": "{{ t_self.data['post_thumb'] }}",
+        "height": 800,
+        "width": 800
+        },
+        {% end %}
+        "datePublished": "{{ t_self.data['post_date'] }}",
+        "dateModified": "{{ t_self.data['post_date'] }}",
+        "author": {
+        "@type": "Organization",
+        "name": "{{ t_self.data['site_name']}}"
+        },
+        "publisher": {
+        "@type": "Organization",
+        "name": "{{ t_self.data['site_name']}}",
+        "logo": {
+        "@type": "ImageObject",
+        "url": "//www.xuehua.us/wp-content/uploads/2018/01/logo.jpg",
+        "width": 150,
+        "height": 81
+        }
+        },
+        "description": "{{ t_self.data['desc'] }}"
+        }
+    </script>
+</head>
+<body>
+    <amp-auto-ads type="adsense"
+            data-ad-client="ca-pub-7536255340317474">
+    </amp-auto-ads>
+    <amp-analytics type="googleanalytics">
+        <script type="application/json">
+            {
+                "vars": {
+                    "account": "UA-113511599-1"
+                },
+                "triggers": {
+                    "trackPageview": {
+                        "on": "visible",
+                        "request": "pageview"
+                    }
+                }
+            }
+        </script>
+    </amp-analytics>
+<header>
+    {{t_self.data["site_name"]}}
+</header>
+    <amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-7536255340317474"
+     data-ad-slot="5600300833"
+     data-auto-format="rspv"
+     data-full-width="">
+  <div overflow=""></div>
+</amp-ad>
+<article>
+    <h1>{{ t_self.data["title"] }}</h1>
+    {% raw t_self.data["content"] %}
+</article>
+<amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-7536255340317474"
+     data-ad-slot="9989774936"
+     data-auto-format="mcrspv"
+     data-full-width="">
+  <div overflow=""></div>
+</amp-ad>
+</body>
+</html>

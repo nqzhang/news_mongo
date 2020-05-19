@@ -23,7 +23,7 @@ async def hot(db,post_id):
         post_score = post_like - post_unlike
     #post_comments = await db.comments.count({"post_id":post_id,"reply_to" : { "$exists" : False }})
     #取该文章所有评论数量
-    post_comments = await db.comments.count({"post_id":post_id})
+    post_comments = await db.comments.count_documents({"post_id":post_id})
 
     #计算该文章所有评论的点赞和踩的差 post_comments_score
     post_comments_score =  await db.comments.aggregate([{"$match":{"post_id": post_id}},

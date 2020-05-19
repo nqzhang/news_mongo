@@ -54,10 +54,12 @@ class BlockingHandler(BlockingBaseHandler):
             if self.views_theme == "wp":
                 post['post_link'] = "//{}{}{}/".format(domain, post['post_date'].strftime("/%Y/%m/%d/"),
                                                        post['post_name'])
-                if self.data['language']:
-                    post['post_link'] = '{}{}/'.format(post['post_link'],self.data['language'])
+                if self.data.get('lang',None):
+                    post['post_link'] = '{}{}/'.format(post['post_link'],self.data['lang'])
             else:
-                post['post_link'] = '//{}/a/{}'.format(domain,str(post['_id']))
+                post['post_link'] = '//{}/a/{}'.format(domain, str(post['_id']))
+                if self.data.get('lang',None):
+                    post['post_link'] = w3lib.url.add_or_replace_parameter(post['post_link'], 'lang', self.data['lang'])
         return posts
     async def generate_author_link_by_author(self,author,site_id=None):
         if not site_id:
@@ -66,8 +68,10 @@ class BlockingHandler(BlockingBaseHandler):
             domain = self.application.dbs['by_site_id'][site_id]['domain']
         if self.views_theme == "wp":
             author_link = "//{}/author/{}/".format(domain,author['user_nicename'])
-        if self.data['language']:
-            author_link = author_link + self.data['language'] + '/'
+        else:
+            author_link = "//{}/u/{}/".format(domain, author['_id'])
+        if self.data['lang']:
+            author_link = author_link + self.data['lang'] + '/'
         return author_link
 
     @run_on_executor
@@ -148,6 +152,17 @@ class BlockingHandler(BlockingBaseHandler):
 class BaseHandler(BlockingHandler):
     async def prepare(self):
         self.user = await self.get_user()
+        lang = self.get_argument("lang",None)
+        self.data= {}
+        self.data['lang'] = lang
+        self.data['site_name'] = self.site_name
+        self.data["origin_url"] = self.request.full_url()
+        self.data['cn_url']= w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-cn')
+        self.data['tw_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-tw')
+        self.data['hk_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-hk')
+        self.data['amp_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'amp', '1')
+        self.timeago_language_dict = {"zh-tw":"zh_TW","zh-cn":"zh_CN","zh-hk":"zh_TW"}
+        self.timeago_language = self.timeago_language_dict[self.data['lang']] if self.data['lang'] else "zh_CN"
     def get_template_namespace(self):
         ns = super(BaseHandler, self).get_template_namespace()
         ns.update({"user": self.user})
@@ -202,6 +217,7 @@ class UserHander(BaseHandler):
     async def prepare(self):
         await super(UserHander, self).prepare()
         await self.check_authentication()
+
     async def check_authentication(self, optional=False):
         if not hasattr(self, '_current_user'):
             try:
@@ -230,22 +246,35 @@ class UserHander(BaseHandler):
 class DBMixin(tornado.web.RequestHandler):
     def initialize(self):
         #super(DBMixin, self).initialize(application, request, **kwargs)
-        self.db =  self.application.dbs[self.request.host].get('db_conn',None)
-        self.db_name = self.application.dbs[self.request.host].get('db_name',None)
-        self.site_name = self.application.dbs[self.request.host]['site_name']
-        self.articles_per_page = self.application.dbs[self.request.host]['articles_per_page']
-        self.cookie_domain = self.application.dbs[self.request.host]['domain']
-        self.domain = self.application.dbs[self.request.host]['domain']
-        self.views_theme = self.application.dbs[self.request.host].get('views_theme',None)
+        self.db =  self.application.dbs['by_domain'][self.request.host].get('db_conn',None)
+        self.db_name = self.application.dbs['by_domain'][self.request.host].get('db_name',None)
+        self.site_name = self.application.dbs['by_domain'][self.request.host]['site_name']
+        self.articles_per_page = self.application.dbs['by_domain'][self.request.host]['articles_per_page']
+        self.cookie_domain = self.application.dbs['by_domain'][self.request.host]['domain']
+        self.domain = self.application.dbs['by_domain'][self.request.host]['domain']
+        self.views_theme = self.application.dbs['by_domain'][self.request.host].get('views_theme',None)
         self.set_cookie("_xsrf", self.xsrf_token)
-        #self.es = self.application.dbs[self.request.host].get('es_conn',None)
+        #self.es = self.application.dbs['by_domain'][self.request.host].get('es_conn',None)
         self.es = self.application.dbs['all'].get('es_conn',None)
         self.es_index = self.application.dbs['all'].get('es_index', None)
-        self.site_id = self.application.dbs[self.request.host]['site_id']
+        self.site_id = self.application.dbs['by_domain'][self.request.host]['site_id']
+        self.cdn_host =  self.application.dbs['by_site_id']['cdn'].get('domain', None)
+
     def get_template_path(self):
-        return os.path.join(self.application.settings.get("template_path"),self.application.dbs[self.request.host]['theme'])
+        return os.path.join(self.application.settings.get("template_path"),self.application.dbs['by_domain'][self.request.host]['theme'])
 
     def get_template_namespace(self):
         ns = super(DBMixin, self).get_template_namespace()
         ns.update({"site_name": self.site_name,"t_self":self})
         return ns
+
+    def static_url(self, path, include_host=None, **kwargs):
+        if self.cdn_host:
+            relative_url = super(DBMixin, self).static_url(path, include_host=False, **kwargs)
+            return '//' + self.cdn_host + relative_url
+        else:
+            return super(BaseHandler, self).static_url(path, include_host=include_host, **kwargs)
+
+    #     self.set_header("Access-Control-Allow-Origin", '127.0.0.5')
+    #     self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+    #     self.set_header("Access-Control-Allow-Methods", "POST, GET, OPTIONS")

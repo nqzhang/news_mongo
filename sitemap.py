@@ -29,7 +29,7 @@ class RotatingFile(object):
         if not os.path.exists(os.path.join(os.getcwd(),self.directory, self.filename)):
             os.makedirs(os.path.join(os.getcwd(),self.directory, self.filename))
         self.fh = open(self.filename_template, 'w')
-        url = config.site_domain + '/' + self.directory + '/' + self.filename + '/' + "%0.2d.txt" % self.ii
+        url = t_self.domain + '/' + self.directory + '/' + self.filename + '/' + "%0.2d.txt" % self.ii
         self.urls.append(url)
 
     def write(self, text=""):
@@ -50,13 +50,13 @@ class RotatingFile(object):
 def genarate_sitemap(min_time,max_time):
     myfile = RotatingFile(directory="sitemap",filename=min_time.strftime('%Y_%m_%d'),maxlines=50000)
     for post in client.posts.find({ "post_date": {"$gte" : min_time, "$lt": max_time}}):
-        t = config.site_domain + '/a/' + str(post['_id'])
+        t = t_self.domain + '/a/' + str(post['_id'])
         myfile.write('{}\n'.format(t))
     if myfile.lines == 0:
         myfile.close()
         os.remove(myfile.filename_template)
     if myfile.ii == 1:
-        urls = [config.site_domain + '/' + myfile.directory + '/' + myfile.filename + '/' + "%0.2d.txt" % myfile.ii]
+        urls = [t_self.domain + '/' + myfile.directory + '/' + myfile.filename + '/' + "%0.2d.txt" % myfile.ii]
     else:
         urls = myfile.urls
     return urls

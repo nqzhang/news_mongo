@@ -864,7 +864,26 @@ html {
     font-size: 13px;
     color: #999
 }
-
+.content-note .posttag a {
+    padding: 3px 8px;
+    background-color: #eee;
+    margin: 2px;
+    height: 20px;
+    line-height: 30px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    white-space: normal;
+    word-break: keep-all;
+    -webkit-transition: background-color .15s linear, color .15s linear;
+    -moz-transition: background-color .15s linear, color .15s linear;
+    -o-transition: background-color .15s linear, color .15s linear;
+    -ms-transition: background-color .15s linear, color .15s linear;
+    transition: background-color .15s linear, color .15s linear
+}
+.content-note .posttag a:hover {
+    text-decoration: none;
+    color: #d43d3d;
+}
 .content .content-note p {
     margin-bottom: 10px;
     line-height: 25px;

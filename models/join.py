@@ -5,15 +5,13 @@ async def post_user(posts,db):
     user_dict = {}
     async for user in users:
         user_dict[user['_id']] = user
-    posts_new = []
     for post in posts:
         try:
             post['user'] = user_dict[post['user']]
-            post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
+            post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M:%S")
         except:
             continue
-        posts_new.append(post)
-    return posts_new
+    return posts
 
 #传入的posts是单个post的字典
 async def post_tags(post,db):
@@ -24,6 +22,17 @@ async def post_tags(post,db):
         tag_dict[tag['_id']] = tag
     post['tags'] = [tag_dict[i] for i in post['tags']]
     return post
+
+#传入的posts是多个post的字典
+async def posts_tags(posts,db):
+    tags = [x for y in posts for x in y['tags']]
+    tags = db.terms.find({'_id': {'$in': tags}})
+    tag_dict = {}
+    async for tag in tags:
+        tag_dict[tag['_id']] = tag
+    for post in posts:
+        post['tags'] = [tag_dict[i] for i in post['tags']]
+    return posts
 
 #传入的posts是单个post的字典
 async def post_category(post,db):
