@@ -2,7 +2,7 @@
 $(document).ready(function() {
             var ad_pub,site_domain = document.domain
             var ad_slot=new Array();
-            if (site_domain==="www.xuehua.us") {
+            if (site_domain==="www.xuehua.tw") {
                 var ad_pub = "3219336841483159"
                 ad_slot[0] = "2314507966"
                 ad_slot[1] = "3483281765"
