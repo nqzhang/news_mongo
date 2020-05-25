@@ -7,7 +7,11 @@ from bson import ObjectId
 from .tools import get_tname_by_tid
 
 def build_key(f,*args,**kwargs):
-    return  args[0].site_name + '_' + f.__name__
+    if args[0].data['lang']:
+        r = '{}_{}_{}'.format(args[0].site_name,f.__name__,args[0].data['lang'])
+    else:
+        r = '{}_{}'.format(args[0].site_name,f.__name__)
+    return r
 
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
         serializer=MsgPackSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
@@ -19,6 +23,10 @@ async def hot_posts(self,post_type=0):
     hot_posts = await self.get_thumb_image(hot_posts)
     for hot_post in hot_posts:
         del hot_post['content']
+        if self.data['lang'] in ["zh-tw", "zh-hk"]:
+            hot_post['title'] = await self.cc_async_s2t(hot_post['title'])
+        elif self.data['lang'] == 'zh-cn':
+            hot_post['title'] = await self.cc_async(hot_post['title'])
     return hot_posts
 
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],

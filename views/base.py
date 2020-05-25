@@ -71,7 +71,8 @@ class BlockingHandler(BlockingBaseHandler):
         else:
             author_link = "//{}/u/{}/".format(domain, author['_id'])
         if self.data['lang']:
-            author_link = author_link + self.data['lang'] + '/'
+            author_link = w3lib.url.add_or_replace_parameter(author_link, 'lang', self.data['lang'])
+            #author_link = author_link + self.data['lang'] + '/'
         return author_link
 
     @run_on_executor
@@ -163,6 +164,13 @@ class BaseHandler(BlockingHandler):
         self.data['amp_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'amp', '1')
         self.timeago_language_dict = {"zh-tw":"zh_TW","zh-cn":"zh_CN","zh-hk":"zh_TW"}
         self.timeago_language = self.timeago_language_dict[self.data['lang']] if self.data['lang'] else "zh_CN"
+        self.data['menus'] = await self.db.menu.find({"type": "left"}).to_list(length=10)
+        if self.data['lang'] in ["zh-tw", "zh-hk"]:
+            for menu in self.data['menus']:
+                menu['name'] = await self.cc_async_s2t(menu['name'])
+        elif self.data['lang'] == 'zh-cn':
+            for menu in self.data['menus']:
+                menu['name'] = await self.cc_async(menu['name'])
     def get_template_namespace(self):
         ns = super(BaseHandler, self).get_template_namespace()
         ns.update({"user": self.user})

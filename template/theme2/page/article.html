@@ -1,45 +1,61 @@
 {% extends base.html %}
 
 {% block main %}
-    <div id="main">
-        <div class="wrap">
-            <!-- 文章页顶部 -->
-            <ins class="adsbygoogle"
-                 style="display:block"
-                 data-ad-client="ca-pub-7536255340317474"
-                 data-ad-slot="5600300833"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            <script>
-                 (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-            <div class="post">
-                {#
-                <div class="posttitle-img "><a href="/">首页</a> <small>&gt;</small>
-                    {% if t_self.data['post_category'] %}
-                    <a href="/category/{{ t_self.data['post_category']['slug'] }}/">{{ t_self.data['post_category']['name'] }}</a>
-                     <small>&gt;</small>
-                    {% end %}
-                    <span class="current">{{t_self.data['title']}}</span></div>
-                 <div class="post-tags">
-                    <div class="tags">
-                            {% if t_self.data['post_tags'] %}
-                            {% set tag_html=[] %}
-                            {% for t in t_self.data['post_tags'] %}
-                                {% set tag_html.append('<a href="/tag/{}/" rel="tag">{}</a>'.format(t["slug"],t["name"])) %}
-                            {% end %}
-                            {% raw ','.join(tag_html) %}
-                        {% end %}
-                    </div>
-                </div> #}
-                <div class="post-title"><h1 class="title">{{ t_self.data['title'] }}</h1>
+<div id="main">
+    <div class="wrap">
+        <!-- 文章页顶部 -->
+        {% if t_self.site_id == "5" %}
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-7536255340317474"
+             data-ad-slot="5600300833"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        {% elif t_self.site_id == "6" %}
+        <!-- 文章页顶部 -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-3219336841483159"
+             data-ad-slot="3244252735"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        {% end %}
 
-                    <div class="post_icon"><span class="mr10">
+        <div class="post">
+            {#
+            <div class="posttitle-img "><a href="/">首页</a> <small>&gt;</small>
+                {% if t_self.data['post_category'] %}
+                <a href="/category/{{ t_self.data['post_category']['slug'] }}/">{{ t_self.data['post_category']['name']
+                    }}</a>
+                <small>&gt;</small>
+                {% end %}
+                <span class="current">{{t_self.data['title']}}</span></div>
+            <div class="post-tags">
+                <div class="tags">
+                    {% if t_self.data['post_tags'] %}
+                    {% set tag_html=[] %}
+                    {% for t in t_self.data['post_tags'] %}
+                    {% set tag_html.append('<a href="/tag/{}/" rel="tag">{}</a>'.format(t["slug"],t["name"])) %}
+                    {% end %}
+                    {% raw ','.join(tag_html) %}
+                    {% end %}
+                </div>
+            </div>
+            #}
+            <div class="post-title"><h1 class="title">{{ t_self.data['title'] }}</h1>
+
+                <div class="post_icon"><span class="mr10">
 
                             <a
-                            href="{{ t_self.data['user']['user_link'] }}"> {{ t_self.data['user']['user_name'] }}</a></span>
+                                    href="{{ t_self.data['user']['user_link'] }}"> {{ t_self.data['user']['user_name'] }}</a></span>
 
-                             <span
+                    <span
                             class="mr10">{{ t_self.data['post_date'] }}</span> <span class="mr10">
                             <!--
                             <a
@@ -49,71 +65,85 @@
                                     title="评论"> <a
                                     href="https://www.xuehua.us/2020/04/25/%e5%a4%a7%e4%bc%97%e5%85%a8%e6%96%b0%e6%97%85%e8%a1%8c%e7%89%88%e9%ab%98%e5%b0%94%e5%a4%ab%e5%ae%9e%e6%8b%8d%ef%bc%8c%e5%b9%b4%e4%b8%ad%e5%bc%80%e5%94%ae%ef%bc%8c%e7%a9%ba%e9%97%b4%e5%a0%aa%e6%af%94su/#respond">0</a></a> </span>
                             -->
-                    </div>
+                </div>
 
-                </div>
-                <div class="post-content"><p></p>
-                    {% raw t_self.data['content'] %}
-                </div>
-                {#
-                <div class="postmetadata"> 转载请注明来自 <a href="https://www.xuehua.us" title="{{ t_self.data['title'] }}">{{ t_self.data['title'] }}</a>，本文标题：<a
-                        href="{{t_self.data['origin_url']}}"
-                        title="{{ t_self.data['title'] }}" rel="bookmark">{{t_self.data['title']}}, 转载请保留本声明！</a></div>
-                        #}
             </div>
-            <div class="clear"></div>
-                <ins class="adsbygoogle"
-                     style="display:block"
-                     data-ad-format="autorelaxed"
-                     data-ad-client="ca-pub-7536255340317474"
-                     data-ad-slot="9989774936"></ins>
-                <script>
-                     (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-            <div id="related">
-                <div class="related_about"><span>
+            <div class="post-content"><p></p>
+                {% raw t_self.data['content'] %}
+            </div>
+            {#
+            <div class="postmetadata"> 转载请注明来自 <a href="https://www.xuehua.us" title="{{ t_self.data['title'] }}">{{
+                t_self.data['title'] }}</a>，本文标题：<a
+                    href="{{t_self.data['origin_url']}}"
+                    title="{{ t_self.data['title'] }}" rel="bookmark">{{t_self.data['title']}}, 转载请保留本声明！</a></div>
+            #}
+        </div>
+        <div class="clear"></div>
+        {% if t_self.site_id == "5" %}
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-7536255340317474"
+             data-ad-slot="9989774936"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        {% elif t_self.site_id == "6" %}
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-3219336841483159"
+             data-ad-slot="4428260401"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+        {% end %}
+
+
+        <div id="related">
+            <div class="related_about"><span>
                     {% if t_self.data['lang'] in ['zh-tw','zh-hk'] %}
                     相關文章
                     {% else %}
                     相关文章
                     {% end %}
                 </span></div>
-                <ul class="related_img">
-                    {% for related_post in t_self.data['related_posts'] %}
-                    <div class="content">
-                        <div class="content-header">
-                            <div class="content-info"></div>
-                        </div>
-                        {% if related_post['post_thumb'] %}
-                        <div class="content-img"><a
-                                href="{{ related_post['post_link'] }}"
-                                title="{{ related_post['title'] }}" target="_blank"> <img
-                                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                                data-original="{{ related_post['post_thumb'] }}"
-                                alt="{{ related_post['title'] }}" class="lazy thumbnail"/> </a></div>
-                        {% end %}
-                        <div class="content-note">
-                            <div class="content-header"><a
-                                    href="{{ related_post['post_link'] }}"
-                                    title="{{ related_post['title'] }}" target="_blank"><h2>
-                                {{ related_post['title'] }}</h2></a></div>
-                            <span class="mr10 postclock">{{ related_post['time_ago'] }}</span>
-                            <!--
-                            <span class="mr10 postuser">
-                            <a
-                                href="https://www.xuehua.us/author/3ba8e297c017ba754db2ca770a55dd76/">一起追爱豆</a></span>
-                                -->
-                            <!--<span class="category-color"> <a href="https://www.xuehua.us/category/%e6%b1%bd%e8%bd%a6/">汽车</a></span>-->
-                        </div>
+            <ul class="related_img">
+                {% for related_post in t_self.data['related_posts'] %}
+                <div class="content">
+                    <div class="content-header">
+                        <div class="content-info"></div>
                     </div>
+                    {% if related_post['post_thumb'] %}
+                    <div class="content-img"><a
+                            href="{{ related_post['post_link'] }}"
+                            title="{{ related_post['title'] }}" target="_blank"> <img
+                            src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                            data-original="{{ related_post['post_thumb'] }}"
+                            alt="{{ related_post['title'] }}" class="lazy thumbnail"/> </a></div>
                     {% end %}
+                    <div class="content-note">
+                        <div class="content-header"><a
+                                href="{{ related_post['post_link'] }}"
+                                title="{{ related_post['title'] }}" target="_blank"><h2>
+                            {{ related_post['title'] }}</h2></a></div>
+                        <span class="mr10 postclock">{{ related_post['time_ago'] }}</span>
+                        <!--
+                        <span class="mr10 postuser">
+                        <a
+                            href="https://www.xuehua.us/author/3ba8e297c017ba754db2ca770a55dd76/">一起追爱豆</a></span>
+                            -->
+                        <!--<span class="category-color"> <a href="https://www.xuehua.us/category/%e6%b1%bd%e8%bd%a6/">汽车</a></span>-->
+                    </div>
+                </div>
+                {% end %}
 
-                </ul>
-            </div>
-            <div id="ads-article-bottom"></div>
-            <div class="clear"></div>
+            </ul>
         </div>
+        <div id="ads-article-bottom"></div>
+        <div class="clear"></div>
     </div>
+</div>
 {% end %}
 
 {% block script %}
@@ -123,13 +153,22 @@
     $(".fancybox").fancybox()
 });</script>
 <script>
-$(document).ready(function() {
-    if ($('.sidebar').css('display') == 'none'){
-        top_element = $('.sidebar .widget_top-posts');
-        top_element.css('width','auto');
-        $('.wrap').append(top_element);
-    }
-});
+    $(document).ready(function () {
+        var bodyw = $(window).width();
+        if (bodyw < 800) {
+            top_element = $('.sidebar .widget_top-posts');
+            top_element.css('width', 'auto');
+            $('.wrap').append(top_element);
+        }
+    });
+    var post_id = "{{ post['_id'] }}";
+    var token = getCookie('_xsrf');
+    $.ajax({
+        url: '/views',
+        headers: {'X-XSRFToken': token},
+        data: {post_id: post_id},
+        type: "POST",
+    });
 </script>
 {% end %}
 

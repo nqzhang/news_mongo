@@ -5,6 +5,7 @@
         <a href="/u/{{ data['author']['_id'] }}/{{ int(data['page'])-1 }}" class="pagination-prev">上一页</a>
     {% end %}
 
+    {#
     {% if int(data['page']) <= 4 %}
         {% set p_range = range(int(data['page'])-4,10) %}
     {% elif int(data['page']) <=  data['max_page'] -4 %}
@@ -21,15 +22,12 @@
                 {% end %}
         {% end %}
     {% end %}
-    {% if int(data['page']) < data ['max_page'] %}
+    #}
 
+    {% if len(t_self.data['posts']) >= t_self.articles_per_page %}
         <a href="/u/{{data['author']['_id']}}/{{ int(data['page'])+1 }}" class="pagination-prev">下一页</a>
     {% end %}
 
-    {% if int(data['page']) != data['max_page'] %}
-        {% if data['max_page'] > 1 %}
-            <a href="/u/{{data['author']['_id']}}/{{data['max_page']}}" class="pagination-prev">尾頁</a>
-        {% end %}
-    {% end %}
+
 </div>
 </div>

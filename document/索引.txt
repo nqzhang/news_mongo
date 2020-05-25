@@ -12,28 +12,21 @@ db.posts.createIndex({is_real_user:1})
 db.terms.createIndex({name:1,type:1})
 db.terms.createIndex({user:1,type:1})
 db.users.createIndex({user_name:1})
-#首页查询
+//首页查询
 db.posts.createIndex({is_real_user:1,type:1,is_recommend:1,post_date:-1})
-
-#db.posts.find({'post_date': {'$gte': ISODate("2018-09-10T22:36:37.312Z")},'type':1}).sort({"views": -1}).limit(7).explain()
+//db.posts.find({'post_date': {'$gte': ISODate("2018-09-10T22:36:37.312Z")},'type':1}).sort({"views": -1}).limit(7).explain()
 db.posts.createIndex({views:-1,type:1})
-
 db.posts.createIndex({post_date,type:1,views:-1,})
-
-
-db.posts.getIndexes()
-
-#db.users.find({"email"："898611548@qq.com",is_real:1})
+//db.users.find({"email"："898611548@qq.com",is_real:1})
 db.users.createIndex({email:1,is_real:1})
+//验证码过期索引
+db.code.createIndex( { "createTime": 1 },{ expireAfterSeconds: 1800 })
+//评论索引
+db.comments.createIndex({post_id:1})
 
-#分片
+//分片
 db.posts.createIndex({_id:"hashed"})
 db.terms.createIndex({_id:"hashed"})
 sh.shardCollection("www_smwenku_com.posts", {"_id":"hashed"})
 sh.shardCollection("www_smwenku_com.terms", {"_id":"hashed"})
 
-#验证码过期索引
-db.code.createIndex( { "createTime": 1 },{ expireAfterSeconds: 1800 })
-
-#评论索引
-db.comments.createIndex({post_id:1})

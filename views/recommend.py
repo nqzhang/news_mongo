@@ -7,7 +7,6 @@ import config
 class recommendPageHandler(BaseHandler,DBMixin):
     async def get(self,page=1):
         user = await self.get_user()
-        menus = await self.db.menu.find({"type": "left"}).to_list(length=10)
         #posts =  await self.db.posts.find({"is_real_user": 1,"type":0,"is_recommend":{"$ne":False}}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
         posts =  await self.db.posts.find({"type":0,"is_recommend":{"$ne":False},"score" : { "$exists" : True }}).sort([("score",-1)]).skip(articles_per_page * (int(page) - 1)).limit(articles_per_page).to_list(length=articles_per_page)
         posts = await join.post_user(posts,self.db)
@@ -16,4 +15,4 @@ class recommendPageHandler(BaseHandler,DBMixin):
         #self.write('ok')
         path = self.request.path
         list_path = 'recommend'
-        self.render('page/index.html',menus=menus,posts=posts,config=config,page=page,hot_posts=hot_posts,user=user,path=path,list_path=list_path)
+        self.render('page/index.html',menus=self.data['menus'],posts=posts,config=config,page=page,hot_posts=hot_posts,user=user,path=path,list_path=list_path)

@@ -139,9 +139,15 @@
     </script>
 </head>
 <body>
+ {% if t_self.site_id == "5" %}
     <amp-auto-ads type="adsense"
             data-ad-client="ca-pub-7536255340317474">
     </amp-auto-ads>
+  {% elif t_self.site_id == "6" %}
+     <amp-auto-ads type="adsense"
+            data-ad-client="ca-pub-3219336841483159">
+    </amp-auto-ads>
+ {% end %}
     <amp-analytics type="googleanalytics">
         <script type="application/json">
             {
@@ -160,6 +166,7 @@
 <header>
     {{t_self.data["site_name"]}}
 </header>
+    {% if t_self.site_id == "5" %}
     <amp-ad width="100vw" height="320"
      type="adsense"
      data-ad-client="ca-pub-7536255340317474"
@@ -168,10 +175,21 @@
      data-full-width="">
   <div overflow=""></div>
 </amp-ad>
+    {% elif t_self.site_id == "6" %}
+        <amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-3219336841483159"
+     data-ad-slot="3244252735"
+     data-auto-format="rspv"
+     data-full-width="">
+     <div overflow=""></div>
+     </amp-ad>
+    {% end %}
 <article>
     <h1>{{ t_self.data["title"] }}</h1>
     {% raw t_self.data["content"] %}
 </article>
+     {% if t_self.site_id == "5" %}
 <amp-ad width="100vw" height="320"
      type="adsense"
      data-ad-client="ca-pub-7536255340317474"
@@ -180,5 +198,15 @@
      data-full-width="">
   <div overflow=""></div>
 </amp-ad>
+{% elif t_self.site_id == "6" %}
+<amp-ad width="100vw" height="320"
+     type="adsense"
+     data-ad-client="ca-pub-3219336841483159"
+     data-ad-slot="4428260401"
+     data-auto-format="mcrspv"
+     data-full-width="">
+      <div overflow=""></div>
+</amp-ad>
+{% end %}
 </body>
 </html>

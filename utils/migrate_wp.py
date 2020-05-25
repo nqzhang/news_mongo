@@ -19,7 +19,7 @@ class myprocess(Process):
         conn = pymysql.connect(host='195.201.164.101',
                                user='root',
                                password='11QQqqWW',
-                               db='news.xuehua.us',
+                               db='tw.xuehua.us',
                                charset='utf8mb4',
                                cursorclass=pymysql.cursors.DictCursor)
         with conn.cursor() as cur:
@@ -65,7 +65,7 @@ class myprocess(Process):
                             x['content'] = x.pop('post_content')
                             x['user'] = tmp_u[x['post_author']]['display_name']
                             x['post_date'] = x['post_date'].strftime("%Y-%m-%d %H:%M:%S")
-                            requests.post('http://tmp.xuehua.us/backend/newpost', data=json.dumps(x, default=str))
+                            requests.post('http://www.xuehua.tw/backend/newpost', data=json.dumps(x, default=str))
                         except Exception as e:
                             traceback.print_exc()
                 self.start_id += 1000
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     conn = pymysql.connect(host='195.201.164.101',
                            user='root',
                            password='11QQqqWW',
-                           db='news.xuehua.us',
+                           db='tw.xuehua.us',
                            charset='utf8mb4',
                            cursorclass=pymysql.cursors.DictCursor)
     with conn.cursor() as cur:

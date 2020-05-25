@@ -86,7 +86,6 @@ class ArticleHandler(BaseHandler,DBMixin):
         post['post_date'] = post['post_date'].strftime("%Y-%m-%d %H:%M")
         #post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
         #print(post)
-        menus = await self.db.menu.find({"type": "left"}).to_list(length=10)
         hot_posts = await sidebar.hot_posts(self)
         u_new_posts = await sidebar.u_new_posts(self,u_id)
         u_categorys =  await sidebar.u_categorys(self,u_id)
@@ -127,7 +126,7 @@ class ArticleHandler(BaseHandler,DBMixin):
         now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         for x in related_posts:
             await self.generate_post_link([x])
-            print(x['post_date'])
+            #print(x['post_date'])
             x['time_ago'] = timeago.format(x['post_date'], now, self.timeago_language)
             await self.get_thumb_image([x])
             if self.data['lang'] in ["zh-tw", "zh-hk"]:
@@ -146,11 +145,13 @@ class ArticleHandler(BaseHandler,DBMixin):
             self.data["site_name"] = await self.cc_async(self.data["site_name"])
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
+            post['user']['user_name'] = await self.cc_async(post['user']['user_name'])
         if language == "zh-tw" or language == "zh-hk":
             html_lang = "zh-Hant"
             self.data["site_name"] = await self.cc_async_s2t(self.data["site_name"])
             post['title'] = await self.cc_async_s2t(post['title'])
             post['content'] = await self.cc_async_s2t(post['content'])
+            post['user']['user_name'] = await self.cc_async_s2t(post['user']['user_name'])
         #post_etree = etree.HTML(post['content'])
         #post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:200]
         #post['desc'] = post_desc
@@ -169,12 +170,12 @@ class ArticleHandler(BaseHandler,DBMixin):
         else:
             self.data['liked'] = False
         #print(post)
-        self.data['menus'] = menus
         self.data['new_comment_posts'] = await sidebar.new_comment_posts(self)
         self.data.update(post)
         self.data['related_posts'] = related_posts
-        print(hot_posts)
-        self.render('page/article.html', menus=menus, post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
+        self.data['hot_posts'] = hot_posts
+        #print(hot_posts)
+        self.render('page/article.html', menus=self.data['menus'], post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=self.data)
         post_score = await hot(self.db,post_id)
 

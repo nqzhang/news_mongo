@@ -14,16 +14,6 @@ function load_custom_ads(){
 	$('.widget_wazhuti_search').after(custom_ads);
 }
 
-$(function() {
-	var need_fix = $('#main').next().is($('.sidebar'));
-	if (need_fix == false) {
-		$('.sidebar script').remove();
-		$('#main').after($('.sidebar'));
-		$('code').attr("style", "white-space:normal;");
-	}
-	//load_custom_ads();
-        $('div.post-content ins.adsbygoogle').parent().css("overflow","hidden");
-});
 
 $('img[src^="https://pic1.xuehuaimg.com/proxy/refer/https://niuerdata.g.com.cn/"]').each(function(i,e){
 	$(e).attr('referrerpolicy','no-referrer');
@@ -40,4 +30,3 @@ $('img[src^="https://niuerdata.g.com.cn/"]').each(function(i, e) {
         console.log('eee');
     })
 
-$('.wrap').append($('.sidebar .widget_top-posts'))

@@ -23,7 +23,6 @@ if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.starts
 else:
     try:
         import uvloop
-
         asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
         AsyncIOMainLoop().install()
     except:

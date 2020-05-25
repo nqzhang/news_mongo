@@ -9,11 +9,14 @@
                 <div class="content-header">
                     <div class="content-info"></div>
                 </div>
+                                {% if post['post_thumb'] %}
+
                 <div class="content-img"><a
                         href="{{ post['post_link'] }}"
                         title="{{ post['post_title'] }}" target="_blank"> <img
                         data-original="{{ post['post_thumb'] }}"
                         alt="{{ post['post_title'] }}" class="lazy thumbnail"> </a></div>
+                {% end %}
                 <div class="content-note">
                     <div class="content-header"><a
                             href="{{ post['post_link'] }}"
@@ -38,7 +41,11 @@
         <div class="clearfix"></div>
         {% if len(t_self.data['posts']) >= 15 %}
         <div class="post-read-more clearfix mb30"><a
-                href="{{ t_self.data['next_page'] }}">加载更多</a></div>
+                href="{{ t_self.data['next_page'] }}">           {% if t_self.data['lang'] in ['zh-tw','zh-hk'] %}
+                加載更多
+            {% else %}
+                加载更多
+            {% end %}</a></div>
         {% end %}
     </div>
 </div>

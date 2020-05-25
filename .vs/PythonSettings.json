@@ -1,4 +1,0 @@
-{
-  "SuppressConfigureTestFrameworkPrompt": "true",
-  "Interpreter": "CondaEnv|CondaEnv|news_mongo"
-}

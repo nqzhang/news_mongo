@@ -16,8 +16,11 @@
           type='text/css' media='all'/>
     <link rel='stylesheet' id='main-css' href="{{static_url('theme2/style.css')}}"
           type='text/css' media='all'/>
-    <script data-ad-client="ca-pub-7536255340317474" async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    {% if t_self.site_id == "5" %}
+    <script data-ad-client="ca-pub-7536255340317474" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+     {% elif t_self.site_id == "6" %}
+    <script data-ad-client="ca-pub-3219336841483159" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    {% end %}
     <script data-cfasync="false">!function () {
         var e = document.createElement("script");
         e.type = "text/javascript", e.async = !0, e.src = "https://cse.google.com/cse.js?cx=012659607576223787520:m9-uh9i1g6w";
@@ -62,7 +65,7 @@
 }</style>
 <div id="wrapper">
     <div id="sitetopbar">
-        <div class="site-logo"><h1><a href="/" title="{{t_self.site_name }}"> <img
+        <div class="site-logo"><h1><a href="/{% if t_self.data['lang'] %}{{ "{}{}".format("?lang=",t_self.data['lang']) }}{% end %}" title="{{t_self.site_name }}"> <img
                 src="{{static_url('theme2/logo.jpg')}}" alt="{{ t_self.site_name }}"/></a></h1></div>
         <div role="navigation" class="site-nav left-menu"><h1 class="minimenu-text"><i class="icon-align-justify"></i>
         </h1>
@@ -71,7 +74,9 @@
                     {% for menu in t_self.data['menus'] %}
 
                     {# <li class="current-menu-item"><a href="{{x[0]}}">{{x[1]}}</a></li> #}
-                    <li ><a href="/c/{{ menu['_id'] }}">{{ menu['name'] }}</a></li>
+                    <li ><a href="/c/{{ menu['_id'] }}{% if t_self.data['lang'] %}{{ "{}{}".format("?lang=",t_self.data['lang']) }}{% end %}">
+                            {{ menu['name'] }}
+                        </a></li>
                    {% end %}
                 {% end %}
             </ul>

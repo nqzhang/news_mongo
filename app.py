@@ -1,6 +1,6 @@
 import tornado
 import tornado.web
-from views import index, recommend, backend, article, category, tag, static, account, user, author, api, question
+from views import index, recommend, backend, article, category, tag, static, account, user, author, api, question,sitemap
 import views.wp as views_wp
 import views.search as views_search
 import config
@@ -27,6 +27,7 @@ class Application(tornado.web.Application):
             (r'/c/(.*?)/?', category.CategoryPageHandler),
             (r'/t/(.*?)/page/(\d*)/?', tag.TagPageHandler),
             (r'/t/(.*?)/?', tag.TagPageHandler),
+            (r'/u/(?P<u_id>.*?)/page/(?P<page>\d*)/?', author.AuthorPageHandler),
             (r'/u/(?P<u_id>.*?)/c/(?P<u_c_id>.*?)/(?P<page>\d*)/?', author.AuthorPageHandler),
             (r'/u/(?P<u_id>.*?)/c/(?P<u_c_id>.*?)/?', author.AuthorPageHandler),
             (r'/u/(?P<u_id>.*?)/(?P<page>\d*)/?', author.AuthorPageHandler),
@@ -55,6 +56,7 @@ class Application(tornado.web.Application):
             (r'/mp/postlist/.*?', user.PostListHandler),
             (r'/mp/postdelete/.*?', user.PostDeleteHandler),
             (r'/mp/ckupload/.*?', user.ckuploadHandeler),
+            tornado.web.url(r"/sitemap/plauvzepsddkiuvd.xml", sitemap.SitemapHandler,name="sitemap"),
             (r"/sitemap/(.*)", static.SitemapStaticFileHandler, {"path": "./sitemap"},),
             # TODO 管理页面
             # (r"/admin/", admin.AdminHandler ),
@@ -84,10 +86,10 @@ class Application(tornado.web.Application):
                      views_wp.category.CategoryHandler),
                     (r"/author/(?P<user_nicename>.*?)/(?P<page>\d*)/?(?P<language>zh-hk|zh-cn|zh-tw)?/?",
                      views_wp.author.AuthorHandler),
-                    tornado.web.url(r"/sitemap/plauvzepsddkiuvd.xml", views_wp.sitemap.SitemapHandler,
-                                    name="sitemap_wp")
+                    # tornado.web.url(r"/sitemap/plauvzepsddkiuvd.xml", views_wp.sitemap.SitemapHandler,
+                    #                 name="sitemap_wp")
                 ])
-            print(views_theme)
+            #print(views_theme)
             if views_theme == "redirect":
                 self.add_handlers(k, [
                     (r"/amp/(?P<post_id>.*?)/(?P<language>.*?)/?", redirect.AmpArticleHandler),
@@ -97,8 +99,8 @@ class Application(tornado.web.Application):
                      views_wp.category.CategoryHandler),
                     (r"/author/(?P<user_nicename>.*?)/(?P<page>\d*)/?(?P<language>zh-hk|zh-cn|zh-tw)?/?",
                      views_wp.author.AuthorHandler),
-                    tornado.web.url(r"/sitemap/plauvzepsddkiuvd.xml", views_wp.sitemap.SitemapHandler,
-                                    name="sitemap_wp")
+                    # tornado.web.url(r"/sitemap/plauvzepsddkiuvd.xml", views_wp.sitemap.SitemapHandler,
+                    #                 name="sitemap_wp")
                 ])
             if views_theme == "search":
                 self.add_handlers(k, [

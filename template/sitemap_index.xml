@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <sitemapindex  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+     {% for day_min,day_max,sitemap_index_num,post_last_mod,post_per_day in result %}
+        {% if post_per_day > 0 %}
+            {% for i in range(1,sitemap_index_num + 1) %}
+            <sitemap>
+                <loc>{{ "{}?type=sitemap&amp;day_min={}&amp;day_max={}&amp;page={}".format(t_self.reverse_full_url("sitemap"),day_min,day_max,i) }}</loc>
+                <lastmod>{{ post_last_mod + "+08:00" }}</lastmod>
+            </sitemap>
+            {% end %}
+        {% end %}
+    {% end %}
+
+    </sitemapindex>
