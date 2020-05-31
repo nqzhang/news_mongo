@@ -55,4 +55,5 @@ class AuthorPageHandler(UserHander,DBMixin):
         if self.data['lang']:
             self.data['next_page'] = w3lib.url.add_or_replace_parameter(self.data['next_page'], 'lang',self.data['lang'])
         self.data['hot_posts'] = hot_posts
+        await self.get_menu()
         self.render('page/author.html',posts=posts, config=config, page=page,u_categorys=u_categorys,data=data)

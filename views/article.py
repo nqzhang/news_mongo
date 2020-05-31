@@ -22,23 +22,6 @@ comment_notify_text = '''
             請點擊<a href="{}">鏈接</a>查看'''
 
 class ArticleHandler(BaseHandler,DBMixin):
-    async def get_post_category_info(self,post):
-        if post.get('category',None):
-            category_id = [i for i in post.get('category')  if i]
-            category = []
-            for c_id in post['category']:
-                c = await self.db.terms.find_one({"_id":ObjectId(c_id)})
-                category.append(c)
-            post['category'] = category
-
-        else:
-            post['category'] = None
-            category_id = None
-        return post, category_id
-    async def get_posts_category_info(self, posts):
-        for post in posts:
-            post = await self.get_post_category_info(post)
-        return posts
     async def get_amp(self,post_id):
         post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
         await self.get_thumb_image([post])
@@ -91,14 +74,16 @@ class ArticleHandler(BaseHandler,DBMixin):
         u_categorys =  await sidebar.u_categorys(self,u_id)
         #related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("views",-1)])\
             #.limit(articles_per_page).to_list(length=articles_per_page)
-        self.es = None
-        if self.es:
+        #self.es = None
+        #if self.es:
+        if False:
             s = Search(index=self.es_index)
             s = s.query("match", title= {"query": post['title']})
+            # s = s.query("match", title= {"query": post['title'],"analyzer":"hanlp"})
             # s = s.query(MoreLikeThis(like=post['title'], fields=['title'],analyzer="jieba_search"))
             s = s.query("match", site_id=self.site_id)
             s = s.exclude('term', post_id=str(post_id))
-            #print(json.dumps(s[0:8].to_dict()))
+            print(json.dumps(s[0:8].to_dict()))
             response = await self.es.search(s[0:8].to_dict())
             related_posts_id = [ObjectId(i['_source']['post_id']) for i in response['hits']['hits']]
             related_posts = await self.db.posts.find({'_id': {'$in': related_posts_id}}).to_list(
@@ -108,11 +93,32 @@ class ArticleHandler(BaseHandler,DBMixin):
         else:
             if tags_id:
                 related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
-                    .limit(self.articles_per_page).to_list(length=self.articles_per_page)
+                     .limit(self.articles_per_page).to_list(length=self.articles_per_page)
                 related_posts = await related_sort(tags_id,related_posts,related_type='tags')
+                '''通过mongodb aggregate 实现的tags排序
+                related_posts=[]
+                replated_posts_cursor =  self.db.posts.aggregate([
+                    {"$match": {"tags": {"$in": tags_id},'_id': {'$ne': post['_id']}}},
+                    {"$unwind": "$tags"},
+                    {"$match": {"tags": {"$in": tags_id}}},
+                    {"$group": {
+                        "_id": "$_id",
+                        "title": {"$first": "$title"},
+                        "user": {"$first": "$user"},
+                        "post_date": {"$first": "$post_date"},
+                        "content": {"$first": "$content"},
+                        "matches": {"$sum": 1},
+                    }},
+                    {"$sort": {"matches": -1}},
+                    {"$limit": articles_per_page},
+                ],allowDiskUse=True)
+                async for replated_post in replated_posts_cursor:
+                    related_posts.append(replated_post)
+                print(related_posts)
+            '''
             else:
                 related_posts = []
-            related_fill_num = 8 - len(related_posts)
+            related_fill_num = self.articles_per_page - len(related_posts)
             if related_fill_num > 0:
                 if category_id:
                     #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
@@ -175,6 +181,7 @@ class ArticleHandler(BaseHandler,DBMixin):
         self.data['related_posts'] = related_posts
         self.data['hot_posts'] = hot_posts
         #print(hot_posts)
+        await self.get_menu()
         self.render('page/article.html', menus=self.data['menus'], post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=self.data)
         post_score = await hot(self.db,post_id)

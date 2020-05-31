@@ -102,7 +102,7 @@ class NewPostHandler(DBMixin):
             if self.es:
                 post_es_data = {"site_id":self.site_id,"post_id":str(post_id),"title": title}
                 res = await self.es.index(index=self.es_index,body=post_es_data,request_timeout=30)
-                print(res)
+                #print(res)
 
 class ViewsHandler(DBMixin):
     async def post(self):

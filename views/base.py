@@ -77,13 +77,17 @@ class BlockingHandler(BlockingBaseHandler):
 
     @run_on_executor
     def get_post_desc(self,post):
-        if not post['content']:
-            post_desc=''
-        else:
-            post_etree = etree.HTML(post['content'])
-            post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:120]
-            # post_desc = post_etree.cssselect('p')[0].text
-        post['desc'] = post_desc
+        if "desc" not in post:
+            if not post['content']:
+                post_desc=''
+            else:
+                post_etree = etree.HTML(post['content'])
+                if post_etree is None:
+                    post_desc = ''
+                else:
+                    post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:120]
+                # post_desc = post_etree.cssselect('p')[0].text
+            post['desc'] = post_desc
         return post
     async def get_posts_desc(self,posts):
         new_posts = []
@@ -150,6 +154,23 @@ class BlockingHandler(BlockingBaseHandler):
         post['content'] = content
         return post
 
+    async def get_post_category_info(self,post):
+        if post.get('category',None):
+            category_id = [i for i in post.get('category')  if i]
+            category = []
+            for c_id in post['category']:
+                c = await self.db.terms.find_one({"_id":ObjectId(c_id)})
+                category.append(c)
+            post['category'] = category
+
+        else:
+            post['category'] = None
+            category_id = None
+        return post, category_id
+    async def get_posts_category_info(self, posts):
+        for post in posts:
+            post = await self.get_post_category_info(post)
+        return posts
 class BaseHandler(BlockingHandler):
     async def prepare(self):
         self.user = await self.get_user()
@@ -163,7 +184,11 @@ class BaseHandler(BlockingHandler):
         self.data['hk_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-hk')
         self.data['amp_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'amp', '1')
         self.timeago_language_dict = {"zh-tw":"zh_TW","zh-cn":"zh_CN","zh-hk":"zh_TW"}
-        self.timeago_language = self.timeago_language_dict[self.data['lang']] if self.data['lang'] else "zh_CN"
+        try:
+            self.timeago_language = self.timeago_language_dict[self.data['lang']] if self.data['lang'] else "zh_CN"
+        except KeyError:
+            self.send_error(500, reason="lang params wrong")
+    async def get_menu(self):
         self.data['menus'] = await self.db.menu.find({"type": "left"}).to_list(length=10)
         if self.data['lang'] in ["zh-tw", "zh-hk"]:
             for menu in self.data['menus']:
@@ -224,20 +249,8 @@ class BaseHandler(BlockingHandler):
 class UserHander(BaseHandler):
     async def prepare(self):
         await super(UserHander, self).prepare()
-        await self.check_authentication()
+        self.current_user = await self.get_current_user_async()
 
-    async def check_authentication(self, optional=False):
-        if not hasattr(self, '_current_user'):
-            try:
-                self._current_user = await self.get_current_user_async()
-            except NotImplementedError:
-                self._current_user = self.get_current_user()
-        if self._current_user is None and not optional:
-            login_url = self.get_login_url()
-            if login_url:
-                self.redirect(login_url)
-            else:
-                raise tornado.web.HTTPError(403)
     async def get_current_user_async(self):
         sessionid = self.get_secure_cookie('sessionid')
         sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
@@ -261,7 +274,8 @@ class DBMixin(tornado.web.RequestHandler):
         self.cookie_domain = self.application.dbs['by_domain'][self.request.host]['domain']
         self.domain = self.application.dbs['by_domain'][self.request.host]['domain']
         self.views_theme = self.application.dbs['by_domain'][self.request.host].get('views_theme',None)
-        self.set_cookie("_xsrf", self.xsrf_token)
+        if not self.get_cookie("_xsrf"):
+            self.xsrf_token
         #self.es = self.application.dbs['by_domain'][self.request.host].get('es_conn',None)
         self.es = self.application.dbs['all'].get('es_conn',None)
         self.es_index = self.application.dbs['all'].get('es_index', None)

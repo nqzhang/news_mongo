@@ -44,3 +44,11 @@ class ArticleHandler(BaseHandler,DBMixin):
                     self.redirect('/a/{}'.format(str(post['_id'])), permanent=True)
                 return
         self.send_error(404, reason="post not found")
+
+class Article2Handler(tornado.web.RequestHandler):
+    async def get(self,a_id,language):
+        self.redirect('/a/{}?lang={}'.format(str(a_id),language), permanent=True)
+
+class NotFoundHander(tornado.web.RequestHandler):
+    async def get(self,**kwargs):
+        self.send_error(404)

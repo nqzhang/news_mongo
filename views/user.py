@@ -109,7 +109,7 @@ class PostListHandler(UserHander,DBMixin):
             views = post.get('views',0)
             post['views'] = views
             #print(post)
-        print(posts)
+        #print(posts)
         self.render('page/postlist.html',config=config,active=active,posts=posts)
 
 class PostDeleteHandler(UserHander,DBMixin):
@@ -129,7 +129,7 @@ class ckuploadHandeler(UserHander,DBMixin):
         url = ''
         self.img_data = None
         #callback = self.get_argument("CKEditorFuncNum")
-        print(self.request.arguments)
+        #print(self.request.arguments)
         if self.request.method == 'POST' and 'upload' in self.request.files:
             fileobj = self.request.files['upload']
             fhash = get_io_qetag(BytesIO(fileobj[0]['body']))
@@ -147,7 +147,7 @@ class ckuploadHandeler(UserHander,DBMixin):
             elif not os.access(dirname, os.W_OK):
                 error = 'ERROR_DIR_NOT_WRITEABLE'
             if not error:
-                print(filepath)
+                #print(filepath)
                 with open(filepath,'wb') as up:      #有些文件需要已二进制的形式存储，实际中可以更改
                     up.write(fileobj[0]['body'])
                     self.img_data = {"u_id": ObjectId(self.current_user.decode()), "fname": fname}

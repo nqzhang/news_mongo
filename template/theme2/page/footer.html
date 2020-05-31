@@ -4,16 +4,24 @@
         <p class="copyright">Copyright © 2017 <a href="https://www.xuehua.us" title="雪花新闻" rel="home">雪花新闻</a> Powered
             by&nbsp;&nbsp;<a href="http://www.xuehua.us" title="xuehua" rel="home">xuehua</a> <a
                     href="http://www.miitbeian.gov.cn" rel="external nofollow" target="_blank">
-                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-113511599-1"></script>
+                {% if t_self.site_id == "5" %}
+                {% set ga_ua = '113511599-1' %}
+                {% elif t_self.site_id == "6" %}
+                {% set ga_ua = '114908401-1' %}
+                {% end %}
+                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-{{ ga_ua }}"></script>
                 <script>function gtag() {
                     dataLayer.push(arguments)
                 }
 
-                window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-113511599-1")</script>
+                window.dataLayer = window.dataLayer || [], gtag("js", new Date), gtag("config", "UA-{{ ga_ua }}")</script>
             </a></p>
     </div>
     <div id="totop"><i class="icon-up-open"></i></div>
 </div>
+<script src="{{static_url('js/lib/jquery-3.3.1.min.js')}}"></script>
+ <!--<script src="https://www.xuehua.us/wp-content/themes/Vnews._V1.2.4/js/jquery/1.8.3/jquery.min.js"></script>-->
+<script async src="{{static_url('theme2/custom_fix.js')}}"></script>
 <script type="text/javascript" src="{{static_url('lib/bootstrap-4.3.1-dist/js/bootstrap.js')}}"></script>
 <script type="text/javascript" src="{{static_url('theme2/traveler.js')}}"></script>
 <script type="text/javascript" src="{{ static_url('js/common.js')}}"></script>
@@ -46,6 +54,8 @@ const observer = lozad('img', {
 });
 observer.observe();
 </script>
+<script src="{{ static_url('lib/vue/vue.min.js') }}"></script>
+<script src="{{ static_url('lib/axios.min.js') }}"></script>
 {% block script %}
 {% end %}
 </body>

@@ -104,7 +104,7 @@ class CategoryHandler(WpBaseHandler):
                 data['next_page'] = data['next_page'] + self.data['lang'] + '/'
             data['category_url'] = category_url
             self.data.update(data)
-            print(category)
+            #print(category)
             #print(json.dumps(data,default=str))
             self.render("category.html")
         else:

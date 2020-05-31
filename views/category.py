@@ -53,5 +53,6 @@ class CategoryPageHandler(BaseHandler,DBMixin):
         if self.data['lang']:
             self.data['next_page'] = w3lib.url.add_or_replace_parameter(self.data['next_page'], 'lang', self.data['lang'])
         self.data['hot_posts'] = hot_posts
+        await self.get_menu()
         self.render('page/category.html',menus=self.data['menus'],posts=posts,c_id=c_id,
                     config=config,page=page,hot_posts=c_hot_posts,list_path=list_path,data=data)

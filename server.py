@@ -32,7 +32,7 @@ import logging
 
 logging.getLogger().setLevel(logging.ERROR)
 
-MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 3
+MAX_WAIT_SECONDS_BEFORE_SHUTDOWN = 0.5
 
 
 def sig_handler(app, sig, frame):
@@ -42,7 +42,7 @@ def sig_handler(app, sig, frame):
         now = time.time()
         if now < deadline:
             logging.info('Waiting for next tick')
-            io_loop.call_later(1, stop_loop, deadline)
+            io_loop.call_later(0.1, stop_loop, deadline)
         else:
             if len(asyncio.Task.all_tasks(io_loop)) == 0:
                 io_loop.stop()
@@ -92,7 +92,7 @@ async def get_dbs():
             dbs['by_site_id'][v['site_id']] = v
     dbs['all_domain'] = [x for x in dbs['by_domain'].keys()]
     import json
-    print(dbs)
+    #print(dbs)
 
     return dbs
 
@@ -119,5 +119,5 @@ if __name__ == "__main__":
     signal.signal(signal.SIGTERM, partial(sig_handler, app))
     signal.signal(signal.SIGINT, partial(sig_handler, app))
     app.init_with_loop(loop)
-    # loop.set_blocking_log_threshold(0.5)
+    # loop.set_debug(True)
     loop.run_forever()

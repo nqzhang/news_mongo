@@ -15,4 +15,5 @@ class recommendPageHandler(BaseHandler,DBMixin):
         #self.write('ok')
         path = self.request.path
         list_path = 'recommend'
+        await self.get_menu()
         self.render('page/index.html',menus=self.data['menus'],posts=posts,config=config,page=page,hot_posts=hot_posts,user=user,path=path,list_path=list_path)

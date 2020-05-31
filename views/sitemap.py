@@ -25,7 +25,7 @@ class SitemapHandler(BlockingHandler,DBMixin):
             page = int(self.get_argument("page"))
             day_min = datetime.datetime.fromisoformat(day_min)
             day_max = datetime.datetime.fromisoformat(day_max)
-            print(day_min,day_max,page)
+            # print(day_min,day_max,page)
             if page == 1:
                 posts = await self.db.posts.find({"post_date": {"$gte":day_min,"$lte":day_max}}, {"_id": 1,"post_date":1}).limit(
                     url_per_sitemap).to_list(length=None)

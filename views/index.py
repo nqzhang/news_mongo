@@ -43,4 +43,5 @@ class IndexPageHandler(BaseHandler,DBMixin):
         if self.data['lang']:
             self.data['next_page'] = w3lib.url.add_or_replace_parameter(self.data['next_page'], 'lang', self.data['lang'])
         self.data['hot_posts'] = hot_posts
+        await self.get_menu()
         self.render('page/index.html',menus=self.data['menus'],posts=posts,config=config,page=page,hot_posts=hot_posts,user=user,path=path,list_path=list_path)

@@ -3,6 +3,10 @@ from bson.json_util import dumps
 from utils.tools import post_time_format
 from .base import UserHander,DBMixin
 from tornado.web import authenticated
+from elasticsearch_dsl import Search
+import json
+from models import join
+import tornado.web
 
 class ApiListHandler(DBMixin):
     async def get(self):
@@ -63,7 +67,7 @@ class ApiAuthorHandler(UserHander,DBMixin):
 class ApiArticleHandler(UserHander,DBMixin):
     @authenticated
     async def post(self):
-        print(self.request.body.decode('utf-8'))
+        #print(self.request.body.decode('utf-8'))
         user_id = self.get_argument('user_id')
         post_id = self.get_argument('post_id')
         action = self.get_argument('action')
@@ -86,10 +90,10 @@ class ApiArticleHandler(UserHander,DBMixin):
             else:
                 await self.db.posts.update_one({"_id":ObjectId(post_id)},{"$inc":{"like.article_unlike":1}})
         elif action == 'undo_article_like':
-            await self.db.like.remove({"type":"article_like","user_id":user_id,"post_id":post_id})
+            await self.db.like.delete_one({"type":"article_like","user_id":user_id,"post_id":post_id})
             await self.db.posts.update_one({"_id":ObjectId(post_id)},{"$inc":{"like.article_like":-1}})
         elif action == 'undo_article_unlike':
-            await self.db.like.remove({"type":"article_like","user_id":user_id,"post_id":post_id})
+            await self.db.like.delete_one({"type":"article_like","user_id":user_id,"post_id":post_id})
             await self.db.posts.update_one({"_id":ObjectId(post_id)},{"$inc":{"like.article_unlike":-1}})
         if action == 'comment_like':
             comment_id = self.get_argument('comment_id')
@@ -114,11 +118,11 @@ class ApiArticleHandler(UserHander,DBMixin):
 
         elif action == 'undo_comment_like':
             comment_id = self.get_argument('comment_id')
-            await self.db.like.remove({"type":"comment_like","user_id":user_id,"post_id":post_id,"comment_id":comment_id})
+            await self.db.like.delete_one({"type":"comment_like","user_id":user_id,"post_id":post_id,"comment_id":comment_id})
             await self.db.comments.update_one({"_id":ObjectId(comment_id)},{"$inc":{"like.comment_like":-1}})
         elif action == 'undo_comment_unlike':
             comment_id = self.get_argument('comment_id')
-            await self.db.like.remove({"type":"comment_like","user_id":user_id,"post_id":post_id,"comment_id":comment_id})
+            await self.db.like.delete_one({"type":"comment_like","user_id":user_id,"post_id":post_id,"comment_id":comment_id})
             await self.db.comments.update_one({"_id":ObjectId(comment_id)},{"$inc":{"like.comment_unlike":-1}})
         """
         if action == 'get_article_user_comment_vote':
@@ -127,4 +131,38 @@ class ApiArticleHandler(UserHander,DBMixin):
             self.finish(dumps(x))
         """
 
+class ApiRelatedEsHandler(UserHander,DBMixin):
+    async def get(self):
+        if 'Googlebot' in self.request.headers["User-Agent"]:
+            raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")
+        post_id = self.get_argument('post_id')
+        category_info = self.get_argument('category_info','0')
+        if self.es:
+            post = await self.db.posts.find_one({"_id": ObjectId(post_id)})
+            s = Search(index=self.es_index)
+            s = s.query("match", title={"query": post['title']})
+            # s = s.query("match", title= {"query": post['title'],"analyzer":"hanlp"})
+            # s = s.query(MoreLikeThis(like=post['title'], fields=['title'],analyzer="jieba_search"))
+            s = s.query("match", site_id=self.site_id)
+            s = s.exclude('term', post_id=str(post_id))
+            #print(json.dumps(s[0:8].to_dict()))
+            response = await self.es.search(s[0:self.articles_per_page].to_dict())
+            related_posts_id = [ObjectId(i['_source']['post_id']) for i in response['hits']['hits']]
+            related_posts = await self.db.posts.find({'_id': {'$in': related_posts_id}}).to_list(
+                length=None)
+            index_map = {v: i for i, v in enumerate(related_posts_id)}
+            related_posts = sorted(related_posts, key=lambda related_post: index_map[related_post['_id']])
+            related_posts = await join.post_user(related_posts, self.db)
+            related_posts = await self.get_posts_desc(related_posts)
+            # if category_info == '1':
+            #     related_posts = await self.get_posts_category_info(related_posts)
+            for x in related_posts:
+                await self.generate_post_link([x])
+                if self.data['lang'] in ["zh-tw", "zh-hk"]:
+                    # x['content'] = await self.cc_async_s2t(x['content'])
+                    x['title'] = await self.cc_async_s2t(x['title'])
+                elif self.data['lang'] == 'zh-cn':
+                    x['title'] = await self.cc_async(x['title'])
+            s_related_posts = [{"title":x['title'],"post_link":x['post_link']} for x in related_posts]
+            self.write(dumps(s_related_posts))
 

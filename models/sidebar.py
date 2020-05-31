@@ -57,6 +57,7 @@ def build_key_with_id(f,*args,**kwargs):
 async def c_hot_posts(self,c_id):
     one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
     hot_posts_list = await self.db.posts.find({'post_date': {'$gte': one_day_ago},"type":0,"category":ObjectId(c_id)},{ "_id": 1,"title": 1 }).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
+    print(one_day_ago,ObjectId(c_id))
     for x in hot_posts_list:
         x['_id'] = str(x['_id'])
     hot_posts = dict({"name":await get_tname_by_tid(self.db,c_id)})

@@ -47,4 +47,5 @@ class TagPageHandler(BaseHandler,DBMixin):
             self.data['next_page'] = w3lib.url.add_or_replace_parameter(self.data['next_page'], 'lang',
                                                                         self.data['lang'])
         self.data['hot_posts'] = hot_posts
+        await self.get_menu()
         self.render('page/tag.html',menus=self.data['menus'],posts=posts,t_id=t_id,config=config,page=page,list_path=list_path)

@@ -70,6 +70,21 @@
             </div>
             <div class="post-content"><p></p>
                 {% raw t_self.data['content'] %}
+
+                <div id="related_article_end">
+                    <span>
+                        {% if t_self.data['lang'] in ['zh-tw','zh-hk'] %}
+                        相關文章
+                        {% else %}
+                        相关文章
+                        {% end %}
+                    </span>
+                    <ul>
+                        <li v-for="article in articles">
+                            <a v-bind:href="article.post_link">{{! article.title }}</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
             {#
             <div class="postmetadata"> 转载请注明来自 <a href="https://www.xuehua.us" title="{{ t_self.data['title'] }}">{{
@@ -103,9 +118,9 @@
         <div id="related">
             <div class="related_about"><span>
                     {% if t_self.data['lang'] in ['zh-tw','zh-hk'] %}
-                    相關文章
+                    為你推薦
                     {% else %}
-                    相关文章
+                    为你推荐
                     {% end %}
                 </span></div>
             <ul class="related_img">
@@ -170,6 +185,8 @@
         type: "POST",
     });
 </script>
+<script type="text/javascript" src="{{ static_url('theme2/article.js')}}"></script>
+
 {% end %}
 
 {% block title %}

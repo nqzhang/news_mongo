@@ -1,4 +1,4 @@
-from views.base import BaseHandler,DBMixin
+from views.base import BaseHandler,DBMixin,BlockingHandler
 import tornado
 import aiomysql
 from elasticsearch_dsl import Search
@@ -39,7 +39,7 @@ class SearchHandler(BaseHandler,DBMixin):
             result = await self.generate_post_link(result,site_id)
         data["result_count"] = response['hits']['total']['value']
         data['results'] = result
-        print(result)
+        #print(result)
         if end > data["result_count"]:
             data['next_p'] = None
         #print(response)

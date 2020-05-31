@@ -85,7 +85,7 @@ class LoginHandler(DBMixin):
             hashstr = tornado.escape.utf8(sessionid + user_salt + user_id)
             await self.application.redis.set(user_id, user_salt, expire=session_ttl)
             sig = hashlib.sha512(hashstr).hexdigest()
-            print(sig)
+            #print(sig)
             self.set_secure_cookie('sessionid', sessionid, domain=self.cookie_domain)
             self.set_secure_cookie('sig', sig, domain=self.cookie_domain)
             self.set_secure_cookie('uid', user_id, domain=self.cookie_domain)
