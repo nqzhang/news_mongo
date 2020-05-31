@@ -256,13 +256,13 @@ class UserHander(BaseHandler):
         sig = tornado.escape.native_str(self.get_secure_cookie('sig'))
         uid = self.get_secure_cookie('uid')
         if not (sessionid and sig and uid):
-            return False
+            return None
         user_salt = await self.application.redis.get(uid)
         hashstr = sessionid + user_salt + uid
         #print(hashlib.sha512(hashstr).hexdigest())
         if sig == hashlib.sha512(hashstr).hexdigest():
             return uid
-        return False
+        return None
 
 class DBMixin(tornado.web.RequestHandler):
     def initialize(self):
