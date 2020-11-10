@@ -4,6 +4,7 @@ from utils.tools import post_time_format
 from .base import UserHander,DBMixin
 from tornado.web import authenticated
 from elasticsearch_dsl import Search
+from elasticsearch_dsl.query import MoreLikeThis
 import json
 from models import join
 import tornado.web
@@ -135,20 +136,23 @@ class ApiRelatedEsHandler(UserHander,DBMixin):
     async def get(self):
         if 'Googlebot' in self.request.headers["User-Agent"]:
             raise tornado.web.HTTPError(404,"Shit! Don't crawl me anymore.")
+            return
         post_id = self.get_argument('post_id')
         category_info = self.get_argument('category_info','0')
         if self.es:
             post = await self.db.posts.find_one({"_id": ObjectId(post_id)})
             s = Search(index=self.es_index)
-            s = s.query("match", title={"query": post['title']})
+            s = s.filter("term", site_id=self.site_id)
+            # s = s.query("match", title={"query": post['title']})
             # s = s.query("match", title= {"query": post['title'],"analyzer":"hanlp"})
-            # s = s.query(MoreLikeThis(like=post['title'], fields=['title'],analyzer="jieba_search"))
-            s = s.query("match", site_id=self.site_id)
+            s = s.query(MoreLikeThis(like=post['title'], fields=['title'], min_term_freq=1,min_word_length=1,
+                                     max_query_terms=12,minimum_should_match="40%"))
+            # s = s.query(MoreLikeThis(like=post['title'], fields=['title']))
             s = s.exclude('term', post_id=str(post_id))
             #print(json.dumps(s[0:8].to_dict()))
             response = await self.es.search(s[0:self.articles_per_page].to_dict())
             related_posts_id = [ObjectId(i['_source']['post_id']) for i in response['hits']['hits']]
-            related_posts = await self.db.posts.find({'_id': {'$in': related_posts_id}}).to_list(
+            related_posts = await self.db.posts.find({'_id': {'$in': related_posts_id}},{"_id":1,"title":1,"user":1}).to_list(
                 length=None)
             index_map = {v: i for i, v in enumerate(related_posts_id)}
             related_posts = sorted(related_posts, key=lambda related_post: index_map[related_post['_id']])

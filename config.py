@@ -8,16 +8,16 @@ env = 'dev'
 if env == 'dev':
     mongo = {
         "urlbak": "mongodb://admin:11QQqqWW@192.168.11.128",
-        "url": "mongodb://192.168.11.130:27017",
+        "url": "mongodb://192.168.2.3:27017",
         "db_name": "news"
     }
     redis_cache = {
-        "host": "192.168.11.130",
+        "host": "192.168.2.3",
         "port": 6379,
         "db": 1
     }
     redis = {
-        "host": "192.168.11.130",
+        "host": "192.168.2.3",
         "port": 6379,
         "db": 0,
     }
@@ -60,7 +60,7 @@ settings = {
     "template_path": os.path.join(BASE_DIR, 'template'),
     "debug": is_debug,
     "autoreload": False,
-    "compress_response": True,
+    "compress_response": False,
     # "compiled_template_cache": False,
     # "static_hash_cache": False,
     # "serve_traceback": True,
@@ -114,3 +114,16 @@ adsense_code = """<script async src="//pagead2.googlesyndication.com/pagead/js/a
         })(window,document,'script','dataLayer','GTM-WV8L3BL');</script>
         <!-- End Google Tag Manager -->
         """
+
+baijia_headers = {
+    'User-Agent': 'User-Agent: Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) '
+                  'AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
+}
+
+doc360_headers = {
+    'Referer' : 'http://www.360doc.com/',
+}
+
+csdn_headers = {
+    'Referer' : 'https://blog.csdn.net/',
+}

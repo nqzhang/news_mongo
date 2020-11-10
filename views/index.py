@@ -16,7 +16,6 @@ class IndexPageHandler(BaseHandler,DBMixin):
         posts = await self.get_thumb_image(posts)
         hot_posts = await sidebar.hot_posts(self)
         #print(posts)
-        hot_posts = await sidebar.hot_posts(self)
         #self.write('ok')
         path = self.request.path
         list_path = 'index'

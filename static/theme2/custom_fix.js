@@ -30,3 +30,13 @@ $('img[src^="https://niuerdata.g.com.cn/"]').each(function(i, e) {
         console.log('eee');
     })
 
+    $(document).ready(function () {
+        var bodyw = $(window).width();
+        if (bodyw < 800) {
+
+        } else {
+            $('.hot_posts_1 ul').html($("#template_hot_posts_1").html());
+            $('.hot_posts_7 ul').html($("#template_hot_posts_7").html());
+
+        }
+    });

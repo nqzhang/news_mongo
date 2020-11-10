@@ -91,7 +91,7 @@
         {% if hot_posts %}
         <div class="widget widget-postlist"><h3>热门资讯</h3>
             <ul>
-                {% for hot_post in hot_posts %}
+                {% for hot_post in hot_posts['hot_posts_1'] %}
                 <li><a href="/a/{{ hot_post['_id'] }}" target="_blank"><span><img alt="{{ hot_post['title'] }}"
                                                                            class="thumb" referrerpolicy="no-referrer"
                                                                            data-original="

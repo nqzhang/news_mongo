@@ -1,6 +1,7 @@
 import tornado
 import tornado.web
-from views import index, recommend, backend, article, category, tag, static, account, user, author, api, question,sitemap
+from views import index, recommend, backend, article, category, tag, static, \
+    account, user, author, api, question,sitemap,proxy
 import views.wp as views_wp
 import views.search as views_search
 import config
@@ -8,8 +9,11 @@ import aioredis
 from views import redirect
 # client = motor_tornado.MotorClient('mongodb://192.168.1.103:27017')
 # db = client.test
-from opencc import OpenCC
-
+#from opencc import OpenCC
+import opencc
+import tornado.curl_httpclient
+import tornado.httpclient
+#print(converter.convert('汉字'))  # 漢字
 
 # from lxml.html.clean import Cleaner
 
@@ -64,11 +68,20 @@ class Application(tornado.web.Application):
             # TODO 管理页面
             # (r"/admin/", admin.AdminHandler ),
             (r'/ads.txt()', tornado.web.StaticFileHandler, {"path": "./ads.txt"},),
+            (r'/proxy/360doc/(.*)', proxy.ProxyHandler),
+            (r'/proxy/baijia/(.*)', proxy.ProxyHandler),
+            (r'/proxy/csdn/(.*)', proxy.ProxyHandler),
+            (r'/proxy/refer/(.*)', proxy.ProxyHandler),
+            (r'/proxy/(.*)', proxy.ProxyHandler),
         ]
 
         self.dbs = dbs
-        self.cc = OpenCC('t2s')
-        self.cc_s2t = OpenCC('s2t')
+        self.cc = opencc.OpenCC('t2s.json')
+        # self.cc = OpenCC('t2s')
+        self.cc_s2t = opencc.OpenCC('s2t.json')
+        tornado.httpclient.AsyncHTTPClient.configure("tornado.curl_httpclient.CurlAsyncHTTPClient")
+        self.http_client = tornado.httpclient.AsyncHTTPClient(max_clients=100)
+        # self.cc_s2t = OpenCC('s2t')
         # self.cleaner = Cleaner(page_structure=True, links=True, javascript=True, style=True, comments=True,
         #                       inline_style=True)
         # self.cleaner.remove_tags = ['a', 'font']
@@ -113,4 +126,4 @@ class Application(tornado.web.Application):
 
     def init_with_loop(self, loop):
         self.redis = loop.run_until_complete(
-            aioredis.create_redis_pool((config.redis['host'], config.redis['port']), maxsize=20, loop=loop))
+            aioredis.create_redis_pool((config.redis['host'], config.redis['port']),db=config.redis['db'], maxsize=20, loop=loop))

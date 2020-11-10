@@ -8,11 +8,13 @@
                         {{ related_post['title'] }}			
                     </a>
                 </h4>
+                {% if related_post.get('desc',None) %}
                 <p class="post-excerpt">
                     <a href="/a/{{ related_post['_id'] }}" target="_blank" title="{{ related_post['title'] }}">
                         {{ related_post['desc'] }}
                     </a>
                 </p>
+                {% end %}
                 <div class="post-meta">
                     <img src="/static/svgs/user.svg" />
                     <a  href="/u/{{ related_post['user']['_id'] }}">{{ related_post['user']['user_name'] }}</a>

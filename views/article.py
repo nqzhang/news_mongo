@@ -26,6 +26,7 @@ class ArticleHandler(BaseHandler,DBMixin):
         post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
         await self.get_thumb_image([post])
         post = await self.get_posts_desc([post])
+        #print(post)
         post = post[0]
         self.data['html_lang'] = "zh-Hans"
         if self.data['lang'] in ["zh-tw", "zh-hk"]:
@@ -38,6 +39,7 @@ class ArticleHandler(BaseHandler,DBMixin):
             post['title'] = await self.cc_async(post['title'])
             post['content'] = await self.cc_async(post['content'])
             self.data["site_name"] = await self.cc_async(self.data["site_name"])
+        post = await self.amp_process(post)
         self.data.update(post)
         self.render('page/article_amp.html')
     async def get(self, post_id):
@@ -47,6 +49,9 @@ class ArticleHandler(BaseHandler,DBMixin):
             await self.get_amp(post_id)
             return
         post = await self.db.posts.find_one({"_id":ObjectId(post_id)})
+        if not post:
+            self.send_error(404,reason="post not found")
+            return
         prev_post=  await self.db.posts.find({"_id": {"$lt":ObjectId(post_id)}}).sort([("_id", -1)]).limit(1).to_list(length=None)
         next_post = await self.db.posts.find({"_id": {"$gt": ObjectId(post_id)}}).sort([("_id", 1)]).limit(1).to_list(length=None)
         post['prev_post'] = prev_post[0] if prev_post else None
@@ -91,8 +96,9 @@ class ArticleHandler(BaseHandler,DBMixin):
             index_map = {v: i for i, v in enumerate(related_posts_id)}
             related_posts = sorted(related_posts, key=lambda related_post: index_map[related_post['_id']])
         else:
+            # related_posts = []
             if tags_id:
-                related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
+                related_posts =  await self.db.posts.find({'tags': {'$in': tags_id},'_id': {'$ne': post['_id']}},{"content":0}).sort([("post_date",-1)]) \
                      .limit(self.articles_per_page).to_list(length=self.articles_per_page)
                 related_posts = await related_sort(tags_id,related_posts,related_type='tags')
                 '''通过mongodb aggregate 实现的tags排序
@@ -122,7 +128,7 @@ class ArticleHandler(BaseHandler,DBMixin):
             if related_fill_num > 0:
                 if category_id:
                     #TODO 先根据日期排序 通过mongodb aggregate 实现速度太慢 以后可以采用elasticsearch 或者google custom search？
-                    related_posts_category = await self.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}}).sort([("post_date",-1)]) \
+                    related_posts_category = await self.db.posts.find({'category': {'$in': category_id},'_id': {'$ne': post['_id']}},{"content":0}).sort([("post_date",-1)]) \
                     .limit(related_fill_num).to_list(length=related_fill_num)
                     related_posts_category = await related_sort(category_id, related_posts_category,related_type='category')
                     related_posts += related_posts_category
@@ -184,7 +190,8 @@ class ArticleHandler(BaseHandler,DBMixin):
         await self.get_menu()
         self.render('page/article.html', menus=self.data['menus'], post=post, config=config,hot_posts=hot_posts,related_posts=related_posts,
                         u_new_posts=u_new_posts,u_categorys=u_categorys,author=author,data=self.data)
-        post_score = await hot(self.db,post_id)
+        if 'Googlebot' not in self.request.headers["User-Agent"]:
+            post_score = await hot(self.db,post_id)
 
 class ApiCommentsAddHandler(UserHander,EmailHandler,DBMixin):
     @authenticated

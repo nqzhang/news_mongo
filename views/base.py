@@ -16,6 +16,7 @@ import logging
 import w3lib.url
 import os
 import tornado.web
+from bs4 import BeautifulSoup
 
 class BlockingBaseHandler(tornado.web.RequestHandler):
     def __init__(self,application, request, **kwargs):
@@ -34,15 +35,20 @@ class BlockingHandler(BlockingBaseHandler):
     @run_on_executor
     def get_thumb_image(self,posts):
         for post in posts:
-            if 'post_thumb' not in post:
-                post['post_thumb'] = ''
-                post_etree = etree.HTML(post['content'])
-                if post_etree is not None:
-                    img = post_etree.cssselect("img")
-                    if len(img) > 0:
-                        post_thumb = img[0].get('src')
-                        if post_thumb:
+            if 'content' in post:
+                if 'post_thumb' not in post:
+                    post_thumb = ''
+                    soup = BeautifulSoup(post['content'], "lxml")
+                    if soup is not None:
+                        imgs = soup.find_all('img')
+                        if imgs:
+                            post_thumb = imgs[0].get('src')
                             post['post_thumb'] = post_thumb
+                        else:
+                            post['post_thumb'] = None
+            else:
+                if 'post_thumb' not in post:
+                    post['post_thumb'] = None
         return posts
 
     async def generate_post_link(self,posts,site_id=None):
@@ -78,17 +84,18 @@ class BlockingHandler(BlockingBaseHandler):
     @run_on_executor
     def get_post_desc(self,post):
         if "desc" not in post:
-            if not post['content']:
-                post_desc=''
+            if 'content' not in post:
+                post_desc = None
             else:
-                post_etree = etree.HTML(post['content'])
-                if post_etree is None:
-                    post_desc = ''
+                soup = BeautifulSoup(post['content'], "lxml")
+                if soup is None:
+                    post_desc = None
                 else:
-                    post_desc = ''.join([i.strip() for i in post_etree.xpath(".//text()")])[:120]
+                    post_desc = soup.get_text()[:120]
                 # post_desc = post_etree.cssselect('p')[0].text
             post['desc'] = post_desc
         return post
+
     async def get_posts_desc(self,posts):
         new_posts = []
         for post in posts:
@@ -178,7 +185,7 @@ class BaseHandler(BlockingHandler):
         self.data= {}
         self.data['lang'] = lang
         self.data['site_name'] = self.site_name
-        self.data["origin_url"] = self.request.full_url()
+        self.data["origin_url"] = w3lib.url.url_query_cleaner(self.request.full_url(),['amp'], remove=True)
         self.data['cn_url']= w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-cn')
         self.data['tw_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-tw')
         self.data['hk_url'] = w3lib.url.add_or_replace_parameter(self.request.full_url(), 'lang', 'zh-hk')
@@ -205,11 +212,15 @@ class BaseHandler(BlockingHandler):
         if await self.is_login():
             uid = tornado.escape.native_str(self.get_secure_cookie('uid'))
             user = await self.db.users.find_one({'_id':ObjectId(uid)})
-            u_categorys = await sidebar.u_categorys(self,ObjectId(uid))
-            need_keys = ['user_name','email','is_active','_id']
-            user = {key: user.get(key,0) for key in need_keys}
-            user['is_login'] = True
-            user['categorys'] = u_categorys
+            if not user:
+                user = {}
+                user['is_login'] = False
+            else:
+                u_categorys = await sidebar.u_categorys(self,ObjectId(uid))
+                need_keys = ['user_name','email','is_active','_id']
+                user = {key: user.get(key,0) for key in need_keys}
+                user['is_login'] = True
+                user['categorys'] = u_categorys
         else:
             user={}
             user['is_login'] = False

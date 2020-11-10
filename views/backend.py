@@ -8,10 +8,10 @@ import datetime
 from bson import ObjectId
 import tornado
 from utils.hot import hot
-from .base import UserHander,DBMixin
+from .base import UserHander,DBMixin,BlockingHandler
 
 
-class NewPostHandler(DBMixin):
+class NewPostHandler(BlockingHandler,DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self):
@@ -19,10 +19,12 @@ class NewPostHandler(DBMixin):
         code = body['code']
         if code != 'qtRjhwcGLHnXPQlC':
             raise tornado.web.HTTPError(500,reason='wrong password')
+        filter_tags = ('',None)
         category = body.get('category',None)
         if category == "None":
             category = None
         tags = body['tags']
+        tags = [i for i in tags if i not in filter_tags]
         title = body['title']
         content = body['content']
         user = body['user']
@@ -89,6 +91,12 @@ class NewPostHandler(DBMixin):
                     post_date = datetime.datetime.now()
                 post_data = {"title": title, "content": content, "user": u_id, "type": post_type_num,
                              "tags": t_ids, "post_date": post_date}
+                desc = body.get('desc', None)
+                if not desc:
+                    await self.get_post_desc(post_data)
+                post_thumb = body.get('post_thumb', None)
+                if not post_thumb:
+                    await self.get_thumb_image([post_data])
                 if category:
                     post_data['category'] = c_ids
                 post_id = await self.db.posts.insert_one(post_data)

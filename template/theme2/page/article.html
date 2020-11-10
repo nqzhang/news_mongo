@@ -6,22 +6,18 @@
         <!-- 文章页顶部 -->
         {% if t_self.site_id == "5" %}
         <ins class="adsbygoogle"
-             style="display:block"
+             style="display:block;height:90px;width:100%;"
              data-ad-client="ca-pub-7536255340317474"
-             data-ad-slot="5600300833"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+             data-ad-slot="5600300833"></ins>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
         {% elif t_self.site_id == "6" %}
         <!-- 文章页顶部 -->
         <ins class="adsbygoogle"
-             style="display:block"
+             style="display:block;height:90px;width:100%;"
              data-ad-client="ca-pub-3219336841483159"
-             data-ad-slot="3244252735"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
+             data-ad-slot="3244252735"></ins>
         <script>
             (adsbygoogle = window.adsbygoogle || []).push({});
         </script>
@@ -129,7 +125,7 @@
                     <div class="content-header">
                         <div class="content-info"></div>
                     </div>
-                    {% if related_post['post_thumb'] %}
+                    {% if related_post.get('post_thumb',None) %}
                     <div class="content-img"><a
                             href="{{ related_post['post_link'] }}"
                             title="{{ related_post['title'] }}" target="_blank"> <img
@@ -157,6 +153,7 @@
         </div>
         <div id="ads-article-bottom"></div>
         <div class="clear"></div>
+
     </div>
 </div>
 {% end %}
@@ -168,14 +165,6 @@
     $(".fancybox").fancybox()
 });</script>
 <script>
-    $(document).ready(function () {
-        var bodyw = $(window).width();
-        if (bodyw < 800) {
-            top_element = $('.sidebar .widget_top-posts');
-            top_element.css('width', 'auto');
-            $('.wrap').append(top_element);
-        }
-    });
     var post_id = "{{ post['_id'] }}";
     var token = getCookie('_xsrf');
     $.ajax({

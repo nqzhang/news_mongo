@@ -60,13 +60,15 @@ def sig_handler(app, sig, frame):
 
 
 async def connect_from_uri(uri):
+    loop = asyncio.get_event_loop()
     p = urlparse(uri)
     connection = await aiomysql.create_pool(host=p.hostname, port=p.port, user=p.username, password=p.password,
                                             db=p.path[1:], loop=loop, maxsize=200, autocommit=True)
     return connection
 
 
-async def get_dbs():
+async def get_dbs(news_mongo_db):
+    loop = asyncio.get_event_loop()
     dbs = {}
     dbs['by_domain'] = {}
     async for x in news_mongo_db.settings.find({"site_id": {"$nin": ["all"]}}):
@@ -74,7 +76,7 @@ async def get_dbs():
             db_uri = x['db']
             x['db_name'] = urlparse(db_uri).path[1:]
             if db_uri.startswith("mongodb"):
-                db = motor.motor_tornado.MotorClient(db_uri, maxPoolSize=200)[x['db_name']]
+                db = motor.motor_tornado.MotorClient(db_uri, maxPoolSize=50)[x['db_name']]
             elif db_uri.startswith("mysql"):
                 db = await connect_from_uri(db_uri)
             x['db_conn'] = db
@@ -100,9 +102,9 @@ async def get_dbs():
 if __name__ == "__main__":
     # asyncio.set_event_loop(asyncio.new_event_loop())
     # db = motor.motor_tornado.MotorClient(config.mongo['url'],maxPoolSize=200,readPreference='secondaryPreferred')[config.mongo['db_name']]
-    news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'], maxPoolSize=200)['news_mongo']
+    news_mongo_db = motor.motor_tornado.MotorClient(config.mongo['url'], maxPoolSize=1)['news_mongo']
     loop = asyncio.get_event_loop()
-    dbs = IOLoop.current().run_sync(get_dbs)
+    dbs = IOLoop.current().run_sync(lambda :get_dbs(news_mongo_db))
     # cron = cron(db)
     # scheduler = TornadoScheduler()
     # scheduler = AsyncIOScheduler()
