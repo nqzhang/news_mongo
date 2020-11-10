@@ -30,8 +30,8 @@ async def hot_black_list(db,hot_posts):
         if filter:
             hot_posts_7.remove(x)
     return hot_posts
-# @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
-#          serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
+@cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
+          serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def hot_posts(self,post_type=0):
     async def process_hot(hot_posts):
         for x in hot_posts:
