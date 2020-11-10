@@ -6,6 +6,7 @@ import datetime
 from bson import ObjectId
 from .tools import get_tname_by_tid
 import re
+from bson.json_util import dumps
 
 def build_key(f,*args,**kwargs):
     if args[0].data['lang']:
@@ -19,19 +20,14 @@ async def hot_black_list(db,hot_posts):
                                                {"hot_black_title": 1}).to_list(length=None)
     hot_black_list = [b['hot_black_title'] for b in hot_black_list]
     h = '(' + '|'.join(hot_black_list) + ')'
-    hot_posts_1 = hot_posts['hot_posts_1']
-    for x in hot_posts['hot_posts_1']:
+    news_hot_posts = []
+    for x in hot_posts:
         filter = re.search(h, x['title'])
-        if filter:
-            hot_posts_1.remove(x)
-    hot_posts_7 = hot_posts['hot_posts_7']
-    for x in hot_posts['hot_posts_7']:
-        filter = re.search(h, x['title'])
-        if filter:
-            hot_posts_7.remove(x)
-    return hot_posts
+        if not filter:
+            news_hot_posts.append(x)
+    return news_hot_posts
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
-          serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
+         serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def hot_posts(self,post_type=0):
     async def process_hot(hot_posts):
         for x in hot_posts:
@@ -45,14 +41,17 @@ async def hot_posts(self,post_type=0):
                 hot_post['title'] = await self.cc_async(hot_post['title'])
     one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
     hot_posts_1 = await self.db.posts.find({'post_date': {'$gte': one_day_ago},"type":post_type},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
+    hot_posts_1 = await hot_black_list(self.db,hot_posts_1)
+
     await process_hot(hot_posts_1)
     seven_day_ago = datetime.datetime.now() - datetime.timedelta(days=7)
     hot_posts_7 = await self.db.posts.find({'post_date': {'$gte': seven_day_ago},"type":post_type},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
+    hot_posts_7 = await hot_black_list(self.db, hot_posts_7)
     await process_hot(hot_posts_7)
+
     hot_posts = {}
     hot_posts['hot_posts_1'] = hot_posts_1
     hot_posts['hot_posts_7'] = hot_posts_7
-    hot_posts = await hot_black_list(self.db,hot_posts)
     return hot_posts
 
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
