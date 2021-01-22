@@ -123,3 +123,4 @@ dump.rdb
 # exclude
 !/static/upload/
 /news_mongo.iml
+/sitemap/

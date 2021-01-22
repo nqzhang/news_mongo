@@ -18,14 +18,18 @@ def build_key(f,*args,**kwargs):
 async def hot_black_list(db,hot_posts):
     hot_black_list = await db.config.find({'hot_black_title': {'$exists': True, '$ne': None}},
                                                {"hot_black_title": 1}).to_list(length=None)
-    hot_black_list = [b['hot_black_title'] for b in hot_black_list]
-    h = '(' + '|'.join(hot_black_list) + ')'
-    news_hot_posts = []
-    for x in hot_posts:
-        filter = re.search(h, x['title'])
-        if not filter:
-            news_hot_posts.append(x)
-    return news_hot_posts
+    if hot_black_list:
+        hot_black_list = [b['hot_black_title'] for b in hot_black_list]
+        h = '(' + '|'.join(hot_black_list) + ')'
+        news_hot_posts = []
+        for x in hot_posts:
+            filter = re.search(h, x['title'])
+            if not filter:
+                news_hot_posts.append(x)
+        return news_hot_posts
+    else:
+        return hot_posts
+
 @cached(ttl=redis_cache_ttl, timeout=0,cache=RedisCache, key_builder=build_key, endpoint=redis_cache['host'],
          serializer=PickleSerializer(), port=redis_cache['port'], db=redis_cache['db'],namespace="right_sidebar",pool_max_size=10)
 async def hot_posts(self,post_type=0):
@@ -40,12 +44,12 @@ async def hot_posts(self,post_type=0):
             elif self.data['lang'] == 'zh-cn':
                 hot_post['title'] = await self.cc_async(hot_post['title'])
     one_day_ago = datetime.datetime.now() - datetime.timedelta(days=1)
-    hot_posts_1 = await self.db.posts.find({'post_date': {'$gte': one_day_ago},"type":post_type},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
+    hot_posts_1 = await self.db.posts.find({'post_date': {'$gte': one_day_ago},"type":post_type,'views':{'$gte':10}},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
     hot_posts_1 = await hot_black_list(self.db,hot_posts_1)
 
     await process_hot(hot_posts_1)
     seven_day_ago = datetime.datetime.now() - datetime.timedelta(days=7)
-    hot_posts_7 = await self.db.posts.find({'post_date': {'$gte': seven_day_ago},"type":post_type},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
+    hot_posts_7 = await self.db.posts.find({'post_date': {'$gte': seven_day_ago},"type":post_type,'views':{'$gte':10}},{ "_id": 1,"title": 1 ,"content":1}).sort([("views", -1)]).limit(hot_news_num).to_list(length=hot_news_num)
     hot_posts_7 = await hot_black_list(self.db, hot_posts_7)
     await process_hot(hot_posts_7)
 
