@@ -9,13 +9,16 @@ from bson import ObjectId
 import tornado
 from utils.hot import hot
 from .base import UserHander,DBMixin,BlockingHandler
-
+from bson.json_util import dumps
 
 class NewPostHandler(BlockingHandler,DBMixin):
     def check_xsrf_cookie(self):
         pass
     async def post(self):
         body=json.loads(self.request.body.decode('utf-8'))
+        error = body.get('error', None)
+        if error:
+            raise tornado.web.HTTPError(500, error)
         code = body['code']
         if code != 'qtRjhwcGLHnXPQlC':
             raise tornado.web.HTTPError(500,reason='wrong password')
@@ -104,7 +107,11 @@ class NewPostHandler(BlockingHandler,DBMixin):
         except:
             traceback.print_exc()
         else:
-            self.write(str(post_id))
+            self.data={}
+            post = {}
+            post['_id'] = post_id
+            post_url  = (await self.generate_post_link([post]))[0]
+            self.write(dumps(post_url))
         if post_id != 0:
             post_score = await hot(self.db,str(post_id))
             if self.es:

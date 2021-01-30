@@ -3,7 +3,9 @@ import config
 from pymongo import ReturnDocument
 from bson import ObjectId
 
-db = motor.motor_asyncio.AsyncIOMotorClient(config.mongo['url'])[config.mongo['db_name']]
+#db = motor.motor_asyncio.AsyncIOMotorClient(config.mongo['url'])[config.mongo['db_name']]
+
+db = motor.motor_asyncio.AsyncIOMotorClient("mongodb://95.216.78.164:27017")["news_xuehua_us"]
 
 async def ttt():
     t_name = "t_name"
@@ -13,8 +15,14 @@ async def ttt():
     print(x)
 async def qqq():
     post_id = ObjectId("5c6721a67a2ed534b85deb52")
-    x = await db.posts.find({"_id":post_id}).to_list(length=None)
-    print(x)
+    x = await db.posts.find({"_id":post_id})
+
+async def delete_posts():
+    with open('delete.txt','r') as f:
+        for l in f:
+            p = l.lstrip('https://www.xuehua.us/a/').split('?lang')[0]
+            post_id = ObjectId(p)
+            x = await db.posts.delete_many({"_id":post_id})
 async def related():
     x = db.posts.aggregate([
         {"$match": {"tags": {"$in": [ObjectId("5bea62907a2ed52674df4468")]}}},
@@ -55,7 +63,8 @@ async def new_comment_posts():
     async for i in x:
             print(i)
 async def main():
-    await new_comment_posts()
+    await delete_posts()
+    #await new_comment_posts()
     #await ttt()
     #await related()
 
