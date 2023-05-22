@@ -14,7 +14,7 @@ elasticsearch==7.6.0
 aioelasticsearch==0.6.0
 elasticsearch-dsl==7.1.0
 aiomysql==0.0.21
-requests==2.23.0
+requests==2.31.0
 pymongo==3.10.1
 pymysql==0.9.2
 beautifulsoup4
