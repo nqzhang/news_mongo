@@ -1,4 +1,4 @@
-tornado==6.0.3
+tornado==6.3.3
 timeago==1.0.14
 motor==2.1.0
 apscheduler==3.5.3
